@@ -1,0 +1,50 @@
+[Options]
+Prcclksel=0
+Vdddown=0
+CC=0
+DIAG=0
+
+[MAP Config]
+;S1C8E108 MAP Configuration Setting
+;  000000-00FFFF : Define 1 byte unit
+;  010000-FFFFFF : Define 256 bytes unit
+;
+;syntax:<Start address><End address>[E][I][U][S][W]
+;	E : Emulation memory
+;	I : I/O(PRC Board) memory
+;	U : User memory
+;	S : Stack area
+;	W : Write protect(Default does not protect)
+
+;Internal ROM
+Map0=000000 001FFF E W
+
+;External ROM(EEPROM)
+Map1=00EE00 00EE7F U
+
+;Internal RAM
+Map2=00F000 00F2FF E
+
+;Stack area
+Map3=00F300 00F3FF E S
+
+;Display memory
+
+;I/O memory
+Map4=00FF00 00FF02 I
+Map5=00FF08 00FF09 I
+Map6=00FF0A 00FF0A I W
+Map7=00FF12 00FF12 I
+Map8=00FF18 00FF19 I
+Map9=00FF20 00FF28 I
+Map10=00FF2A 00FF2A I 
+Map11=00FF2D 00FF2D I
+Map12=00FF30 00FF37 I 
+Map13=00FF40 00FF40 I
+Map14=00FF41 00FF41 I W
+Map15=00FF48 00FF4F I
+Map16=00FF52 00FF52 I 
+Map17=00FF54 00FF54 I W
+Map18=00FF60 00FF63 I
+Map19=00FF88 00FF8E I
+

@@ -1,0 +1,415 @@
+Notes of the ICE88UR                                                May/11/2000
+
+                            SEIKO EPSON Corp.
+
+This document contains some important notes on using the ICE88UR.
+The content is described as the general known problems, additional explanations 
+and restrictions. So, please read this document at first before you start using 
+the ICE88UR.
+
+1.General known problem
+ The environment set command(SET SMD=0/1) enables/disables interrupts during a 
+ step execution. Thought enable an interrupt(SET SMD=1), the ICE88UR does not
+ occur interrupts.
+
+2.USB PnP specification
+ The ICE88UR is corresponding to the USB interface version 1.1. When the after
+ installing the software and the PC is connected to the ICE88UR with power on,
+ the OS on the PC will detect the USB driver automatically. When the OS will be
+ required where the USB driver, indicate the folder installed ICE88UR software
+ (default "C:\Epson\S1C88\Bin").
+
+3.Restriction of the folder and file names
+ The folder and file names used by the debugger are should be named only using
+ the alpha-numeric character. Do not use the double-byte or space characters.
+
+4.System reset on the PRC board
+ When the system reset terminal of the PRC board built-in the ICE88UR is
+ supplied to the active level or make a system reset by the SVD(Supply Voltage
+ Detector) circuit, the debugger cannot start-up. Be sure the system reset
+ condition is released and restart the debugger.
+
+5.Internal memory check
+ 5-1 While testing memory, debugger start-up
+ After power on the ICE88UR, do not start-up the debugger while testing the
+ ICE memory. The memory checking time, when the diagnostic switch front of the
+ ICE88UR is turned off, it takes about 10 seconds, when the switch is turned
+ on, it takes about 40 seconds.
+
+ 5-2 Display result of the check
+ When the "DIAG" switch is turned on and power on the ICE88UR, it will display
+ the result of the memory check on the debugger start-up screen. When the
+ switch is turned off and power on the ICE88UR, it will not display the result.
+
+ An example of when the "DIAG" switch is turned on and start up the debugger:
+
+  ICE88UR System Software Ver 1.12
+  Copyright SEIKO EPSON Corporation 1999-2000
+
+  Communication device initializing succeed.
+  Protocol establishing succeed.
+  ICE88UR diagnosis succeed.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Memory initialize passed.
+  MAP parameter setting completed.
+  >
+
+ An example of when the "DIAG" switch is turned off and start up the debugger:
+
+  ICE88UR System Software Ver 1.12
+  Copyright SEIKO EPSON Corporation 1999-2000
+
+  Communication device initializing succeed.
+  Protocol establishing succeed.
+  Memory initialize passed.
+  MAP parameter setting completed.
+  >
+
+6.Re-starting after the forcibly termination
+ Choosing the [Close] in the control-menu box, displaying the following message
+ on the message window.
+
+ Target program still active.
+ Would you like to abort this?
+
+ If you choose "No", the ICE88UR debugger will be closed without terminating
+ the target program execution.
+ In case of re-start the ICE88UR, push the RESET button front of the ICE88UR
+ or terminate the power supply once.
+
+7.Debugging C language sources
+ When you debug the C language sources, never set the optimize option
+ (-O[flag...]) at the C compiler(C88) and the assembler(as88).
+
+8.[Source] window
+ 8-1 When the MIX or ASM type is chosen for source window display format,
+ if you scroll back the source list, possibly it will be displayed the illegal
+ instructions. Because the display order is different from E0C88 CPU execution
+ order.
+
+ 8-2 Displaying C source language 
+ When the C source language is displayed, the displaying range is only inside
+ of the sources file which has the now source line. If you want to display other
+ source of different file, change by "LI" command.
+
+ 8-3 Specifying the source line number
+ Displaying the C source on [Source] window, you can specify as following,
+
+ >li %file_name#line_number
+ But cannot specify the line number, which C source does not have (any
+ instruction) .
+
+ [Source] window (SET VIEW=SCE)			[Status Bar]
+ /*	STRUCT	*/				Source Line:00001
+ void test_struct(void)				Source Line:00002
+ {						Source Line:00003
+ 	extern char	count;
+ 	struct str1 {
+ 		char	char_mem;
+ 		int	int_mem;
+ 		short	short_mem;
+ 		long	long_mem;
+ 		};
+ 	struct str2 {
+ 		struct str1 lev1;
+ 		}lev2;
+ 	if(count==0x00){			Source Line:00014
+ 		lev2.lev1.char_mem=0x00;
+ 		lev2.lev1.int_mem=0x0000;
+ 		lev2.lev1.short_mem=0x0000;
+ 		lev2.lev1.long_mem=0x00000000;
+ 	}
+ 
+ [Source] window (SET VIEW=MIX)
+ {
+                              /test_struct:
+    00005E 00:005E  CF6A0900  SUB  SP,#0009
+    	if(count==0x00){
+    000062 00:0062  CED000F0  LD   A,[F000]
+    000066 00:0066  3200      CP   A,#00
+    000068 00:0068  E723      JRS  NZ,008C
+    		lev2.lev1.char_mem=0x00;
+    00006A 00:006A  B200      LD   L,#00
+    00006C 00:006C  CFFA      LD   IX,SP
+    00006E 00:006E  CEC600    LD   XP,#00
+    000071 00:0071  62        LD   [IX],L
+    		lev2.lev1.int_mem=0x0000;
+    000072 00:0072  C70000    LD   IY,#0000
+    000075 00:0075  CF7701    LD   [SP+01],IY
+    		lev2.lev1.short_mem=0x0000;
+    000078 00:0078  C70000    LD   IY,#0000
+    00007B 00:007B  CF7703    LD   [SP+03],IY
+    		lev2.lev1.long_mem=0x00000000;
+    00007E 00:007E  C60000    LD   IX,#0000
+    000081 00:0081  C70000    LD   IY,#0000
+    000084 00:0084  CF7605    LD   [SP+05],IX
+    000087 00:0087  CF7707    LD   [SP+07],IY
+    	}
+
+ [Command] window
+ >li %struct.c#1	<- NG
+ lnvalid line number.
+ >li %struct.c#3	<- OK
+ >li %struct.c#14	<- OK
+
+ 8-4 Displaying disassembler
+  When ICE88UR loaded psa file, C language sources is not display,
+  But menu of MIX or ASM C source type is chosen  for source window display format 
+  is enable.
+  
+
+
+9.[Map] window
+ When the target MCU is specified I/O area to except FFxxH address, the I/O area
+ is not displayed on the Map window.
+
+10.VAR command
+ 10-1 Displays in binary number
+ When it is chosen the binary for display form by VAR command, the higher bits
+ are not displayed.
+
+ [Command] window
+ >var !char_var;h
+ char_var = H'55
+ >var !char_var;b
+ char_var = B'101
+ Displaying the data of lower 3 bits.
+
+ >var !int_var;h
+ int_var = H'5555
+ >var !int_var;b
+ int_var = B'0101
+ Displaying the data of lower 4 bits.
+
+ >var !short_var;h
+ short_var = H'5555
+ >var !short_var;b
+ short_var = B'0101
+ Displaying the data of lower 4 bits.
+
+ >var !long_var;h
+ long_var = H'55555555
+ >var !long_var;b
+ long_var = B'10101
+ Displaying the data of lower 5 bits.
+
+ 10-2 STDOUT option
+ Not support the STDOUT option of VAR command.
+
+ [Command] Window
+ >var !char_var;STDOUT
+ Internal error: ICE88UR does not support this version.
+
+11.Symbol informations
+ The ICE88UR supports two kinds of symbol informations. One is C source symbol
+ informations which is made by C compiler with the "-g" option and set up by
+ down-load the file. Another is SY symbol informations which is set up by "SY"
+ command or down-load the symbol file(file_name.sy).
+ The data size of SY symbol is 4 bytes(long type). SY symbol is same as 4 bytes
+ value. It does not have the symbol type, the sign information and the type
+ information.
+
+ [Command] Window
+ >sy !sym_3000 3000
+ >sy !sym_4000 4000
+ [Search result] Window
+ sym_3000                         00003000 LAB - ---- 0000
+ sym_4000                         00004000 LAB - ---- 0000
+
+ [Command] Window
+ >e !sym_3000 55
+ The data(55) is written at the address 00003000h.
+ This is same as following,
+ >e 00003000 55
+
+ [Command] Window
+ >e 1000 !sym_3000+!sym_4000
+ The result of 00003000+00004000 is written at the address 1000h by byte type(default).
+ This is same as following,
+ >e 1000 00003000+00004000
+
+12.Binomial operator
+ 12-1 Subtraction
+ Can not use the C source symbol in subtraction.
+
+ [Search result] Window
+ !int_var1                        0000F010 VAR S WORD 0002
+ !int_var2                        0000F012 VAR S WORD 0002
+ !int_var3                        0000F014 VAR S WORD 0002
+ [Command] Window
+ >e !char_var1 !char_var2-!char_var3
+ Specified symbol does not exist.
+
+
+ 12-2 Multiplication
+ Can not use the C source symbol in multiplication.
+
+ [Search result] Window
+ !int_var1                        0000F010 VAR S WORD 0002
+ !int_var2                        0000F012 VAR S WORD 0002
+ !int_var3                        0000F014 VAR S WORD 0002
+ [Command] Window
+ >e !char_var1 !char_var2*!char_var3
+ Specified symbol does not exist.
+
+ 12-3 Division
+ Can not use the C source symbol and macro variable in division.
+
+ [Search result] Window
+ !int_var1                        0000F010 VAR S WORD 0002
+ !int_var2                        0000F012 VAR S WORD 0002
+ !int_var3                        0000F014 VAR S WORD 0002
+ [Command] Window
+ >e !char_var1 !char_var2/!char_var3
+ Specified symbol does not exist.
+ [Macro] Window
+ \addr = h'1000
+ \data1 = h'10
+ \data2 = h'2
+ e \addr \data1/\data2
+ d \addr @2;l
+ [Dump] Window
+ address     +0       +4       +8       +C          ASCII
+ 001000   00000010 11111111 11111111 11111111  ................ 
+
+ 12-4 Logical AND operator
+ Can not use the C source symbol in AND operation.
+
+ [Search result] Window
+ !int_var1                        0000F010 VAR S WORD 0002
+ !int_var2                        0000F012 VAR S WORD 0002
+ !int_var3                        0000F014 VAR S WORD 0002
+ [Command] Window
+ >e !char_var1 (!char_var2)&(!char_var3)
+ Specified symbol does not exist.
+
+ 12-5 Logical exclusive OR operator
+ Not support the XOR operator.
+
+ [Search result] Window
+ !int_var1                        0000F010 VAR S WORD 0002
+ !int_var2                        0000F012 VAR S WORD 0002
+ !int_var3                        0000F014 VAR S WORD 0002
+ [Command] Window
+ >e !char_var1 (!char_var2)~(!char_var3)
+ Invalid formula.
+ [Macro] Window
+ \addr = h'1000
+ \data1 = h'00ff
+ \data2 = h'0f0f
+ e \addr \data1~\data2
+ d \addr @2;l
+ [Dump] Window
+ address     +0       +4       +8       +C          ASCII
+ 001000   11111111 11111111 11111111 11111111  ................ 
+
+13.Pointer operator(*) and Address operator(&)
+ Using pointer operator and address operator for C source symbol and SY symbol,
+ dealing is following,
+
+ [Source] Window
+ char	char_var;
+ char	*char_ptr;
+ char	**char_ptr_to_ptr;
+ char_ptr = &char_var;
+ char_ptr_to_ptr = &char_ptr;
+ [Command] Window
+ >sy !sym_1000 1000
+ [Search result] window
+ !char_var                        SP +0000 VAR S BYTE 0001
+ !char_ptr                        SP +0003 VAR - PTR  0000
+ !char_ptr_to_ptr                 SP +0007 VAR - PTR  0000
+ sym_1000                         00001000 LAB - ---- 0000
+
+ !char_ptr is the pointer for the variable of char type(!char_var)
+ !char_ptr_to_ptr is the pointer for the pointer(!char_ptr)
+
+ 13-1 Pointer operator for SY symbol
+
+ [Dump] Window
+ 001000   00002345 FFFFFFFF FFFFFFFF FFFFFFFF  E#.............. 
+ 002000   FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF  ................ 
+ [Command] Window
+ >e 2000 *!sym_1000
+ [Dump] Window
+ 002000   FFFFFF45 FFFFFFFF FFFFFFFF FFFFFFFF  E............... 
+ The value 45 of the address 00001000h defined by the symbol(!symbol_1000) is
+ written at the address 2000h for byte type(default).
+
+ [Dump] Window
+ 001000   00002345 FFFFFFFF FFFFFFFF FFFFFFFF  E#.............. 
+ 002340   FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF  ................ 
+ [Command] Window
+ >e *!sym_1000 33
+ [Dump] Window
+ 002340   FFFFFFFF FFFF33FF FFFFFFFF FFFFFFFF  .....3.......... 
+ The data(33) is written at the address 00002345h which is the value of the
+ address 00001000h defined by symbol(!sym_1000).
+
+ 13-2 address operator for SY symbol
+ The address operator cannot use for SY symbol.
+
+ [Command] window
+ >e 2000 &!sym_1000
+ Invalid symbol name.
+ >e &!sym_1000 55
+ Invalid symbol name.
+
+ 13-3 Pointer operator for C source symbol
+
+ [Command] Window
+ >var *!char_ptr;h
+ *char_ptr = H'33
+ The value of the pointer variable(*!char_ptr) is same as the value of the
+ variable(!char_var).
+
+ >var **!char_ptr_to_ptr;h
+ **char_ptr_to_ptr = H'33
+ The value of the pointer variable(**!char_ptr_to_ptr) for pointer is same
+ as the value of variable(!char_var).
+
+ >var *!char_ptr_to_ptr;h
+ *char_ptr_to_ptr = H'F7E1
+ The address of keeping the value of pointer variable for pointer
+ (**!char_ptr_to_ptr) is same as the address of variable(!char_var).
+
+ The pointer operator for C source symbol can not use more than pointer
+ level which is setting in C source.
+
+ [Command] Window
+ >var **!char_ptr;h
+ Invalid formula.
+ >var *!char_var
+ Invalid formula.
+ >var *!char_var;h
+ Invalid formula.
+
+ 13-4 Address operator for C source symbol
+
+ [Command] Window
+ >var &!char_var
+ &char_var = H'00F7E1
+ The address of variable(!char_var)
+
+ >var &*!char_ptr
+ char_ptr = H'F7E1
+ The address which is keeping the value of pointer variable(*!char_ptr) is same
+ as the address of variable(!char_var).
+
+ >var &**!char_ptr_to_ptr
+ *char_ptr_to_ptr = H'F7E1
+ The address which is keeping the value of pointer variable for pointer
+ (**!char_ptr_to_ptr) is same as the address of variable(!char_var).
+
+ >var &!char_ptr
+ &char_ptr = H'00F7E4
+ The addres of pointer(!char_ptr).
+
+ >var &*!char_ptr_to_ptr
+ char_ptr_to_ptr = H'F7E4
+ The address of pointer(!char_ptr).
+
+ >var &!char_ptr_to_ptr
+ &char_ptr_to_ptr = H'00F7E8
+ The address of pointer for pointer(!char_ptr_to_ptr).
+

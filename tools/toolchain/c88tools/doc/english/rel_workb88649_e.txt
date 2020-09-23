@@ -1,0 +1,50 @@
+===============================================================================
+	WorkBench88650 Version 1.10
+	REL_WORKB88650_E.TXT
+	Jun 23, 2005
+	SEIKO EPSON CORP.
+===============================================================================
+
+Table of Contents
+-----------------
+1.  Revision History
+2.  Differences from the Manual
+3.  Limitations and Known Problems
+
+
+1. Revision History
+-------------------
+  Ver 1.00   First release
+  Ver 1.10   In Windows2000/XP, corrected so that firmware is read properly
+             when it started from DOS prompt without '.exe'.
+
+2. Differences from the Manual
+------------------------------
+
+  None
+
+
+3. Limitations and Known Problems
+---------------------------------
+
+(1) The source file name that WB88 manages
+
+  The source file name should be unique in WB88 project.
+  Even if directories are different, you cannot register the source file of the
+  same name with the same project.
+
+(2) The directory pass and the source file name which WB88 manages
+
+  You cannot use a 2 bytes character nor a long file name.
+
+(3) File reference on the network
+
+  When you refer to a file on the network from the WB88 top, please use the path
+  name that a drive name was assigned to.
+  You cannot specify the pass beginning with a computer name.
+
+(4) Display font size
+
+  If you select the font size other than Small Fonts or Large Fonts of the system
+  default, there is a possibility that text in WB88 will be truncated.
+

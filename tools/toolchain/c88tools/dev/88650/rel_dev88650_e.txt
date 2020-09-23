@@ -1,0 +1,34 @@
+===============================================================================
+	DEV88650 Version 5.01
+	REL_DEV88650_E.TXT
+	Jun 30, 2005
+	SEIKO EPSON CORP.
+===============================================================================
+
+Contents
+----
+1.  Release history
+2.  Difference from manual
+3.  Restriction
+4.  The method of the installation
+
+1. Release history
+------------------
+  Ver 5.00    First release
+  Ver 5.01    Corrected the bug of FSA data of in 
+			  131072/fosc1
+			  262144/fosc1 
+			  of function option No.8 (WATCHDOG TIMER XNMI GENERATION CYCLE).
+
+2. Difference from manual
+-------------------------
+Å@None
+
+
+3. Restriction
+--------------
+  None
+
+4. The method of the installation
+  Please thaw S5U1C88650D46.zip on the folder of .../EPSON/S1C88/DEV/.
+  After that, 88650 folder is made, and various files are installed under that.

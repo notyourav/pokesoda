@@ -1,0 +1,33 @@
+===============================================================================
+	DEV88848 Version 2.00
+	REL_DEV88848_E.TXT
+	April, 24, 2006
+	SEIKO EPSON CORP.
+===============================================================================
+
+Contents
+----
+1.  Release history
+2.  Difference from manual
+3.  Restriction
+4.  The method of the installation
+
+1. Release history
+------------------
+  Ver 1.00    First release
+  Ver 2.00    Corrected the bug that the internal RAM area 0xF3FF-0xF5FF was not recognized at the time of section use.
+              Corrected a setting error of the display memory area setting.
+
+
+2. Difference from manual
+-------------------------
+Å@None
+
+
+3. Restriction
+--------------
+  None
+
+4. The method of the installation
+  Please thaw S5U1C88848D42.zip on the folder of .../S1C88/DEV/.
+  After that, 88848 folder is made, and various files are installed under that.

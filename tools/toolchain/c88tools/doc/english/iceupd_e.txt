@@ -1,0 +1,23 @@
+How to update the ICE88UR firmware
+
+	SEIKO EPSON Corporation
+
+1) Please start "C:\EPSON\S1C88\ICE\ICE88URupd\TM88Wiz.exe".
+
+2) Please connect the ICE88UR to a PC, and turn on a power supply.
+   If programs using the ICE88UR started, please be finished entirely.
+
+3) The wizard detects ICE88UR automatically and updates the firmware.
+   Please do not turn off a power supply of ICE88UR, or do not remove a cable.
+
+4) When the update completed, "The update wizard of the firmware was finished
+   normally", is displayed.
+
+5) With the above, update is completion.
+   Please turn off a power supply of ICE88UR once, and turn on again.
+
+6) The version can be confirmed in menu [Help] of the debugger.
+
+        Firmware (Target Processor)   Ver 0.03
+        Firmware (Control Processor)  Ver 0.09
+        Boot ROM                      Ver 0.09

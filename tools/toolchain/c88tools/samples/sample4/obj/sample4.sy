@@ -1,0 +1,16 @@
+000026  __start_cpt
+000026  __START
+000041  _watchdog
+000046  _rtpt1
+000070  __copytable
+0000ba  __exit
+0000bf  _main
+00013c  _disp_char
+0001a0  _clear_vram
+0001e8  _mulx
+000211  __lc_cp
+00f000  _gflag
+00f000  __lc_b_.tbss
+00f199  __lc_ub_xvwbuffer
+00f1a9  __lc_ue_xvwbuffer
+00f800  __lc_es

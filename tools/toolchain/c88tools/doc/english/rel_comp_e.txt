@@ -1,0 +1,669 @@
+===============================================================================
+    C88 c1.2 r3
+    REL_COMP_E.TXT
+    Dec 20, 2007
+    SEIKO EPSON CORP.
+===============================================================================
+
+Table of Contents
+-----------------
+1.  Revision History
+2.  Differences from the Manual
+3.  Limitations and Known Problems
+
+
+1. Revision History
+-------------------
+
+
+2. Differences from the Manual
+------------------------------
+
+  None
+
+
+3. Limitations and Known Problems
+---------------------------------
+
+  <C88>
+
+[1] Use Compiler Option -O0(optimization off)
+
+ 1) When you divided a value of "signed char", it is not performed properly.
+    You can avoid it by using "unsigned char".
+
+ 2) An operator (==,!,<,<=,>,>=,!) can't be used in switch statement.
+
+      switch(!a)                     NG
+
+      a=!a;
+      switch(a)                      OK
+
+ 3) After substituted the structure member, the printf output is not performed
+    properly when it refers to the value of the structure member.
+    (Only LARGE memory model)
+
+      typedef union {
+          float   dat ;
+          unsigned char   buf[4] ;
+      } DATA ;
+      float   dt01 = -3.4E+038 ;
+      DATA    a;
+         :
+
+      a.dat = dt01 ;                  //substitution
+      if (
+             a.buf[0] != 0x9e         //refer
+          || a.buf[1] != 0xc9 
+          || a.buf[2] != 0x7f 
+          || a.buf[3] != 0xff 
+      ) {
+          err++ ;
+      }
+       :
+      printf(...);                    //printf internal error occur
+
+[2] Use Compiler Option -O1(optimization on)
+
+  1) There is the case that the result of performing 32 times of rotation does
+     not become 0.
+
+     (int)A>>=32
+
+  2) It becomes a compilation error when you operate (int)a*a in the return
+     statement of a function.
+
+       int sub(int a)
+       {
+            :
+          return a*a;
+       }
+       
+  3) When there is % during character string of (s)printf(), all character strings
+     after it are ignored.
+
+       char*   pText="test%test";
+       printf("%s\n",pText);
+
+     result
+       test
+
+  4) When performing character string function processing to the pointer to the
+     multidimensional char type, there is the case that increment to the pointer
+     to the char type cannot perform normally.
+
+       char tbl[2][10] = {
+           {"top"},
+           {"bottom"}
+       } ;
+       char (*wp)[10]  = tbl ;
+       if (strcmp( (*wp)[0], "top" ) == 0 );
+           printf("%s\n",wp);
+       wp++ ;
+       printf("%s\n",wp);
+
+     result
+       top
+       top             The result must be "bottom". 
+
+  5) The completion condition of the "for" statement does not work normally in
+     the case of the following.
+     It is necessary to describe an expression to handle the variable of the
+     judgment condition last, when you describe several expressions of the for
+     statement (j++,k++).
+
+       for( j = 0; j < 10; k++ ,j++)   OK
+
+       for( j = 0; j < 10; j++ ,k++)   NG
+
+     The compiler translates in the case of NG as follows.
+       for( j = 0; k < 10; j++ ,k++)
+
+  6) When you use a loop processing in case statement, the substitution to the
+     member of the structure cannot be performed properly.
+     It works normally if you exclude loop processing.
+
+       for( i = 0; i < 1; i++ )
+       {
+           switch( i ) {
+           case 0 : 
+               for ( j=0 ; j < 1 ; j++ ) {
+                   s1.x3[i]  = s1.x1p->data ;
+               }
+               break ;
+           case 1 :
+               s1.x3[i]  = s1.x1p->data ;
+               break ;
+           default: break ;
+           }
+       }
+
+  7) When there is more than a triple loop, reference of the two-dimensional
+     above-mentioned array of initialized int type is not performed normally.
+     You can avoid it by using array more than two dimensions of the character
+     type.
+
+       int a[2][2] ={ { 78, 79, },{ 80, 81, } };
+       for(i=0;i<1;i++)
+       {
+           for(j=0;j<2;j+=1)
+           {
+               for(k=0;k<1;k++) 
+               {
+                   if (a[j][k] != 78)        //a[0][0] does not become 78.
+                       flg++;
+               }
+           }
+       }
+
+  8) In the case of recursive function, there is the case that the reference of
+     the value of static type cannot perform properly.
+
+       int test1(int flg)
+       {
+            static int count = 0 ;
+            count ++ ;
+            if (flg == 0)
+                return 0 ;
+            if (flg == 1)
+            {
+                flg -- ;
+                test1(flg);
+                return count ;
+            }
+       }
+     The function test1 is called twice recursively and static variable "count"
+     should become 2, but becomes 1.
+
+  9) There is a case returning an unexpected value when sscanf() overflowed.
+
+       sscanf( "12345", "%x", &iDat ):
+       printf("%x",iDat);
+       sscanf( "1289ABx", "%x", &iDat ):
+       printf("%x",iDat);
+       sscanf( "4294967295", "%d", &iDat ):
+       printf("%lx",iDat);
+
+     results
+       ffffffff
+       ffffffff
+       7FFF
+
+ 10) The result when you pass an operation result of the same variable to the
+     argument of the function is not guaranteed.
+
+       int function (int x,y,z);
+       {
+             return x+y+z;
+       }
+
+       int ix=1;
+       function (ix++,ix++,ix++);
+
+ 11) When you use a pointer in a loop same as the loop which substitutes initial
+     value for a pointer to the structure with a self-reference structure and
+     substitute a value for a member, stack pointer might be broken.
+     (Only LARGE memory model)
+
+        struct person {
+            int  no;
+            char name[20];
+            int  age ;
+            struct person *next;
+        } ;
+
+            struct person list[10] ;
+            struct person *pp;
+       NG
+            for ( i=0 ; i< 2 ; i++ )
+            {
+                pp = &list[i];
+                :
+                pp->next = NULL;
+            }
+       OK
+            for ( i=0 ; i< 2 ; i++ )
+                pp = &list[i];
+
+            for ( i=0 ; i< 2 ; i++ )
+                pp->next = NULL;
+
+ 12) There is the case that longjmp function does not work normally unless you
+     clear YP register 0 before using.
+
+ 13) If you cast the pointer of a certain variable to different data type in
+     a loop, and use a loop variable as an additional character and the array
+     based on the pointer, and increment a loop variable by the last of the loop,
+     there is the case that the compiler stops.
+     Please take care because any error message is not displayed in this case.
+
+    char sfr_tdata;
+                
+    long usFuncLocal;
+    char i;
+
+    double a;
+
+    void func( void ) {
+        char y;
+
+        while ( i ) {
+            /* arbitrary code */
+            a *= a;
+            a *= a;
+            a *= a;
+            a *= a;
+
+            /* cast is indispensable */
+             y = ((char *)&usFuncLocal  )[i] ;
+                
+            /* arbitrary code */
+            a *= a;
+            a *= a;
+            a *= a;
+            a *= a;
+                
+            /* memory access is indispensable */
+            sfr_tdata = y;
+                
+            /* arbitrary code */
+            a *= a;
+            a *= a;
+            a *= a;
+                
+            /* i++ is indispensable just before the end of While */
+            i++;
+                
+            /* When here is a code, all right */
+            }
+        }
+    }
+
+[3] -O0/-O1 common
+
+  1) The number of the letters in one line of the source program beyond 103
+     characters becomes the compilation error.
+
+  2) When you make the addressing of the variable, a location error does not
+     occur even if you specify it in the ROM area.
+
+  3) It becomes a compilation error when you perform substitution to the bit
+     field member in one line.
+   
+      struct srt_dat {
+          signed int      bit00 : 3 ;
+          unsigned int    bit01 : 2 ;
+      } ;
+         :
+      struct srt_dat arg1;
+
+      arg1.bit00 = arg1.bit01 = 2 ;  NG
+
+      arg1.bit00 = 2 ;               OK
+      arg1.bit01 = 2 ;               OK
+
+  4) When a variable is declared as static, there is a case that the variable
+     is not cleared with zero when you don't initialize it.
+      - The number of elements of the one-dimensional array more than 91
+      - Two-dimensional array
+
+  5) When the nest level of "for" statement is 15, declaring a variable in each
+     "for" statement becomes a compilation error.
+
+  6) It becomes a compilation error when a function has more than three arguments
+     and called by the function pointer, and there are more than two argument of
+     long type.
+
+       void func( char arg3, long arg4, long arg5 )
+       {
+           :
+       }
+
+       void (*funcwp1[])( char, long, long ) = { func } ;
+       funcwp1[0]( 1, 2, 3 ) ;         Compiler error
+
+     The char, short, long type of the argument works normal.
+
+  7) When you initialize a structure which has a member of structure and union,
+     and if you initialize the structure by character string it becomes a
+     compilation error.
+    
+     NG
+         SRT_DAT exsrt1 = {
+                           "0123456789",
+                            1 
+                          } ;
+     OK
+         SRT_DAT exsrt1 = {
+                           {"0123456789"},
+                           { 1 }
+                          } ;
+
+  8) Please secure data length +1 of the origin of copy to the area of the copy
+     destination in "strcpy".
+     There is the case that stack pointer is destroyed.
+
+     unsigned char c1[3] ;     NG
+     unsigned char c1[4] ;     OK
+     strcpy(c1, "abc") ;
+
+  9) There is a case that printf does not work when you declare a big array in
+     Auto variable.
+
+       int main( void )
+       {
+           unsigned char  var1[3][40], var2[3][600];
+           :
+           printf("test\n") ;
+       }
+     
+     Please declare a big size variable in the global area.
+
+ 10) There is a case that it cannot compile when there is a direct value
+     operation of the pointer in the left side of a statement.
+
+     NG
+         *(( unsigned char * )0xf823 - i - 2 ) = 0xa0;
+     OK
+         unsigned char * pwork;
+         pwork=( unsigned char * )0xf823;
+         *(pwork - i - 2 ) = 0xa0;
+
+     You can avoid it by substituting a pointer for a work variable once.
+
+ 11) When the argument of a function has arguments of the char type more than
+     seven, it cannot pass values normally.
+     Please reduce the number of arguments by using a array and pass it by a
+     pointer.
+
+ 12) The D flag is not cleared in built-in function _bcd and _ubcd normally.
+     In addition, please use only char type argument for _bcd.
+     You can perform the set/reset of the D flag by an assembler description.
+
+         unsigned char count;
+
+         count = 0x17;
+         #pragma asm
+            OR  SC,#00010000b   ;D flag set
+         #pragma endasm
+         count += 0x05;
+         #pragma asm
+            AND SC,#11101111b   ;D flag clear
+         #pragma endasm
+
+ 13) Please do not use an assembler comment(;) within #pragma asm - #pragma endasm
+     in #ifdef. It becomes an abnormal file at the time of the preprocessor passage
+     and it cannot be compiled or assembled normally.
+
+     :NG    
+        #ifdef FEA_XXX
+        #pragma asm
+         nop   ; don't try this at home
+        #pragma endasm
+        #endif
+
+ 14) When you declare a variable with parenthesis {...} inside of a function,
+     there is a case that an E287 error occurs at the time of assembling.
+
+     Example) 
+        unsigned char func0(void)
+        {
+            {                       
+                char i;                 <-----
+                for (i = 0; i < 5; i++) 
+                    uiGlobal_array[ i ] = 0x12;
+            }                       
+            return 0;
+        }
+     If an error occurred, please avoid it by either process as follows.
+     1. Declare the local variable in the top of the function.
+     2. Specify no optimization (-O0).
+     3. Compile it without adding a debugging information (Remove -g option)
+
+     Example) 
+        unsigned char func0(void)
+        {
+            char i;                     <----- 
+            for (i = 0; i < 5; i++) 
+                uiGlobal_array[ i ] = 0x12;
+            return 0;
+        }
+
+ 15) When a C source with a new line code of LF compiled, an assembling error
+     occurs. Please do not use a new line code except CRLF (0D 0A windows format)
+     for the new line code of the C source.
+     It causes an abnormal operation.
+
+ 16) The compiler does not support a double byte character.
+     Please avoid the use of double byte characters such as the Japanese in a C
+     source.
+     You can use double byte characters in the case of the comment, but please
+     use a form of /* ... */, not //.
+
+ 17) It does not jump properly afterwards when you perform a function call through
+     function pointer with compiler option -Ml or - Md (memory model, Compact-Data
+     or Large) and jumped.
+     Please allocate the function called via a function pointer after 0x00'8000
+     address.
+
+ 18) It does not work normally when you replace it via local variable between the
+     same array.
+     Example)
+      NG case 1:
+        unsigned char   array[2];
+        
+        int test( void ) {
+        
+            unsigned char   temp;
+        
+            temp = array[1];
+            array[1]  = array[0] ;
+            array[0]  = temp;
+        }
+
+      NG case 2:
+      The array and local variable is changed into short from char.
+      It occurs even if you change it into long.
+        unsigned short   array[2];
+        
+        int test( void ) {
+        
+            unsigned short   temp;
+        
+            temp = array[1];
+            array[1]  = array[0] ;
+            array[0]  = temp;
+        }
+
+     Correction)
+     It works normally when it returns a result of the operation of an array to
+     array, such as a scratch register is demanded on the way.
+        array[ x ] = array[ y ] + 3;
+     You can avoid the problem by adding volatile declaration to array declaration
+     or local variable.
+
+      OK case 1:
+        volatile unsigned char   array[2];                <- added volatile
+        
+        int test( void ) {
+        
+            unsigned char   temp;
+        
+            temp = array[1];
+            array[1]  = array[0] ;
+            array[0]  = temp;
+        }
+
+      OK case 2:
+        unsigned char   array[2];
+        
+        int test( void ) {
+        
+            volatile unsigned char   temp;                <- added volatile
+        
+            temp = array[1];
+            array[1]  = array[0] ;
+            array[0]  = temp;
+        }
+
+      OK case 3:
+        unsigned char   array[2];
+        
+        int test( void ) {
+        
+            unsigned char   temp;                         <- added volatile
+        
+            temp = array[1];
+            array[1]  = array[0] ;
+            array[0]  = temp;
+        }
+
+      OK case 4:
+        unsigned char   array[2];
+        
+        int test( void ) {
+        
+            unsigned char   temp;
+        
+            temp = array[1];
+            array[1]  = array[0] ;
+            array[0]  = temp + 0x12;                      <- set it in array after operation
+        }
+
+ 19) The pointer variable (ptr) with the initial value of const type such as
+     follows is allocated to ROM in C88.
+     It is usually allocated by RAM in ANSI C.
+     Example)
+         const char xyz;
+         const char *ptr = &xyz
+
+     Please describe it as follows to arrange a pointer (ptr) to RAM.
+     You can arrange a pointer (ptr) to RAM by describing it as follows.
+     Correction)
+         const char xyz;
+         const char *ptr;
+
+         ptr = &xyz;
+
+ 20) The all pointer variables with initial value are allocated to ROM in C88
+     as follows.
+     It is usually allocated by RAM in ANSI C.
+     Example)
+      NG case 1:
+         char xyz;
+         char *ptr = &xyz
+
+      NG case 2:
+        void (*function_pointer) (void) = (void (*) (void))function;
+        void function (void) {
+                :
+                :
+             return; 
+        }
+
+     Correction)
+     Please separate a definition and initialization to arrange a pointer to RAM.
+     You can arrange a pointer to RAM by describing it as follows.
+      OK case 1:
+         char xyz;
+         char *ptr;
+
+         ptr = &xyz;
+
+      OK case 2:
+        void (*function_pointer) (void);
+        void function (void) {
+                :
+                :
+             return; 
+        }
+
+        func_X(){
+                :
+            function_pointer=(void (*) (void))function;   ----- *1
+                :
+        }
+
+        *1 Please substitute it in a function
+
+ 21) Describing only section designation by assembler in C88, then it is not
+     possible to describe data in itself by C language.
+     Example)
+         #pragma asm
+         DEFSECT   ".frdata3",DATA,FIT 10000H,ROMDATA
+         SECT      ".frdata3"
+         #pragma endasm
+
+         _rom static unsigned char Test3[] = {7,11,11,11,11,
+                                              _a_12,_b_12,_c_12,_d_12,_e_12,_f_12,_g_12,
+                                              _a_12,_b_12,_c_12,_d_12,_e_12,_f_12,_g_12,
+                                              _a_12,_b_12,_c_12,_d_12,_e_12,_f_12,_g_12};
+     When you specify the location of data by C language, please specify address with
+     a _at() attribute.
+     In addition, please describe all the data tables by assembler when you describe
+     a section by assembler.
+     Correction)
+          DEFSECT   ".frdata3",DATA,FIT 10000H,ROMDATA
+          SECT      ".frdata3"
+
+     _Test0: DB 007H,00BH,00BH,00BH,00BH,008H,07CH,0FEH,0C6H,0C6H,0C6H,0C6H
+             DB 0C6H,0C6H,...
+
+
+----------------------------------------------------------------------------
+  <ASM88>
+
+  1) Macro function @CNT() returns the number of arguments of the macro
+     interpreted, but @CNT() always returns 0.
+
+     TEST   MACRO    ADDR,DATA
+         IF  @CNT() < 2
+             fail    'Incorrect number of arguments!!!'
+             exitm
+         ENDIF
+         :
+     ENDM
+
+     When there are arguments less than 2 in the above macro, it outputs error
+     message.
+     However delivering a right argument in macro, it becomes an assembling error.
+     When you want to check the number of macro arguments, please use a @ARG function.
+
+     TEST   MACRO    ADDR,DATA
+
+         IF @ARG('ADDR') ==0
+             fail    'Incorrect number of arguments!!!'
+             exitm
+         ENDIF
+         IF @ARG('DATA') ==0
+             fail    'Incorrect number of arguments!!!'
+             exitm
+         ENDIF
+         :
+
+     ENDM
+
+----------------------------------------------------------------------------
+  <LINK88>
+
+   1) Please do not use connected two "_"  in a symbol name (includes C function
+      and variable name).
+            
+     NG sample.1)
+       test1.c:
+         extern void __Function( void );
+                              
+         int main( void ) {
+            __Function();
+         }
+     NG sample.2)
+       test2.c:
+         void a__Function( void ) {
+            return;
+         }
+         int main( void ) {
+            a__Function();
+         }
+     ==>Link processing cannot be finished normally because a following error
+        occurs at the time of the link.
+        "lk88 E208 (0): Found unresolved external(s):" 

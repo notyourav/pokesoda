@@ -1,0 +1,99 @@
+* S1C88832 FUNCTION OPTION DOCUMENT V1.02A
+*
+* FILE NAME    T88832.fdc
+* USER'S NAME  
+* INPUT DATE   2001/10/29
+* COMMENT      
+*
+* *** OPTION A ***
+* --- #PERIPHERAL CIRCUIT BOARD OPTION ---
+* OSC1 SYSTEM CLOCK Internal Clock(32.768KHz) ---- Selected
+* OSC3 SYSTEM CLOCK Internal Clock(4.9152MHz) ---- Selected
+*OPT0A01 01
+*OPT0A02 01
+*
+* *** OPTION NO.1 ***
+* --- OSC1 SYSTEM CLOCK ---
+* Crystal ---- Selected
+ OPT0101 01
+*
+* *** OPTION NO.2 ***
+* --- OSC3 SYSTEM CLOCK ---
+* Crystal ---- Selected
+ OPT0201 01
+*
+* *** OPTION NO.3 ***
+* --- MULTIPLE KEY ENTRY RESET ---
+* COMBINATION Not Use ---- Selected
+ OPT0301 01
+*
+* *** OPTION NO.4 ***
+* --- SVD RESET ---
+* Not Use ---- Selected
+ OPT0401 01
+*
+* *** OPTION NO.5 ***
+* --- INPUT PORT PULL UP RESISTOR ---
+* K00 With Resistor ---- Selected
+* K01 With Resistor ---- Selected
+* K02 With Resistor ---- Selected
+* K03 With Resistor ---- Selected
+* K04 With Resistor ---- Selected
+* K05 With Resistor ---- Selected
+* K06 With Resistor ---- Selected
+* K07 With Resistor ---- Selected
+* K10 With Resistor ---- Selected
+* /RESET With Resistor ---- Selected
+ OPT0501 01
+ OPT0502 01
+ OPT0503 01
+ OPT0504 01
+ OPT0505 01
+ OPT0506 01
+ OPT0507 01
+ OPT0508 01
+ OPT0509 01
+ OPT0510 01
+*
+* *** OPTION NO.6 ***
+* --- I/O PORT PULL UP RESISTOR ---
+* P10 With Resistor ---- Selected
+* P11 With Resistor ---- Selected
+* P12 With Resistor ---- Selected
+* P13 With Resistor ---- Selected
+* P14 With Resistor ---- Selected
+* P15 With Resistor ---- Selected
+* P16 With Resistor ---- Selected
+* P17 With Resistor ---- Selected
+ OPT0601 01
+ OPT0602 01
+ OPT0603 01
+ OPT0604 01
+ OPT0605 01
+ OPT0606 01
+ OPT0607 01
+ OPT0608 01
+*
+* *** OPTION NO.7 ***
+* --- LCD DRIVING DUTY ---
+* 1/32 & 1/16 Duty ---- Selected
+ OPT0701 01
+*
+* *** OPTION NO.8 ***
+* --- LCD POWER SUPPLY ---
+* Internal TYPE A(VC2 Standard,1/5Bias,4.5V) ---- Selected
+ OPT0801 01
+*
+* *** OPTION NO.9 ***
+* --- XBZ OUTPUT ---
+* Use ---- Selected
+ OPT0901 01
+*
+* *** OPTION NO.10 ***
+* --- XTOUT OUTPUT ---
+* Use ---- Selected
+ OPT1001 01
+*
+ OPT1101 01
+*EOF
+

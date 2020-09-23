@@ -1,0 +1,33 @@
+===============================================================================
+	OBPW88 Version 2.70
+	REL_OBPW88_E.TXT
+	Jan 31, 2007
+	SEIKO EPSON CORP.
+===============================================================================
+
+Contents
+----
+1.  Release history
+2.  Different point from manual
+3.  Restriction
+4. The method of the installation
+
+1. Release history
+-----------
+  Ver 1.00    First release
+Å@Ver 2.00    correspondence Windows2000,WindowsXP
+  Ver 2.70    Bug correction of OBPW88(Timing of communication)
+              Addition of USBtoSerial driver(For S5U1C88000W4).
+	      For S1C8F626
+
+2. Different point from manual
+-----------------------
+Å@None
+
+
+3. Restriction
+-----------
+  None
+
+4. The method of the installation
+  Please thaw OBPW88V2_70.zip on the folder of Åc/EPSON/S1C88/writer/obpw/.

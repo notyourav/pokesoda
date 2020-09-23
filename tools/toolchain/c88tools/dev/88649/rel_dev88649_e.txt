@@ -1,0 +1,60 @@
+===============================================================================
+	DEV88649 Version 3.00
+	REL_DEV88649_J.TXT
+	May 22, 2002
+	SEIKO EPSON CORP.
+===============================================================================
+
+Contents
+----
+1.  Release history
+2.  Difference from manual
+3.  Restriction
+
+
+1. Release history
+------------------
+  Ver 1.00    First release
+
+　Ver 2.00
+	<sic88649.ini><T88649.fsa><T88649.fdc>
+    Version up of sic88649.ini by the change of Function Option specifications.
+	Ver1.00		->	Ver2.00
+	No1.　OSC1　SYSTEM　CLOCK
+	1.Crystal	->	1.Crystal
+	2.Ceramic	->	2.CR
+	3.CR
+	4.External Clock
+
+	No2.　OSC3　SYSTEM　CLOCK
+	1.Crystal	->	1.Crystal
+	2.Ceramic	->	2.Ceramic
+	3.CR		->	3.CR
+	4.External Clock
+
+	No4.　INPUT　PORT　PULL-UP　RESISTOR
+	Added a choice of MUC/XMPU.
+
+	<Fil88649.exe>
+	Version up by the correction of the Fil88649.exe bug.
+	Ver1.00		->	Ver2.00
+
+  Ver 3.00
+	Added peripheral circuit board option(OSC1 SYSTEM CLOCK).
+	Added peripheral circuit board option(OSC3 SYSTEM CLOCK).
+	Added Option (No.7 INPUT PORT INPUT I/F LEVEL).
+
+2. Difference from manual
+-------------------------
+　None
+
+
+3. Restriction
+--------------
+
+  	Ver 3.00
+	Option 7 (No. 7 INPUT PORT INPUT I/F LEVEL) is non-correspondence in
+    S5U1C88649D2200.
+
+
+

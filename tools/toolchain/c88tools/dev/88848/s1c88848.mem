@@ -1,0 +1,35 @@
+/**************************************************************************
+**
+**	FILE        :  @(#)s1c88848.mem	1.2
+**
+**	VERSION     :  02/12/24
+**
+**	DESCRIPTION :  External memory description for s1C88348
+**		       - single chip MCU mode (default) 
+**		       The user should select the mode by adding or 
+**		       removing comments.
+**
+**	COPYRIGHT   :  2002 SEIKO EPSON CORPORATION
+**
+**************************************************************************/
+
+memory {
+////////////////////////////////////////////////////////////////////////
+//
+//	S I N G L E   C H I P   M C U   M O D E
+//
+//
+	/////////////////////////////////////////////////////////
+	//
+	// external bus is empty
+	// 
+	bus external_bus {
+		mau 8;
+	}
+
+	/////////////////////////////////////////////////////////
+	//
+	// chips
+
+	/* only on-chip memory available in single chip mode */
+}

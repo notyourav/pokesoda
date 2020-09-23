@@ -1,0 +1,635 @@
+===============================================================================
+    C88 c1.2 r3
+    REL_COMP_J.TXT
+    Dec 20, 2007
+    SEIKO EPSON CORP.
+===============================================================================
+
+目次
+----
+1.  更新履歴
+2.  マニュアルとの相違
+3.  制限事項
+
+
+1. 更新履歴
+-----------
+
+
+2. マニュアルとの相違点
+-----------------------
+
+    なし
+
+
+3. 制限事項
+-----------
+
+  <C88>
+
+[1] コンパイルオプションの最適化オプション -O0(optimization off) のときのみ
+
+ 1) char型の値を除算したときに、正しく行われません。
+    unsigned charを使用することで回避できます。
+
+ 2) switch文で 等値演算(==,!=), 関係演算(>,>=,<,<=),論理否定演算(!)を
+    行うとコンパイルエラーになります。
+
+      switch(!a)                     NG
+
+      a=!a;
+      switch(a)                      OK
+
+ 3) 構造体メンバへの代入後、構造体メンバの値を参照するとprintf出力が正しく行われない。
+    (LARGEモデルのみ)
+
+      typedef union {
+          float   dat ;
+          unsigned char   buf[4] ;
+      } DATA ;
+      float   dt01 = -3.4E+038 ;
+      DATA    a;
+         :
+
+      a.dat = dt01 ;                  //代入
+      if (
+             a.buf[0] != 0x9e         //参照
+          || a.buf[1] != 0xc9 
+          || a.buf[2] != 0x7f 
+          || a.buf[3] != 0xff 
+      ) {
+          err++ ;
+      }
+       :
+      printf(...);                    //printf内部でエラー発生
+
+[2] コンパイルオプションの最適化オプション -O1(optimization on) のときのみ
+
+  1) ローテートを32回行った結果が0にならない場合があります。
+     (int)A>>=32
+
+  2) 関数のreturn文中にて(int)a*aの演算を行うと,コンパイルエラーとなります。
+
+       int sub(int a)
+       {
+            :
+          return a*a;
+       }
+       
+  3) (s)printf()の文字列指定中に%があるとそれ以降の全ての文字列を無視します。
+       char*   pText="test%test";
+       printf("%s\n",pText);
+
+     結果
+       test
+
+  4) 多次元のchar型へのポインタへの文字列関数処理を行った場合,
+     char型へのポインタへのインクリメントが正常に行えない場合があります。
+
+       char tbl[2][10] = {
+           {"top"},
+           {"bottom"}
+       } ;
+       char (*wp)[10]  = tbl ;
+       if (strcmp( (*wp)[0], "top" ) == 0 );
+           printf("%s\n",wp);
+       wp++ ;
+       printf("%s\n",wp);
+
+     結果
+       top
+       top             "bottom" を指さなければならない
+
+  5) for文の終了条件が以下の場合正常に動作しないことがあります。
+   　for文の式を複数記述する場合 (j++,k++),判定条件の変数を扱う式を
+   　最後に記述する必要があります。
+       for( j = 0; j < 10; k++ ,j++)   OK
+
+　   　for( j = 0; j < 10; j++ ,k++)   NG
+
+     NGの場合コンパイル時に以下のように解釈してしまいます。
+   　　for( j = 0; k < 10; j++ ,k++)
+
+  6) case文内でループ処理を用いて構造体のメンバへの代入が正しく行えない。
+     ループ処理をはずせば正常に動作します。
+
+       for( i = 0; i < 1; i++ )
+       {
+           switch( i ) {
+           case 0 : 
+               for ( j=0 ; j < 1 ; j++ ) {      //for文を削除すれば正常動作
+                   s1.x3[i]  = s1.x1p->data ;
+               }
+               break ;
+           case 1 :
+               s1.x3[i]  = s1.x1p->data ;
+               break ;
+           default: break ;
+           }
+       }
+
+  7) 3重ループ以上のとき、初期化されたint型の2次元以上の配列の参照が正常に行われない。
+     char型の2次元以上の配列を使用すれば回避できます。
+
+       int a[2][2] ={ { 78, 79, },{ 80, 81, } };
+       for(i=0;i<1;i++)
+       {
+           for(j=0;j<2;j+=1)
+           {
+               for(k=0;k<1;k++) 
+               {
+                   if (a[j][k] != 78)        //a[0][0]が78になりません。
+                       flg++;
+               }
+           }
+       }
+
+  8) 再帰関数の際に、static型の値の参照が正しく行えない場合があります。
+
+       int test1(int flg)
+       {
+            static int count = 0 ;
+            count ++ ;
+            if (flg == 0)
+                return 0 ;
+            if (flg == 1)
+            {
+                flg -- ;
+                test1(flg);
+                return count ;
+            }
+       }
+      関数test1は再帰的に2回呼ばれstatic変数countは2になるはずだが1になってしまいます。
+
+  9) sscanf()がオーバーフローした時予期しない値を返す場合があります。
+
+       sscanf( "12345", "%x", &iDat ):
+       printf("%x",iDat);
+       sscanf( "1289ABx", "%x", &iDat ):
+       printf("%x",iDat);
+       sscanf( "4294967295", "%d", &iDat ):
+       printf("%lx",iDat);
+     結果
+       ffffffff
+       ffffffff
+       7FFF
+
+ 10) 関数の引数に同一変数の演算結果を渡した場合の結果が保証されません。
+       
+       int function (int x,y,z);
+       {
+             return x+y+z;
+       }
+
+       int ix=1;
+     　function (ix++,ix++,ix++);
+
+
+ 11) 自己参照構造体で,構造体へのポインタに初期値を代入するループと同じループ内で
+     ポインタを用いてメンバに値を代入するとスタックポインタが壊れるおそれがあります。
+     (LARGEモデルのみ)
+
+        struct person {
+            int  no;
+            char name[20];
+            int  age ;
+            struct person *next;
+        } ;
+
+            struct person list[10] ;
+            struct person *pp;
+    NG
+            for ( i=0 ; i< 2 ; i++ )
+            {
+                pp = &list[i];
+                :
+                pp->next = NULL;
+            }
+    OK
+            for ( i=0 ; i< 2 ; i++ )
+                pp = &list[i];
+
+            for ( i=0 ; i< 2 ; i++ )
+                pp->next = NULL;
+
+ 12) longjmp 関数使用前に YPレジスタを0クリアしないと正常に動作しない場合があります。
+
+
+ 13) ループ内である変数のポインタを異なるデータ型にキャストし、そのポインタを元に
+     ループ変数を添字とした配列として使用した場合で、かつループの最後でループ変数を
+     インクリメントした場合コンパイラが停止する事があります。この場合エラーメッセ
+     ージは表示されませんのでご注意下さい。
+
+    char sfr_tdata;
+                
+    long usFuncLocal;
+    char i;
+
+    double a;
+
+    void func( void ) {
+        char y;
+
+        while ( i ) {
+            /* 任意のコード */
+            a *= a;
+            a *= a;
+            a *= a;
+            a *= a;
+
+            /* キャスト必須 */
+             y = ((char *)&usFuncLocal  )[i] ;
+                
+            /* 任意のコード */
+            a *= a;
+            a *= a;
+            a *= a;
+            a *= a;
+                
+            /* メモリアクセスは必須 */
+            sfr_tdata = y;
+                
+            /* 任意のコード */
+            a *= a;
+            a *= a;
+            a *= a;
+                
+            /* while 最後の直前に i++ は必須 */
+            i++;
+                
+            /* ここにコードあると大丈夫 */
+            }
+        }
+    }
+
+[3] -O0/-O1共通
+
+  1) ソースプログラムの一行の文字数が103文字を超えた場合、コンパイルエラーとなります。
+
+  2) 変数のアドレス指定する場合、ROM領域内に指定してもロケートエラーは発生しません。
+
+  3) ビットフィールドメンバへの代入を１行で行うとコンパイルエラーになります。
+　　  struct srt_dat {
+          signed int      bit00 : 3 ;
+          unsigned int    bit01 : 2 ;
+      } ;
+         :
+      struct srt_dat arg1;
+
+      arg1.bit00 = arg1.bit01 = 2 ;  NG
+
+      arg1.bit00 = 2 ;               OK
+      arg1.bit01 = 2 ;               OK
+
+  4) staticで変数を宣言しているとき, 変数の初期値設定されていない場合に
+   　ゼロクリアされない場合があります。
+　 　 - 1次元配列の要素数91以上
+　 　 - 2次元配列
+
+  5) for文のネストレベルが15のとき、各for文内で変数宣言を行うと
+     コンパイルエラーになります。
+
+  6) 関数ポインタによる関数呼び出しを行うとき引数が3個以上あり,
+     且つlong型の引数が2個以上ある場合コンパイル時にエラーになります。
+       void func( char arg3, long arg4, long arg5 )
+       {
+           :
+       }
+
+       void (*funcwp1[])( char, long, long ) = { func } ;
+       funcwp1[0]( 1, 2, 3 ) ;         コンパイルエラー
+
+       引数の型が char, short, long では正常動作します。
+
+  7) 構造体と共用体をメンバに持つ構造体の初期化を行うとき,
+     構造体を文字列で初期化するとコンパイルエラーになります。
+     コンパイルエラー
+         SRT_DAT exsrt1 = {
+                           "0123456789",
+                            1 
+                          } ;
+     以下のように初期化すると,正常に動作します。
+         SRT_DAT exsrt1 = {
+                           {"0123456789"},
+                           { 1 }
+                          } ;
+
+  8) strcpy でコピーするコピー先の領域はコピー元のデータ長+1としてください。
+     stack pointerが破壊される場合があります。
+     unsigned char c1[3] ;     NG
+     unsigned char c1[4] ;     OK
+   　strcpy(c1, "abc") ;
+
+  9) Auto変数に大きな配列を宣言すると,printfが動作しない場合があります。
+
+       int main( void )
+       {
+           unsigned char  var1[3][40], var2[3][600];
+           :
+           printf("test\n") ;
+       }
+     サイズの大きい変数はグローバル領域に宣言して下さい。
+
+ 10) 左辺にポインタの直値演算式が存在するときコンパイルできない場合があります。
+     NG
+         *(( unsigned char * )0xf823 - i - 2 ) = 0xa0;
+     OK
+　    　 unsigned char * pwork;
+         pwork=( unsigned char * )0xf823;
+         *(pwork - i - 2 ) = 0xa0;
+     ポインタを一度ワーク変数に代入することで回避できます。
+
+ 11) 関数の引数にchar型の引数が7個以上ある場合,正常に値が渡すことができません。
+     配列などを用いて,ポインタで渡すなどして引数の数を減らして下さい。
+
+ 12) 組み込み関数 _bcd,_ubcdにてDフラグが正常にクリアされません。
+     また_bcdの引数はchar型のみを使用してください。
+    
+     アセンブラ記述にてDフラグのセット，クリアを行います。
+        unsigned char count;
+
+        count = 0x17;
+        #pragma asm
+            OR  SC,#00010000b   ;D flag set
+        #pragma endasm
+        count += 0x05;
+        #pragma asm
+            AND SC,#11101111b   ;D flag clear
+        #pragma endasm
+
+ 13) #ifdef 内の #pragma asm～ #pragma endasm 内、アセンブラコメントで（；） 
+     を使用しないで下さい。プリプロセッサ通過時に異常ファイルとなり正常
+     にコンパイル・アセンブル出来ません。
+     NG
+        #ifdef FEA_XXX
+        #pragma asm
+         nop   ; don't try this at home
+        #pragma endasm
+        #endif
+
+ 14) 関数の内部での中カッコ { ... } を使用して変数宣言を行った場合、アセンブル時に E287 
+     エラーが発生する事があります。
+     発生例) 
+        unsigned char func0(void)
+        {
+            {                               
+                char i;                     <-----
+                for (i = 0; i < 5; i++) 
+                    uiGlobal_array[ i ] = 0x12;
+            }
+            return 0;
+        }
+
+     エラーが出た時は以下いずれかの方法で回避して下さい。
+     ・ローカル変数は関数の先頭に宣言する。
+     ・最適化無し( -O0 )を指定する
+     ・デバッグ情報を付加せずにコンパイルする( -g オプションを外す )
+    
+     修正例) 
+        unsigned char func0(void)
+        {
+            char i;                         <-----
+            for (i = 0; i < 5; i++) 
+                uiGlobal_array[ i ] = 0x12;
+            return 0;
+        }
+
+ 15) 改行コードが LF のＣソースをコンパイルするとアセンブルエラーが出ます。
+     Ｃソースの改行コードに CRLF( 0D 0A windows 形式) 以外の改行コードを
+     使用しないで下さい。異常動作の原因になります。
+
+ 16) コンパイラは２バイト文字に対応していません。
+     C ソース内で日本語等の２バイト文字の使用は避けて下さい。
+
+     コメントの場合は２バイト文字は使用可能ですが、// ではなく /* ... */ の形式
+     を使用して下さい。
+
+ 17) コンパイラオプション -Ml or -Md( メモリモデルが Compact-Data または Large )
+     で関数ポインタ経由での関数呼び出しを行うと、その後ジャンプすると正しくジャンプ
+     しなくなります。
+
+     関数ポインタ経由で呼び出される関数は 0x00'8000 番地以降に配置して下さい。
+
+ 18) 同一配列間をローカル変数を経由して入れ替えを行うと正常に動作しない事が
+     あります。
+      発生例) 
+      ＮＧケース１：
+        unsigned char   array[2];
+        
+        int test( void ) {
+        
+            unsigned char   temp;
+        
+            temp = array[1];
+            array[1]  = array[0] ;
+            array[0]  = temp;
+        }
+
+      ＮＧケース２：
+      配列、ローカル変数を char から short に変更。long に変えても発生します。
+        unsigned short   array[2];
+        
+        int test( void ) {
+        
+            unsigned short   temp;
+        
+            temp = array[1];
+            array[1]  = array[0] ;
+            array[0]  = temp;
+        }
+
+     修正例) 
+     途中でスクラッチレジスタが要求されるケース、
+      array[ x ] = array[ y ] + 3; 
+     など配列の演算の結果を配列に戻す場合は正常に動作します。配列宣言または
+     ローカル変数に volatile 宣言を追加する事で問題を回避できます。
+
+      回避ケース１：
+        volatile unsigned char   array[2];                <- volatile を追加
+        
+        int test( void ) {
+        
+            unsigned char   temp;
+        
+            temp = array[1];
+            array[1]  = array[0] ;
+            array[0]  = temp;
+        }
+
+      回避ケース２：
+        unsigned char   array[2];
+        
+        int test( void ) {
+        
+            volatile unsigned char   temp;                <- volatile を追加
+        
+            temp = array[1];
+            array[1]  = array[0] ;
+            array[0]  = temp;
+        }
+
+      回避ケース３：
+        unsigned char   array[2];
+        
+        int test( void ) {
+        
+            unsigned char   temp;                         <- volatile を追加
+        
+            temp = array[1];
+            array[1]  = array[0] ;
+            array[0]  = temp;
+        }
+
+      回避ケース４：
+        unsigned char   array[2];
+        
+        int test( void ) {
+        
+            unsigned char   temp;
+        
+            temp = array[1];
+            array[1]  = array[0] ;
+            array[0]  = temp + 0x12;                      <- 演算後に配列にセット
+        }
+
+ 19) C88で下記のようなconst型の初期値付きポインタ変数（ptr）はROMに配置されます。
+     通常ANSI CではRAMに配置されます。
+
+      発生例) 
+       　const char xyz;
+         const char *ptr = &xyz
+
+     ポインタ（ptr）をRAMに配置するには下記のように記述してください。
+     下記のように記述することで、ポインタ（ptr）をRAMに配置することができます。
+
+     修正例) 
+         const char xyz;
+         const char *ptr;
+
+         ptr = &xyz;
+
+ 20) C88で下記のように全ての初期値付きポインタ変数は ROM に配置されます。
+     通常ANSI CではRAMに配置されます。
+
+      発生例) 
+      例 1
+       　char xyz;
+         char *ptr = &xyz
+
+      例 2
+        void (*function_pointer) (void) = (void (*) (void))function;
+        void function (void) {
+                :
+                :
+             return; 
+        }
+
+     修正例) 
+     ポインタをRAMに配置するには定義と初期化を別にしてください。
+     下記のように記述することで、ポインタをRAMに配置することができます。
+
+     例 1
+         char xyz;
+         char *ptr;
+
+         ptr = &xyz;
+
+     例 2
+        void (*function_pointer) (void);
+        void function (void) {
+                :
+                :
+             return; 
+        }
+
+        func_X(){
+                :
+            function_pointer=(void (*) (void))function;   ----- *1
+                :
+        }
+
+        *1 関数内で代入してください
+
+ 21) C88でセクション指定だけをアセンブラで記述し、データ自体をC言語で記述する
+     ことはできません。
+
+      発生例) 
+         #pragma asm
+     　　DEFSECT   ".frdata3",DATA,FIT 10000H,ROMDATA
+         SECT      ".frdata3"
+         #pragma endasm
+
+         _rom static unsigned char Test3[] = {7,11,11,11,11,
+                                              _a_12,_b_12,_c_12,_d_12,_e_12,_f_12,_g_12,
+                                              _a_12,_b_12,_c_12,_d_12,_e_12,_f_12,_g_12,
+                                              _a_12,_b_12,_c_12,_d_12,_e_12,_f_12,_g_12};
+
+     C言語でデータの配置をする場合は_at()属性で番地を指定してください。
+     また、セクションをアセンブラで記述する場合はデータテーブルをすべてアセンブラ
+     で記述するようにしてください。
+
+     修正例) 
+        　DEFSECT   ".frdata3",DATA,FIT 10000H,ROMDATA
+          SECT      ".frdata3"
+
+     _Test0: DB 007H,00BH,00BH,00BH,00BH,008H,07CH,0FEH,0C6H,0C6H,0C6H,0C6H
+             DB 0C6H,0C6H,～
+
+
+----------------------------------------------------------------------------
+  <ASM88>
+
+　1) マクロ関数 @CNT()は、マクロ展開の引数の数を返すのですが,
+     @CNT()は常に０を返してしまいます。
+
+     TEST   MACRO    ADDR,DATA
+         IF  @CNT() < 2
+             fail    'Incorrect number of arguments!!!'
+             exitm
+         ENDIF
+         :
+     ENDM
+
+     上記マクロでは引数が２より少ない場合,エラーメッセージを出力します。
+     しかし,正しい引数をマクロに引き渡しているのに,アセンブルエラーとなってしまいます。
+
+     マクロの引数の数をチェックしたい場合は,
+     @ARG関数を使用してください。
+
+     TEST   MACRO    ADDR,DATA
+
+         IF @ARG('ADDR') ==0
+             fail    'Incorrect number of arguments!!!'
+             exitm
+         ENDIF
+         IF @ARG('DATA') ==0
+             fail    'Incorrect number of arguments!!!'
+             exitm
+         ENDIF
+         :
+
+     ENDM
+
+----------------------------------------------------------------------------
+  <LINK88>
+
+   1) シンボル名( C の 関数、変数名含む )内で _ を２つ繋げて使わないで下さい。
+            
+     NG sample.1)
+       test1.c:
+         extern void __Function( void );
+                              
+         int main( void ) {
+            __Function();
+         }
+     NG sample.2)
+       test2.c:
+         void a__Function( void ) {
+            return;
+         }
+         int main( void ) {
+            a__Function();
+         }
+     ==>リンク時に 
+     lk88 E208 (0): Found unresolved external(s):
+     とエラーが出るため正常にリンク処理が終了出来ません。

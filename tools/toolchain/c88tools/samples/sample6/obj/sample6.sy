@@ -1,0 +1,8 @@
+000100  __START
+0002b3  int_clock
+00030a  _disp_stringY8
+00038e  DPCHR16SUB_MCU
+0003c8  _disp_dotY16
+0003eb  _k_osc_1to3
+00040f  int_dummy
+00f800  __lc_es

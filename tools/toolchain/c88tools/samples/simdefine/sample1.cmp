@@ -1,0 +1,22 @@
+[Internal]
+CPU=CPU.bmc
+LCD=LcdDrv88.bmc
+K/P/R port=KPRport.bmc
+SVD=SVD88.bmc
+Sound=Sound88.bmc
+
+[Settings]
+CpuType=88348
+ChipMode=MCU
+CpuModel=1
+OSC1=32.768K
+OSC3=4.9152MHz
+
+[External]
+
+[LCD]
+BkColor=156,156,99
+OffColor=124,124,71
+
+
+

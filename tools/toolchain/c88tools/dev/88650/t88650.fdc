@@ -1,0 +1,136 @@
+* S1C88650 FUNCTION OPTION DOCUMENT V5.01
+*
+* FILE NAME    zzzzzzzz.FDC
+* USER'S NAME  
+* INPUT DATE   2005/07/05
+* COMMENT      
+*
+* *** OPTION A ***
+* --- Peripheral Circuit Board Option OSC1 SYSTEM CLOCK ---
+* Internal clock ---- Selected
+*OPT0A01 01
+*
+* *** OPTION B ***
+* --- Peripheral Circuit Board Option OSC3 SYSTEM CLOCK ---
+* Internal clock ---- Selected
+*OPT0B01 01
+*
+* *** OPTION NO.1 ***
+* --- OSC1 SYSTEM CLOCK ---
+* Crystal ---- Selected
+ OPT0101 01
+*
+* *** OPTION NO.2 ***
+* --- OSC3 SYSTEM CLOCK ---
+* Crystal ---- Selected
+ OPT0201 01
+*
+* *** OPTION NO.3 ***
+* --- MULTIPLE KEY ENTRY RESET ---
+* Not Use ---- Selected
+ OPT0301 01
+*
+* *** OPTION NO.4 ***
+* --- INPUT PORT PULL UP REGISTOR ---
+* K00 With Resistor ---- Selected
+* K01 With Resistor ---- Selected
+* K02 With Resistor ---- Selected
+* K03 With Resistor ---- Selected
+* K04 With Resistor ---- Selected
+* K05 With Resister ---- Selected
+* K06 With Resistor ---- Selected
+* K07 With Resistor ---- Selected
+* XRESET With Resistor ---- Selected
+* XMPU/MCU With Resistor ---- Selected
+ OPT0401 01
+ OPT0402 01
+ OPT0403 01
+ OPT0404 01
+ OPT0405 01
+ OPT0406 01
+ OPT0407 01
+ OPT0408 01
+ OPT0409 01
+ OPT0410 01
+*
+* *** OPTION NO.5 ***
+* --- I/O PORT PULL UP RESISTOR ---
+* P00 With Resistor ---- Selected
+* P01 With Resistor ---- Selected
+* P02 With Resistor ---- Selected
+* P03 With Resistor ---- Selected
+* P04 With Resistor ---- Selected
+* P05 With Resistor ---- Selected
+* P06 With Resistor ---- Selected
+* P07 With Resistor ---- Selected
+* P10 With Resistor ---- Selected
+* P11 With Resistor ---- Selected
+* P12 With Resistor ---- Selected
+* P13 With Resistor ---- Selected
+* P14 With Resistor ---- Selected
+* P15 With Resistor ---- Selected
+* P16 With Resistor ---- Selected
+* P17 With Resistor ---- Selected
+ OPT0501 01
+ OPT0502 01
+ OPT0503 01
+ OPT0504 01
+ OPT0505 01
+ OPT0506 01
+ OPT0507 01
+ OPT0508 01
+ OPT0509 01
+ OPT0510 01
+ OPT0511 01
+ OPT0512 01
+ OPT0513 01
+ OPT0514 01
+ OPT0515 01
+ OPT0516 01
+*
+* *** OPTION NO.6 ***
+* --- INPUT PORT INPUT I/F LEVEL ---
+* K00 CMOS LEVEL ---- Selected
+* K01 CMOS LEVEL ---- Selected
+* K02 CMOS LEVEL ---- Selected
+* K03 CMOS LEVEL ---- Selected
+* K04 CMOS LEVEL ---- Selected
+* K05 CMOS LEVEL ---- Selected
+* K06 CMOS LEVEL ---- Selected
+* K07 CMOS LEVEL ---- Selected
+ OPT0601 01
+ OPT0602 01
+ OPT0603 01
+ OPT0604 01
+ OPT0605 01
+ OPT0606 01
+ OPT0607 01
+ OPT0608 01
+*
+* *** OPTION NO.7 ***
+* --- I/O PORT INPUT I/F LEVEL ---
+* P10 CMOS LEVEL ---- Selected
+* P11 CMOS LEVEL ---- Selected
+* P12 CMOS LEVEL ---- Selected
+* P13 CMOS LEVEL ---- Selected
+* P14 CMOS LEVEL ---- Selected
+* P15 CMOS LEVEL ---- Selected
+* P16 CMOS LEVEL ---- Selected
+* P17 CMOS LEVEL ---- Selected
+ OPT0701 01
+ OPT0702 01
+ OPT0703 01
+ OPT0704 01
+ OPT0705 01
+ OPT0706 01
+ OPT0707 01
+ OPT0708 01
+*
+* *** OPTION NO.8 ***
+* --- WATCHDOG TIMER XNMI GENERATION CYCLE ---
+* 131072/fosc1 ---- Selected
+ OPT0801 03
+*
+ OPT0901 01
+*EOF
+

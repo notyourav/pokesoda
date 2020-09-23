@@ -1,0 +1,29 @@
+===============================================================================
+	S5U1C88650F1200
+	c88650V2.mcs
+	Jun 23, 2005
+	SEIKO EPSON CORP.
+===============================================================================
+
+Table of Contents
+-----------------
+1.  Revision History
+2.  Differences from the Manual
+3.  Limitations and Known Problems
+
+
+1. Revision History
+-------------------
+
+  Ver 1.00	First release
+  Ver 2.00	The correction of the bug that the single chip & maximum mode cannot set.
+
+
+2. Differences from the Manual
+------------------------------
+
+  None
+
+
+3. Limitations and Known Problems
+---------------------------------

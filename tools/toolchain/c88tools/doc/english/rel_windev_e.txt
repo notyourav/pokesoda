@@ -1,0 +1,19 @@
+<Winfog,Winsog,Winmdc common>
+
+1. Revision History
+
+
+2. Difference from the manual
+
+    none
+
+
+3. Restrictions
+
+  1) Please use the model information definition file (S1C88xxx.ini) prepared
+     with this package by all means.
+
+  2) Please never change the contents of the file to use with the DEV tool by
+     editors. With the changed file, it cannot bear the responsibility of the
+     malfunction that may occur.
+

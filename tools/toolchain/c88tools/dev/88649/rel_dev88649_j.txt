@@ -1,0 +1,59 @@
+===============================================================================
+	DEV88649 Version 2.00
+	REL_DEV88649_J.TXT
+	May 22, 2002
+	SEIKO EPSON CORP.
+===============================================================================
+
+目次
+----
+1.  更新履歴
+2.  マニュアルとの相違
+3.  制限事項
+
+
+1. 更新履歴
+-----------
+  Ver 1.00    初回リリース
+
+　Ver 2.00
+	<sic88649.ini><T88649.fsa><T88649.fdc>
+	Function Option仕様変更によるsic88649.iniのバージョンアップ
+	Ver1.00		→	Ver2.00
+	No1.　OSC1　SYSTEM　CLOCK
+	1.Crystal	→	1.Crystal
+	2.Ceramic	→	2.CR
+	3.CR
+	4.External Clock
+
+	No2.　OSC3　SYSTEM　CLOCK
+	1.Crystal	→	1.Crystal
+	2.Ceramic	→	2.Ceramic
+	3.CR		→	3.CR
+	4.External Clock
+	
+	No4.　INPUT　PORT　PULL-UP　RESISTOR
+	選択肢MUC/XMPUの追加。
+	
+	<Fil88649.exe>
+	Fil88649.exeバグの修正によるバージョンアップ
+	Ver1.00		→	Ver2.00
+
+　Ver 3.00
+	Peripheral circuit boardオプション OSC1 SYSTEM CLOCKの追加。
+	Peripheral circuit boardオプション OSC3 SYSTEM CLOCKの追加。
+	オプション7（No.7 INPUT PORT INPUT I/F LEVEL）の追加。
+
+2. マニュアルとの相違点
+-----------------------
+　なし
+
+
+3. 制限事項
+-----------
+
+　Ver 3.00
+	オプション7（No.7 INPUT PORT INPUT I/F LEVEL)はS5U1C88649D2200では未対応。
+
+
+

@@ -1,0 +1,72 @@
+===============================================================================
+	WorkBench88 Version 2.04
+	REL_WORKB_E.TXT
+	Jun 23, 2005
+	SEIKO EPSON CORP.
+===============================================================================
+
+Table of Contents
+-----------------
+1.  Revision History
+2.  Differences from the Manual
+3.  Limitations and Known Problems
+
+
+1. Revision History
+-------------------
+
+  Ver 1.00   First release
+  Ver 1.22   Supported Windows 2000.
+  Ver 2.00   Added advanced locator.
+  Ver 2.01   Corrected it so that a .dsc file conversion had different
+             correspondence on the model by automatic generation of DELFEE.
+  Ver 2.02   1. Corrected it to be able to convert a .cpu file in the MPU mode
+                when there were several ROM installed by automatic generation
+                of DELFEE.
+             2. Corrected it to let a par file reflect the contents of the
+                section editor.
+             3. Corrected it not to check comment (//) by the automatic generation
+                of the cpu file.
+  Ver 2.03   1. Corrected to make all list files when "Generate Listing File" of
+                ASM Options was ON .
+             2. In ReBuild, corrected it to update after deleting *.lst files
+                by all means.
+  Ver 2.04   1. Corrected the bug of the forced terminate when there was a cross
+                reference of include in a source.
+             2. Coped with comment at the time of the corrected source search.
+             3. Corrected the forced terminate when a source has a 0a new line code.
+             4. Corrected some notation errors and changed the setting of some check
+                box.
+             5. Corrected makefile at the time of the alc88 use; (build malfunction
+                countermeasure).
+
+2. Differences from the Manual
+------------------------------
+
+  None
+
+
+3. Limitations and Known Problems
+---------------------------------
+
+(1) The source file name that WB88 manages
+
+  The source file name should be unique in WB88 project.
+  Even if directories are different, you cannot register the source file of the
+  same name with the same project.
+
+(2) The directory pass and the source file name which WB88 manages
+
+  You cannot use a 2 bytes character nor a long file name.
+
+(3) File reference on the network
+
+  When you refer to a file on the network from the WB88 top, please use the path
+  name that a drive name was assigned to.
+  You cannot specify the pass beginning with a computer name.
+
+(4) Display font size
+
+  If you select the font size other than Small Fonts or Large Fonts of the system
+  default, there is a possibility that text in WB88 will be truncated.
+

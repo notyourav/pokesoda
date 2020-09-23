@@ -1,0 +1,179 @@
+*** The restriction for the SMC88 Software Development Tool ***
+                                        SEIKO EPSON CORP.
+                                                23/Jun/'2005
+<The restriction of SAP88 Package Ver.4.0>
+----------------------------------------------------------------------------
+The SAP88 package "SMC88 Family Structured Assembler"(before Ver.3.2) which
+SEIKO EPSON has released is simplified the whole tool system like the limit-
+ation under the use or deleting the unnecessary utilities.
+That's why, many problems have occurred to the additional utilities as follows.
+We beg you to use these utilities after understanding these limitations and
+the following precaution to use.
+
+ -The objects which we beg you to keep absolutely at the time of programming-
+
+ 1)Prohibition to use the programming method like C language, Structured
+   control statement, conditional expression, function and assignment
+   operation expression and so on which are enable to make a program like
+   C language about programming by assembly language.
+   However, these specifications are prohibition to use because of many
+   problems existing as follows.
+
+ 2)Prohibition to use the optimized branch instruction at programming by
+   assembly language.
+
+ 3)As the other one, keeping absolutely the following precaution.
+
+  1. <SAP88>
+     These are many bugs about the programming method like C language,
+     Structured control statement and so on.
+     That's why, this specification is prohibition to use.
+
+   1)Prohibition to use Structured control statement, conditional expression
+     The Structured control statement, conditional expression(if,while,switch
+     and so on) generates optimized branch instructions automatically,
+     however, this specification is prohibition to use because of ASM88
+     problems which the following mentioned.
+
+   2)Prohibition to use the all programming method like C language to
+     assembly language, assignment operation expression and so on.
+     As describing in the "README.DOC" which included before the Structured
+     Assembler Package Ver.3.2, the programming method has been enable to
+     use only specification corresponding to the SMC88 core instruction set
+     one by one.
+     However, in spite of the programming corresponding to the SMC88 core
+     instruction set one by one, a part of instruction is converted into
+     some instructions by SAP88, at the time, the register destroy occurs
+     in order not to evacuate the temporary register.
+     (Basically, the SAP88 converts into SMC88 instruction set as much as
+      possible by using the fixed converting method, however, this conversion
+      method itself is differ by the programming method and a part of them
+      are unable to make a rule.)
+     Like this, at the case of programming, it is under the prohibition to
+     use the all programming method as C language, function or assignment
+     operation expression and so on, in order to avoid the occurrence of
+     unexpected problem.
+
+   3)Confliction of label
+     The SAP88 automatically generates the label on the Structured control
+     statement, assignment operation expression and Macro definition.
+     But, the SAP88 does not distinguish the label name both the Structured
+     control statement and Macro definition.
+     By the above reason, it conflicts between the label by structured
+     description and the label by Macro definition, ASM88 occurs the error
+     message of multiply definition.
+     (Including this reason, SAP88 prohibits to use the all Structured
+      control statement and assignment operation expression.)
+
+   4)The support of only Macro definition
+     From the above reason, the specification of SAP88 supports only Macro
+     function which is described at usual assembly language and pseudo
+     instruction.
+----------------------------------------------------------------------------
+  2. <ASM88>
+
+   1)The prohibition of the optimized branch instruction
+     The optimized branch instruction of the relation with JR, CAR occurs
+     many problems as follows.
+     (This problem does not occur under the same situation of using but it
+      depends on the number of the optimized branch instruction, number of
+      symbol, host environment of using.)
+
+     *"Phase error" occurs.
+      Even if it includes only one error, "Phase error" occurs to all branch
+      instruction after that.
+
+     *Error message occurs unexpectedly.
+      It is possible for program to occur the unexpected error message in
+      spite of the part of no error.
+
+     *Mistake of address calculation for relative branch
+	<= This is very important measure.
+      On the branch address calculation for JR,CAR, mistake of address
+      calculation often occurs without error message.
+      And, even if no error occurs at the time of using ASM88, LINK88 has
+      the case which the unexpected error occurs by using this optimized
+      branch instruction.
+      Further, at the time of using the optimized branch instruction rarely
+      ,it does not output error message at all, and it mistakes the
+      calculation of relative branch.
+      It sometimes generates the execution program which branches to the
+      address differing from the actual one.
+      (As to such calculation mistake of relative branch address, it is no
+       way for program except calculating hexadecimal code of execution
+       program, and it is impossible to discover such a mistake as a matter
+       of fact.)
+
+   2)ASM88 never checks the define storage(i.e. DB,DW and so on) size at
+     ROM/RAM size, therefore when it takes a define storage, be careful
+     the size by the customer.
+
+   3)Due to the maximum symbol memory limitation (this depends on the symbol
+     number, length and host environment), sometimes the ASM88 occurs
+     "insufficient Memory" message, in this case, please split file and
+     re-assemble by the customer.
+
+   4)The FIL88XXX (including the DEV88XXX Package) accepts only ascending
+     address order, therefore the location address setting (at the time of
+     using LINK88 and ORG pseudo instructions) must set by ascending address
+     order.
+
+   5)The ASM88 does not check the dependence relation between internal symbol
+     definition and of external one.
+     However, in almost case that it fails to define the symbol in source
+     program, LINK88 outputs the information about undefined symbol.
+     And so, it seems that problem especially does not occur on actual use.
+
+   6)Please never use DBCS character in the source file.
+     The ASM88 does not support the DBCS character, the ASM88 recognizes
+     only SBCS code.
+
+   7)Please never use character of "L" at the top of the label.
+     If it uses the character of "L" at the top of the label or symbol in
+     source program, as the character of "L" is the reserved word in ASM88,
+     it can not detect the undefined label or symbol.
+     (However, if the top character of "L" is the undefined label or symbol,
+      LINK88 can detect this label or symbol.
+      And so, it seems not to be serious problem on the actual use.)
+
+   8)Please never mix "@" and "$" in the label and symbol.
+     Further, the ASM88 supports some of specific character($,.,@, and ?) as
+     label and symbol name, however, from relation of the operation method
+     about a cardinal number at the time of debug on ICE88R.
+     Please use only alpha-numeric and "_"(underscore) in label and symbol.
+
+   9)It prohibits the description of "LABEL+$-$" in the operand.
+     If programmer writes this format, the ASM88 occurs the error message.
+
+  10)If programmer writes "LD [AAA],[BBB]" which the SMC88 does not have as
+     an instruction in the source file, the ASM88 converts incorrect code
+     without error message.
+
+----------------------------------------------------------------------------
+  3. <LINK88>
+
+   1)In case of using SMC88 core 16M. Min and Max mode, the value between
+     physical address and logical address is differ in Bank area(2-255).
+     And LINK88 does not support such SMC88 core architecture.
+     And so, please form the code size to less than 32K bytes in one module
+     except the case within 64K bytes as undermentioned physical area.
+     (The logical address of SMC88 core is 64K bytes from 0 to ffffh.
+      However, in the case of less than 64K bytes as physical address,
+      the address between Bank 0 and Bank 1 is sequence and physical and
+      logical address is same.)
+
+   2)In case that code size is more than 64K bytes at 1 section, LINK88
+     overwrites to the address 0000h which it has already relocated the
+     code after 10000h without error message.
+
+
+----------------------------------------------------------------------------
+  4. <The other Note>
+
+   1)This utility does not support at all auto control for BANK and PAGE
+     expanding address area more than 64K bytes for SMC88 core architecture.
+     And so, please make a program by programmer's control about address
+     control for such BANK and PAGE.
+     In case of no these description, SMC88 core almost disposes as program
+     within 64K bytes.
+----------------------------------------------------------------------------

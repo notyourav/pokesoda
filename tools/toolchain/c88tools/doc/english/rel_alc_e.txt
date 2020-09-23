@@ -1,0 +1,51 @@
+===============================================================================
+	ALC88 Version 1.08
+	REL_ALC88_E.TXT
+	Jun 17, 2005
+	SEIKO EPSON CORP.
+===============================================================================
+
+Table of Contents
+-----------------
+1.  Revision History
+2.  Differences from the Manual
+3.  Limitations and Known Problems
+
+
+1. Revision History
+-------------------
+
+  Ver 1.00	First release
+  Ver 1.01  Corrected the bug that became strange address of the divergence
+            destination at the time of optimization.
+  Ver 1.02  Corrected the enum type non-correspondence, because it became the
+            load error at the time of simulator start.
+  Ver 1.04  1. Corrected the bug to be out of access to the local symbol at the
+               time of optimization.
+            2. Because there was the case which reading of the NON ADDRESS
+               information of an inf file cannot properly, corrected it.
+  Ver 1.07  Corrected the bug that alc88 comes to output only one ***.out and
+            is terminated abnormally, and the warning such as application
+            errors is not displayed then, and any message is not displayed.
+  Ver 1.08  1. Corrected the bug that causes forced terminate when there was no
+               symbol character string declaration.
+            2. Corrected the bug that an error appears in the abs load of
+               DB88/sim88 at the time of enum declaration use.
+            3. Corrected the bug that alc88 displays an error "alc88 E204:
+               Cannot find 0xXXX byte for .text__FUNCNAME section" and terminated
+               when there was a small size function with Large or Compact-Data
+               memory model.
+            4. Corrected the bug that did not arrange a CODE section on the
+               appropriate page.
+            5. Corrected the bug that a program cannot be arranged in an address
+               cut off on a page border.
+
+
+2. Differences from the Manual
+------------------------------
+
+  None
+
+
+3. Limitations and Known Problems
+---------------------------------

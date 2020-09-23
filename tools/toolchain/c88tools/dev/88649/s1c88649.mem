@@ -1,0 +1,88 @@
+/**************************************************************************
+**
+**	FILE        :  @(#)s1c88649.mem	1.0
+**
+**	VERSION     :  01/12/19
+**
+**	DESCRIPTION :  External memory description for S1C88816
+**		       - single chip MCU mode (default) 
+**		       The user should select the mode by adding or 
+**		       removing comments.
+**
+**		       Note: MPU configurations need adaption of 
+**		             s1c88649.cpu file 	
+**
+**	COPYRIGHT   :  2001 SEIKO EPSON CORPORATION
+**
+**************************************************************************/
+
+memory {
+////////////////////////////////////////////////////////////////////////
+//
+//
+//
+	/////////////////////////////////////////////////////////
+	//
+	// external bus is empty
+	// 
+	bus external_bus {
+		mau 8;
+	}
+
+	/////////////////////////////////////////////////////////
+	//
+	// chips
+
+	/* only on-chip memory available in single chip mode */
+////////////////////////////////////////////////////////////////////////
+//	
+//	E X P A N D E D   5 1 2 K   M C U   M O D E  (MINIMUM + MAXIMUM)
+//	NOTE: Example configuration, with external memory 
+//	      - 0x80000-0x180000 read-only (rom) memory
+//	      - 0x180000-0x280000 writable (ram) memory
+//
+
+	/////////////////////////////////////////////////////////
+	//
+	// external bus
+	// 
+  //	bus external_bus {
+  //		mau 8;
+  //		mem addr=0x40000  chips= e_rom;
+  //	}
+
+	/////////////////////////////////////////////////////////
+	//
+	// chips
+	// - external rom, 8 bits addressable, 1M size
+	//
+  //	chips e_rom attr=r mau=8 size=0x100000;
+
+
+////////////////////////////////////////////////////////////////////////
+//	
+//	E X P A N D E D   5 1 2 K   M P U   M O D E  (MINIMUM + MAXIMUM)
+//	NOTE: Example configuration, with external memory 
+//
+
+	/////////////////////////////////////////////////////////
+	//
+	// external bus
+	// 
+  //	bus external_bus {
+  //		mau 8;
+  //		mem addr=0x0      chips= e_rom0;
+  //		mem addr=0xd800   chips= i_ram;
+  //		mem addr=0x10000  chips= e_rom1;
+
+  //	}
+
+	/////////////////////////////////////////////////////////
+	//
+	// chips
+	//
+  //	chips e_rom0 attr=r mau=8 size=0xd800;
+  //	chips i_ram attr=w mau=8 size=0x2800;
+  //	chips e_rom1 attr=r mau=8 size=0x10000;
+
+}

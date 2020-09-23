@@ -1,0 +1,56 @@
+===============================================================================
+	DEV8F626 Version 3.0
+	REL_DEV8F626_E.TXT
+	Jun 26, 2007
+	SEIKO EPSON CORP.
+===============================================================================
+
+Contents
+--------
+1.  Release history
+2.  Difference from manual
+3.  Restriction
+4.  The method of the installation
+
+
+1. Release history
+------------------
+  Ver 1.0    First release
+  Ver 2.0    Modified FOG specification
+                 Modified Option specification
+                 [1]No.A PERIPHERAL CIRCUIT BOARD OPTION
+                    S1C8F626 MASK OPTION LIST
+                    SET1¨none
+                    SET2¨SET1
+                    SET3¨none
+                    SET4¨SET2
+
+                 [2]Changed WIN FOG Setting
+                    The following setting is not necessary.
+                    "Function Option File Generate Setup->Function Option HEX->EPROM Type".
+
+  Ver 3.0    Corrected a trouble of FOG setting
+                 [1]Corrected "Option No.2 OSC3 SYSTEM CLOCK" setting
+                 Option No.2 OSC3 SYSTEM CLOCK
+                 1.Crystal/Ceramic     Mask Data OPT0201 01
+                 2.CR                  Mask Data OPT0201 02
+                 *There is a malfunction for setting with Ver 2.0 and does the
+                  same setting, even if you select the above.
+
+                 [2]Corrected "Option Hex file start address" setting
+
+
+2. Difference from manual
+-------------------------
+  None
+
+
+3. Restriction
+---------------
+  None
+
+
+4. The method of the installation
+----------------------------------
+  Please thaw S5U1C8F626D43.zip on the folder of .../EPSON/S1C88/DEV/.
+  After that, 8F626 folder is made, and various files are installed under that.

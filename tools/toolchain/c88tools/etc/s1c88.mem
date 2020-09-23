@@ -1,0 +1,21 @@
+/**************************************************************************
+**
+**	FILE        :  @(#)s1c88.mem	1.2
+**
+**	VERSION     :  99/04/19
+**
+**	DESCRIPTION :  Generalized memory description for S1C88.
+**		       configured as:
+**		       - no external memory 
+**		         (all memory internal defined in s1c88.cpu )
+**
+**	COPYRIGHT   :  2000 SEIKO EPSON CORPORATION
+**
+**************************************************************************/
+
+memory {
+	/* No external memory; all memory defined as internal memory */
+}
+
+
+

@@ -1,0 +1,31 @@
+/**************************************************************************
+**
+**	FILE        :  @(#)S1C8E108.mem	1.0
+**
+**	VERSION     :  03/04/22
+**
+**	DESCRIPTION :  External memory description for S1C8E108
+**		       - single chip MCU mode (default) 
+**		       The user should select the mode by adding or 
+**		       removing comments.
+**
+**		       Note: MPU configurations need adaption of 
+**		             S1C8E108.cpu file 	
+**
+**	COPYRIGHT   :  2003 SEIKO EPSON CORPORATION
+**
+**************************************************************************/
+
+memory {
+////////////////////////////////////////////////////////////////////////
+//
+//
+//
+	/////////////////////////////////////////////////////////
+	//
+	// external bus is empty
+	// 
+	bus external_bus {
+		mau 8;
+	}
+}

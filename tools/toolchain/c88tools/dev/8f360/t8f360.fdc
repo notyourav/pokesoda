@@ -1,0 +1,142 @@
+* S1C8F360 FUNCTION OPTION DOCUMENT V4.00
+*
+* FILE NAME    T8f360.fdc
+* USER'S NAME  
+* INPUT DATE   2002/11/08
+* COMMENT      
+*
+* *** OPTION A ***
+* --- #PERIPHERAL CIRCUIT BOARD OPTION ---
+* OSC1 SYSTEM CLOCK Internal Clock ---- Selected
+* OSC3 SYSTEM CLOCK Internal Clock ---- Selected
+* LCD POWER SUPPLY LCD POWER IN ICE ---- Selected
+* S1C8F360 MASK OPTION LIST Set 1 ---- Selected
+*OPT0A01 01
+*OPT0A02 01
+*OPT0A03 01
+*OPT0A04 01
+*
+* *** OPTION NO.1 ***
+* --- OSC1 SYSTEM CLOCK ---
+* Crystal ---- Selected
+*OPT0101 01
+*
+* *** OPTION NO.2 ***
+* --- OSC3 SYSTEM CLOCK ---
+* CR ---- Selected
+ OPT0201 02
+*
+* *** OPTION NO.3 ***
+* --- MULTIPLE KEY ENTRY RESET ---
+* Not Use ---- Selected
+*OPT0301 01
+*
+* *** OPTION NO.4 ***
+* --- SVD RESET ---
+* Not Use ---- Selected
+*OPT0401 01
+*
+* *** OPTION NO.5 ***
+* --- INPUT PORT PULL UP RESISTOR ---
+* K00 With Resistor ---- Selected
+* K01 With Resistor ---- Selected
+* K02 With Resistor ---- Selected
+* K03 With Resistor ---- Selected
+* K04 With Resistor ---- Selected
+* K05 With Resistor ---- Selected
+* K06 With Resistor ---- Selected
+* K07 With Resistor ---- Selected
+* K10 With Resistor ---- Selected
+* K11 With Resistor ---- Selected
+* MPU With Resistor ---- Selected
+* TEST With Resistor ---- Selected
+* RESET With Resistor ---- Selected
+*OPT0501 01
+*OPT0502 01
+*OPT0503 01
+*OPT0504 01
+*OPT0505 01
+*OPT0506 01
+*OPT0507 01
+*OPT0508 01
+*OPT0509 01
+*OPT0510 01
+*OPT0511 01
+*OPT0512 01
+*OPT0513 01
+*
+* *** OPTION NO.6 ***
+* --- OUTPUT PORT SPECIFICATION ---
+* R00 Complementary ---- Selected
+* R01 Complementary ---- Selected
+* R02 Complementary ---- Selected
+* R03 Complementary ---- Selected
+* R04 Complementary ---- Selected
+* R05 Complementary ---- Selected
+* R06 Complementary ---- Selected
+* R07 Complementary ---- Selected
+* R10 Complementary ---- Selected
+* R11 Complementary ---- Selected
+* R12 Complementary ---- Selected
+* R13 Complementary ---- Selected
+* R14 Complementary ---- Selected
+* R15 Complementary ---- Selected
+* R16 Complementary ---- Selected
+* R17 Complementary ---- Selected
+*OPT0601 01
+*OPT0602 01
+*OPT0603 01
+*OPT0604 01
+*OPT0605 01
+*OPT0606 01
+*OPT0607 01
+*OPT0608 01
+*OPT0609 01
+*OPT0610 01
+*OPT0611 01
+*OPT0612 01
+*OPT0613 01
+*OPT0614 01
+*OPT0615 01
+*OPT0616 01
+*
+* *** OPTION NO.7 ***
+* --- I/O PORT PULL UP RESISTOR ---
+* P00 With Resistor ---- Selected
+* P01 With Resistor ---- Selected
+* P02 With Resistor ---- Selected
+* P03 With Resistor ---- Selected
+* P04 With Resistor ---- Selected
+* P05 With Resistor ---- Selected
+* P06 With Resistor ---- Selected
+* P07 With Resistor ---- Selected
+* P10 With Resistor ---- Selected
+* P11 With Resistor ---- Selected
+* P12 With Resistor ---- Selected
+* P13 With Resistor ---- Selected
+* P14 Gate Direct ---- Selected
+* P15 Gate Direct ---- Selected
+* P16 Gate Direct ---- Selected
+* P17 Gate Direct ---- Selected
+*OPT0701 01
+*OPT0702 01
+*OPT0703 01
+*OPT0704 01
+*OPT0705 01
+*OPT0706 01
+*OPT0707 01
+*OPT0708 01
+*OPT0709 01
+*OPT0710 01
+*OPT0711 01
+*OPT0712 01
+*OPT0713 01
+*OPT0714 01
+*OPT0715 01
+*OPT0716 01
+*
+* *** OPTION NO.8 ***
+* --- R26/R51 PORT SPECIFICATION ---
+* R26=Normal,R51=Normal S1C883** ---- Selected
+ OPT0801 02
+*EOF

@@ -1,0 +1,31 @@
+===============================================================================
+	AS88 c1.2 r3
+	REL_AS88_E.TXT
+	Dec 11, 2007
+	SEIKO EPSON CORP.
+===============================================================================
+
+Table of Contents
+-----------------
+1.  Revision History
+2.  Differences from the Manual
+3.  Limitations and Known Problems
+
+
+1. Revision History
+-------------------
+
+
+2. Differences from the Manual
+------------------------------
+
+  None
+
+
+3. Limitations and Known Problems
+---------------------------------
+
+(1) When you specified a file name beyond 127 characters to pass an argument of
+    AS88, the created abs file cannot be loaded by DB88/SIM88.
+    Please specify a file name equal to or less than 127 characters.
+

@@ -1,0 +1,28 @@
+===============================================================================
+	Universal ROM Writer S1C8F360 Version 1.10
+	REL_RW8F360_E.TXT
+	Jun 23, 2005
+	SEIKO EPSON CORP.
+===============================================================================
+
+Table of Contents
+-----------------
+1.  Revision History
+2.  Differences from the Manual
+3.  Limitations and Known Problems
+
+
+1. Revision History
+-----------
+  Ver 1.00   first release
+  Ver 1.10   It is modified so that it can start from the DOS prompt without inputting ".exe"
+
+2. Difference from the Manual
+-----------------------------
+  Nothing.
+
+
+
+3. Limitations and Known Problems
+-----------------------------
+  Nothing.

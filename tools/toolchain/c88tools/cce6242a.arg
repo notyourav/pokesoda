@@ -1,0 +1,6 @@
+'-e'
+'-Itools/toolchain/include'
+'-Md'
+'-o'
+'soda.obj'
+'soda.asm'

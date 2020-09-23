@@ -1,0 +1,177 @@
+/**************************************************************************
+**
+**	FILE        :  @(#)s1c88832.cpu	1.2
+**
+**	VERSION     :  99/04/19
+**
+**	DESCRIPTION :  CPU description for S1C88832.
+**		       - MCU mode (default)
+**		       - MPU mode
+**
+**	COPYRIGHT   :  2000 SEIKO EPSON CORPORATION
+**
+**************************************************************************/
+
+cpu {
+////////////////////////////////////////////////////////////////////////
+//
+//	 A D R E S S I N G   M O D E S 
+//
+
+	/////////////////////////////////////////////////////////
+	//
+	// program memory short
+	// - Section CODE SHORT (object format id-nbr Y3)
+	// - 8 bits addressable
+	// - 0-32k address range mapped to 0-32k address space
+	//         (via addressing mode code)
+	//          
+	amode code_short {
+		attribute Y3;
+		mau 8;
+		map src=0 size=32k dst=0 amode=code;
+	}
+
+	/////////////////////////////////////////////////////////
+	//
+	// program memory/ constant rom data
+	// - Section CODE (object format id-nbr Y1)
+	// - 8 bits addressable
+	// - 0-8M address range mapped to 0-8M address space
+	//        (via addressing mode data)
+	//
+	amode code {
+		attribute Y1;
+		mau 8;
+		map src=0 size=8M dst=0 space=SMC88_space;
+	}
+
+	/////////////////////////////////////////////////////////
+	//  data memory tiny
+	// - Section DATA TINY (object format id-nbr Y5)
+	// - 8 bits addressable
+	// - 0-256 address range mapped to address space
+	//         (via addressing mode data_short)
+	//          
+	amode data_tiny {
+		attribute Y5;
+		mau 8;
+		map src=0 size=0x100 align=0x100 amode=data_short;
+	}
+
+	/////////////////////////////////////////////////////////
+	//
+	// data memory short
+	// - Section DATA SHORT (object format id-nbr Y4)
+	// - 8 bits addressable
+	// - 0-64k address range mapped to 0-64k address space 
+	//	   (via adressing mode data)
+	//
+	amode data_short {
+		attribute Y4;
+		mau 8;
+		map src=0 size=64k dst=0 amode=data;
+	}
+
+	/////////////////////////////////////////////////////////
+	//
+	// data memory 
+	// - Section DATA (object format id-nbr Y2)
+	// - 8 bits addressable
+	// - 0-16M address range mapped to 0-16M address space
+	//
+	amode data {
+		attribute Y2;
+		mau 8;
+		map src=0 size=16M dst=0 space=SMC88_space;
+	}
+
+
+///////////////////////////////////////////////////////////////////////
+//
+//	S P A C E 
+//
+	
+	/////////////////////////////////////////////////////////
+	//
+	// address space 
+	// - 8 bits addressable
+	// - 0-16M address range mapped to 0-16M bus
+	//
+	space SMC88_space {
+		mau 8;
+		map src=0 size=16M dst=0 bus=SMC88_bus label=total_range;
+	}
+
+
+////////////////////////////////////////////////////////////////////////
+//
+//	B U S
+//      configuration
+//
+
+	/////////////////////////////////////////////////////////
+	//
+	// bus 
+	// - 8 bits addressable
+	// ( external bus is specified in s1c88832.mem )
+	//
+	bus SMC88_bus {
+		mau 8;
+		map src=0      size=0x10000  dst=0      bus=internal_bus;
+	}
+
+	bus internal_bus {
+		mau 8;
+		mem addr=0      chips=i_rom;
+		mem addr=0xf000 chips=i_ram;
+		mem addr=0xf800 chips=dis_mem;
+		mem addr=0xff00 chips=io_mem;
+	}
+
+////////////////////////////////////////////////////////////////////////
+//
+//	I N T E R N A L   C H I P S
+//
+
+	/////////////////////////////////////////////////////////
+	// internal rom 
+	// read-only
+	// 8 bits addressable
+	// d000(hex) size
+	//
+	chips	i_rom		attr=r mau=8 size=0x8000;
+	/////////////////////////////////////////////////////////
+	// internal ram 
+	// writable
+	// 8 bits addressable
+	// 600(hex) size
+	//
+	chips	i_ram	attr=w mau=8 size=0x600;
+
+	/////////////////////////////////////////////////////////
+	// display memory 
+	// special (cannot allocate in this area)
+	// 8 bits addressable
+	// 542(hex) size
+	//
+	chips	dis_mem	attr=s mau=8 size=0x542;
+
+	/////////////////////////////////////////////////////////
+	// i/o memory
+	// special (cannot allocate in this area)
+	// 8 bits addressable
+	// 100(hex) size
+	//	
+	chips	io_mem	attr=s mau=8 size=0x100;
+
+////////////////////////////////////////////////////////////////////////
+//
+//	D E B U G G E R   R E G I S T E R   D E F I N I T I O N S
+//	
+	/////////////////////////////////////////////////////////
+	// currently, no derivatives have special names for
+	// their sfr's. Therefore all processors currently use
+	// the default register definition file.
+	regsfr	reg88.dat
+}

@@ -1,0 +1,67 @@
+===============================================================================
+	DB88 Version 1.60
+	REL_DB88_E.TXT
+	Dec 11, 2007
+	SEIKO EPSON CORP.
+===============================================================================
+
+Table of Contents
+-----------------
+1.  Revision History
+2.  Differences from the Manual
+3.  Limitations and Known Problems
+
+
+1. Revision History
+-------------------
+  Ver 1.47    First release.
+  Ver 1.48    Speeded up the Mix mode.
+  Ver 1.49	  Corrected the bug to be hung up at the time of indication by a
+              function in a list of Functions of the source window in Win98.
+  Ver 1.51    Corrected the bug to be hung up when it took a forced break after
+              having carried out command "GO" of DB88.
+  Ver 1.52    Corrected that an error was given when it turned on Output Warning
+              Message of DIALOG which appeared in [Option] -[Settings].
+  Ver 1.53    Corrected the bug that hung up with PRC88408 or the tool bar became
+              disabled, after having carried out command "GO" of DB88 and took a
+              forced break.
+  Ver 1.54    Corrected the bug that a step carried out a program at the time of
+              Bus mode: expansion and MCU: maximum mode setting, the CB,NB,EP,XP,YP
+              register of the register window was not displayed. (with Windows XP)
+  Ver 1.55    Corrected the bug that did not break even if there was a break point
+              when a hardware break was set and step was carried out.
+  Ver 1.56    Corrected the bug that DB88 is forced finished when carried out
+              NEXT,STEP EXIT just after DB88(Ver1.55) started.
+  Ver 1.58    Corrected the bug that was not displayed adequately if you would
+              confirm the value of the variable with a watch window.
+  Ver 1.60    1. Corrected the bug that rarely did not display an appropriate source
+                 line corresponding to the address with a source window.
+              2. Corrected the bug that when there is a large quantity of disassembler
+                 lines in a source line at Mixture mode, indication becomes slow.
+              3. Corrected the bug that an abs file including the debugging information
+                 of a C source with many nests cannot be loaded.
+
+
+2. Differences from the Manual
+------------------------------
+
+  None
+
+
+3. Limitations and Known Problems
+---------------------------------
+
+(1) The command history function cannot be used with Windows2000/XP.
+
+(2) There is a case to display unjust instruction when you scroll the [Source]
+    window reversely, with selecting mixture display or reverse assembling
+    display in the display form of the [Source] window, because the order of
+    reverse assembling is different from the order of practice of S1C88CPU.
+
+(3) System reset on the PRC board
+    As for the PRC board built-in by ICE88UR, if the input level of the system
+    reset terminal is a reset level, or the reset function of the SVD(Supply
+    Voltage Detector) circuit is in condition to work, this ICE88UR debugger
+    does not start. Be sure the system reset condition is released and restart
+    the debugger.
+

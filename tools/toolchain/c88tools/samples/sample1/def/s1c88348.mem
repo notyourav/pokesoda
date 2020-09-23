@@ -1,0 +1,5 @@
+memory {
+	bus external_bus {
+		mau 8;
+	}
+}

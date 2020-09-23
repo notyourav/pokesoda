@@ -1,0 +1,126 @@
+* E0C88408 FUNCTION OPTION DOCUMENT V 1.10
+*
+* FILE NAME    T88408.FDC
+* USER'S NAME  
+* INPUT DATE   '98/03/18
+*
+* #E0C88408 OPTION
+* *** OPTION NO.1 ***
+* --- OSC1 SYSTEM CLOCK ---
+*     CRYSTAL  -------------------------------------------   SELECTED
+ OPT0101 01
+*
+* *** OPTION NO.2 ***
+* --- OSC3 SYSTEM CLOCK ---
+*     CRYSTAL  -------------------------------------------   SELECTED
+ OPT0201 01
+*
+* *** OPTION NO.3 ***
+* --- MULTIPLE KEY ENTRY RESET ---
+*     NOT USE  -------------------------------------------   SELECTED
+ OPT0301 01
+*
+* *** OPTION NO.4 ***
+* --- MPU MODE INITIAL SET ---
+*     4M MAXIMUM  ----------------------------------------   SELECTED
+ OPT0401 01
+*
+* *** OPTION NO.5 ***
+* --- INPUT PORT PULL UP RESISTOR ---
+*     K00                  WITH RESISTOR  ----------------   SELECTED
+*     K01                  WITH RESISTOR  ----------------   SELECTED
+*     K02                  WITH RESISTOR  ----------------   SELECTED
+*     K03                  WITH RESISTOR  ----------------   SELECTED
+*     K04                  WITH RESISTOR  ----------------   SELECTED
+*     K05                  WITH RESISTOR  ----------------   SELECTED
+*     K06                  WITH RESISTOR  ----------------   SELECTED
+*     K07                  WITH RESISTOR  ----------------   SELECTED
+*     K10                  WITH RESISTOR  ----------------   SELECTED
+*     K11                  WITH RESISTOR  ----------------   SELECTED
+*     K12                  WITH RESISTOR  ----------------   SELECTED
+*     K13                  WITH RESISTOR  ----------------   SELECTED
+*     XRESET               WITH RESISTOR  ----------------   SELECTED
+*     XMPU                 WITH RESISTOR  ----------------   SELECTED
+ OPT0501 01
+ OPT0502 01
+ OPT0503 01
+ OPT0504 01
+ OPT0505 01
+ OPT0506 01
+ OPT0507 01
+ OPT0508 01
+ OPT0509 01
+ OPT0510 01
+ OPT0511 01
+ OPT0512 01
+ OPT0513 01
+ OPT0514 01
+*
+* *** OPTION NO.6 ***
+* --- I/O PORT PULL UP RESISTOR ---
+*     P00                  WITH RESISTOR  ----------------   SELECTED
+*     P01                  WITH RESISTOR  ----------------   SELECTED
+*     P02                  WITH RESISTOR  ----------------   SELECTED
+*     P03                  WITH RESISTOR  ----------------   SELECTED
+*     P04                  WITH RESISTOR  ----------------   SELECTED
+*     P05                  WITH RESISTOR  ----------------   SELECTED
+*     P06                  WITH RESISTOR  ----------------   SELECTED
+*     P07                  WITH RESISTOR  ----------------   SELECTED
+*     P10                  WITH RESISTOR  ----------------   SELECTED
+*     P11                  WITH RESISTOR  ----------------   SELECTED
+*     P12                  WITH RESISTOR  ----------------   SELECTED
+*     P13                  WITH RESISTOR  ----------------   SELECTED
+*     P14                  WITH RESISTOR  ----------------   SELECTED
+*     P15                  WITH RESISTOR  ----------------   SELECTED
+*     P16                  WITH RESISTOR  ----------------   SELECTED
+*     P17                  WITH RESISTOR  ----------------   SELECTED
+*     P20                  WITH RESISTOR  ----------------   SELECTED
+*     P21                  WITH RESISTOR  ----------------   SELECTED
+*     P22                  WITH RESISTOR  ----------------   SELECTED
+*     P23                  WITH RESISTOR  ----------------   SELECTED
+*     P30                  WITH RESISTOR  ----------------   SELECTED
+*     P31                  WITH RESISTOR  ----------------   SELECTED
+*     P32                  WITH RESISTOR  ----------------   SELECTED
+*     P33                  WITH RESISTOR  ----------------   SELECTED
+*     P34                  WITH RESISTOR  ----------------   SELECTED
+*     P35                  WITH RESISTOR  ----------------   SELECTED
+*     P36                  WITH RESISTOR  ----------------   SELECTED
+*     P37                  WITH RESISTOR  ----------------   SELECTED
+ OPT0601 01
+ OPT0602 01
+ OPT0603 01
+ OPT0604 01
+ OPT0605 01
+ OPT0606 01
+ OPT0607 01
+ OPT0608 01
+ OPT0609 01
+ OPT0610 01
+ OPT0611 01
+ OPT0612 01
+ OPT0613 01
+ OPT0614 01
+ OPT0615 01
+ OPT0616 01
+ OPT0617 01
+ OPT0618 01
+ OPT0619 01
+ OPT0620 01
+ OPT0621 01
+ OPT0622 01
+ OPT0623 01
+ OPT0624 01
+ OPT0625 01
+ OPT0626 01
+ OPT0627 01
+ OPT0628 01
+*
+* *** OPTION NO.7 ***
+* --- RAM OPTION ---
+*     LCD RAM USE 3.5K  ----------------------------------   SELECTED
+ OPT0701 07
+ OPT0702 07
+ OPT0703 07
+ OPT0704 07
+\\END
+

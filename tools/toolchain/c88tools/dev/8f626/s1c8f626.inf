@@ -1,0 +1,34 @@
+;Chip Model
+0
+;Intarnal Rom Start
+0
+10000
+;Intarnal Rom Size
+C000
+30000
+;Intarnal Ram Start
+D800
+;Intarnal Ram Size
+2000
+;Add External Mem
+;Add User Rom
+;Add User Ram
+;Exec Start
+54
+;Disable Making Delfee
+0
+;Start Module
+__START
+;I/O Start
+ff00
+;I/O Size
+100
+;Internal Dev Start
+NON
+;Internal Dev Size
+NON
+;Heap Size
+50
+;Chip Cnt
+2
+;End

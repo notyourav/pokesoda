@@ -1,0 +1,36 @@
+===============================================================================
+	DEV8E108 Version 3.00
+	REL_DEV8E108_E.TXT
+	January 25, 2003
+	SEIKO EPSON CORP.
+===============================================================================
+
+Contents
+--------
+1.  Release history
+2.  Difference from manual
+3.  Restriction
+
+
+1. Release history
+------------------
+  Ver 1.00    First release
+
+  Ver 2.00    There was a bug of the RAM area size in S1C8E108.Inf.
+
+  Ver 3.00	  Deleted CR oscillation of OSC1 SYSTEM CLOCK.
+
+2. Difference from manual
+-------------------------
+Å@None
+
+
+3. Restriction
+--------------
+  None
+
+
+4. The method of the installation
+  Please thaw S5U1C8E108D43.zip on the folder of .../EPSON/S1C88/DEV/.
+  After that, 8E108 folder is made, and various files are installed under that.
+

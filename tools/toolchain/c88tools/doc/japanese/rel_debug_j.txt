@@ -1,0 +1,429 @@
+ICE88UR における注意事項                                        2000年 5月11日
+
+　　　　　　　　　　　　　　　　　　　　　　　　　　　セイコーエプソン株式会社
+
+この文書において、ICE88UR を使用する際の注意点について説明させていただきます。
+内容は、ICE88UR における残存不具合、ICE88UR セットアップマニュアルの補足、制限
+事項などが解説されておりますので、ご使用の前にぜひお読みくださるようお願い申し
+上げます。
+
+1.残存不具合
+　環境設定コマンド( SET SMD=0/1 ) において、ステップ実行時の割り込みを許可する
+　か、禁止するかを設定しますが、割り込みを許可するように設定(SET SMD=1) をして
+　も、ステップ実行中の割り込みは発生しません。
+
+2.USB PnP仕様について
+　ICE88URとPC のインターフェイスは、USB (Ver1.1)仕様に準拠しております。PCに本
+　ソフトウェアをインストール後、ICE88UR を接続して電源を投入することにより、OS
+　は自動的に USBドライバの検出を行います。ここでUSB ドライバの格納　場所を入力
+  するように指示された場合は、本ソフトウェアがインストールされているフォルダ
+  (標準は"C:\Epson\S1C88\Bin")を指定してください。
+
+3.フォルダ、ファイル名における制限
+　本デバッガで使用するフォルダ名、ファイル名は英数字および、記号のみを使用して
+　ください。２バイト文字、カナ文字、スペースは使用できません。
+
+4.PRCボードにおけるシステムリセット
+　ICE88UR に内蔵された PRCボードにおいて、システムリセット端子の入力レベルが、
+　リセットになるようなレベルであったり、また、SVD(Supply Voltage Detector)回路
+　によるリセット機能が働くような状態のままでは、本ICE88UR 対応デバッガは起動し
+　ません。必ず、リセットが解除されるような状態にして、本デバッガを起動してくだ
+　さい。
+
+5.内部メモリイニシャルチェック
+　5-1 チェック中のデバッガ起動
+　ICE88UR の電源を投入後、イニシャルチェックが完了するまではデバッガを起動させ
+　ないでください。イニシャルチェック時間は、ICE88UR 本体前面パネルの"DIAG"スイ
+　ッチが OFFになっている場合で約10秒、ONになっている場合は約35秒かかります。
+
+　5-2 チェック結果の表示
+　ICE88UR 本体の前面パネルにある"DIAG"スイッチをON 側にしてICE88URの電源を投入
+　した場合は、デバッガを起動したときにエミュレーションメモリ、マップメモリ等の
+　内部メモリチェック結果を表示します。また、本スイッチをOFF 側にしてICE88UR の
+　電源を投入した場合は、これらのチェックを行なわないため、チェック結果の表示は
+　ありません。
+
+　"DIAG"スイッチをON側にして起動した場合の[Command]ウィンド表示：
+　ICE88UR System Software Ver 1.12
+　Copyright SEIKO EPSON Corporation 1999-2000
+　
+　Communication device initializing succeed.
+　Protocol establishing succeed.
+　ICE88UR diagnosis succeed.
+　~~~~~~~~~~~~~~~~~~~~~~~~~~
+　Memory initialize passed.
+　MAP parameter setting completed.
+　>
+
+　"DIAG"スイッチをOFF側にして起動した場合の[Command]ウィンド表示：
+　ICE88UR System Software Ver 1.12
+　Copyright SEIKO EPSON Corporation 1999-2000
+　
+　Communication device initializing succeed.
+　Protocol establishing succeed.
+　Memory initialize passed.
+　MAP parameter setting completed.
+　>
+
+6.強制終了後の再起動について
+　ICE88UR にてターゲットプログラムを実行中、強制的に終了させようとすると下記の
+　メッセージがメッセージウィンドに表示されます。
+
+　Target program still active.
+　Would you like to abort this?
+
+　ここで、いいえ(NO)を選択すると ターゲットプログラムの実行を 中断することなく
+　デバッガを終了します。
+　再起動時は ICE88UR 本体のリセットボタンにてリセット処理を行なうか、ICE88URの
+　電源を一度切った後再起動してください。
+
+7.Ｃソースレベルデバッグ
+　Ｃソースレベルデバッグを行なうときは、コンパイルおよびアセンブル時にオプティ
+　マイズオプション（-O[flag...]）は付けないでください。
+
+8.[Source]ウィンドウ表示
+　8-1 逆アセンブル表示
+　[Source]ウィンドの表示形式にミックス表示あるいは逆アセンブル表示を選択してい
+　るとき、[Source]ウィンドを逆スクロールすると、逆アセンブルする順序がE0C88CPU
+　の実行順序と異なるため、不正なインストラクションを表示する場合があります。
+
+　8-2 Ｃソースコード表示
+　Ｃソース表示を選択しているとき、その表示範囲は現時点で [Source] ウィンドウに
+　表示しているソース行を含むファイル領域となります。異なるファイル内のソースを
+　表示したいときは、LIコマンド等により変更してください。
+
+　8-3 ソース行番号指定表示
+　[Source] WindowへＣソース表示を行なうとき、">li %file_name#line_number" にて
+　Ｃソース表示行を 指定できます。しかし、アセンブラに展開されない Ｃソース行を
+　"#line_number" に指定することはできません。
+
+　[Source] window (SET VIEW=SCE)		[Status Bar]
+　/*	STRUCT	*/				Source Line:00001
+　void test_struct(void)			Source Line:00002
+　{						Source Line:00003
+	extern char	count;
+	struct str1 {
+		char	char_mem;
+		int	int_mem;
+		short	short_mem;
+		long	long_mem;
+		};
+	struct str2 {
+		struct str1 lev1;
+		}lev2;
+	if(count==0x00){			Source Line:00014
+		lev2.lev1.char_mem=0x00;
+		lev2.lev1.int_mem=0x0000;
+		lev2.lev1.short_mem=0x0000;
+		lev2.lev1.long_mem=0x00000000;
+	}
+
+　[Source] window (SET VIEW=MIX)
+　{
+                             /test_struct:
+   00005E 00:005E  CF6A0900  SUB  SP,#0009
+　   	if(count==0x00){
+   000062 00:0062  CED000F0  LD   A,[F000]
+   000066 00:0066  3200      CP   A,#00
+   000068 00:0068  E723      JRS  NZ,008C
+   		lev2.lev1.char_mem=0x00;
+   00006A 00:006A  B200      LD   L,#00
+   00006C 00:006C  CFFA      LD   IX,SP
+   00006E 00:006E  CEC600    LD   XP,#00
+   000071 00:0071  62        LD   [IX],L
+   		lev2.lev1.int_mem=0x0000;
+   000072 00:0072  C70000    LD   IY,#0000
+   000075 00:0075  CF7701    LD   [SP+01],IY
+   		lev2.lev1.short_mem=0x0000;
+   000078 00:0078  C70000    LD   IY,#0000
+   00007B 00:007B  CF7703    LD   [SP+03],IY
+   		lev2.lev1.long_mem=0x00000000;
+   00007E 00:007E  C60000    LD   IX,#0000
+   000081 00:0081  C70000    LD   IY,#0000
+   000084 00:0084  CF7605    LD   [SP+05],IX
+   000087 00:0087  CF7707    LD   [SP+07],IY
+   	}
+
+　[Command] window
+　>li %struct.c#1		<- NG
+　lnvalid line number.
+　>li %struct.c#3		<- OK
+　>li %struct.c#14		<- OK
+
+　8-4 逆アセンブラ表示
+  PSAファイルを読み込んだ場合は，ソース表示できませんが，
+  メニューのSource，Mix，DisAssembleの切り替えは有効になっています。
+  実際はDisAssemble表示しかできません。
+
+9.[Map]ウィンドウ表示
+　I/Oメモリ空間がFFxx番地以外の機種においては、I/Oメモリマップ空間の表示がされ
+　ません。
+
+10.VARコマンド
+　10-1 2進数表示
+　VAR コマンドで表示形式に２進数表示を選択したとき、変数の上位ビットが表示され
+　ません。
+
+　[Command] window
+　>var !char_var;h
+　char_var = H'55
+　>var !char_var;b
+　char_var = B'101
+　下位３ビットのデータのみを表示します。
+
+　>var !int_var;h
+　int_var = H'5555
+　>var !int_var;b
+　int_var = B'0101
+　下位４ビットのデータのみを表示します。
+
+　>var !short_var;h
+　short_var = H'5555
+　>var !short_var;b
+　short_var = B'0101
+　下位４ビットのデータのみを表示します。
+
+　>var !long_var;h
+　long_var = H'55555555
+　>var !long_var;b
+　long_var = B'10101
+　下位５ビットのデータのみを表示します。
+
+　10-2 STDOUTオプション
+　VARコマンドのSTDOUTオプションには対応しておりません。
+
+　[Command] Window
+　>var !char_var;STDOUT
+　Internal error: ICE88UR does not support this version.
+
+11.シンボル情報
+　シンボル情報には、コンパイル時に "-g" オプションを付けて生成されたファイルを
+　ダウンロードすることにより設定されるＣソースシンボル情報と、SYコマンドあるい
+　はシンボルファイル（file_name.sy）をダウンロードすることにより設定されるSY
+　シンボル情報があります。
+　SYシンボルは、4 バイト（long型）のデータサイズでアドレスに割り付けられるため、
+　SYシンボルは各種コマンドのパラメータに設定したとき、4 バイト長の数値と同義に
+　なります。また、SYシンボルは、符号情報、型情報およびサイズ情報を持ちません。
+
+　[Command] Window
+　>sy !sym_3000 3000
+　>sy !sym_4000 4000
+
+　[Search result] Window
+　sym_3000                         00003000 LAB - ---- 0000
+　sym_4000                         00004000 LAB - ---- 0000
+
+　[Command] Window
+　>e !sym_3000 55
+　00003000番地にデータh'55が書き込まれます。
+
+　以下の命令と同義となります。
+　>e 3000 55
+
+　[Command] Window
+　>e 1000 !sym_3000+!sym_4000
+　00003000+00004000の演算結果が1000番地に byte型（デフォルト）で書き込まれます。
+
+　以下の命令と同義となります。
+　>e 1000 00003000+00004000
+
+12.二項演算子
+　12-1 減算
+　減算式の項にCソースシンボルを用いることはできません。
+
+　[Search result] Window
+　!int_var1                        0000F010 VAR S WORD 0002
+　!int_var2                        0000F012 VAR S WORD 0002
+　!int_var3                        0000F014 VAR S WORD 0002
+
+　[Command] Window
+　>e !char_var1 !char_var2-!char_var3
+　Specified symbol does not exist.
+
+　12-2 乗算
+　乗算式の項にCソースシンボルを用いることはできません。
+
+　[Search result] Window
+　!int_var1                        0000F010 VAR S WORD 0002
+　!int_var2                        0000F012 VAR S WORD 0002
+　!int_var3                        0000F014 VAR S WORD 0002
+
+　[Command] Window
+　>e !char_var1 !char_var2*!char_var3
+　Specified symbol does not exist.
+
+　12-3 除算
+　除算式の項にCソースシンボルおよびマクロ内変数を用いることはできません。
+
+　[Search result] Window
+　!int_var1                        0000F010 VAR S WORD 0002
+　!int_var2                        0000F012 VAR S WORD 0002
+　!int_var3                        0000F014 VAR S WORD 0002
+
+　[Command] Window
+　>e !char_var1 !char_var2/!char_var3
+　Specified symbol does not exist.
+
+　[Macro] Window
+　\addr = h'1000
+　\data1 = h'10
+　\data2 = h'2
+　e \addr \data1/\data2
+　d \addr @2;l
+
+　[Dump] Window
+　address     +0       +4       +8       +C          ASCII
+　001000   00000010 11111111 11111111 11111111  ................ 
+
+　12-4 論理積(AND)
+　AND式の項にCソースシンボルを用いることはできません。
+
+　[Search result] Window
+　!int_var1                        0000F010 VAR S WORD 0002
+　!int_var2                        0000F012 VAR S WORD 0002
+　!int_var3                        0000F014 VAR S WORD 0002
+
+　[Command] Window
+　>e !char_var1 (!char_var2)&(!char_var3)
+　Specified symbol does not exist.
+
+　12-5 排他的論理和(XOR)
+　XOR論理演算子には対応しておりません。
+
+　[Search result] Window
+　!int_var1                        0000F010 VAR S WORD 0002
+　!int_var2                        0000F012 VAR S WORD 0002
+　!int_var3                        0000F014 VAR S WORD 0002
+
+　[Command] Window
+　>e !char_var1 (!char_var2)~(!char_var3)
+　Invalid formula.
+
+　[Macro] Window
+　\addr = h'1000
+　\data1 = h'00ff
+　\data2 = h'0f0f
+　e \addr \data1~\data2
+　d \addr @2;l
+
+　[Dump] Window
+　address     +0       +4       +8       +C          ASCII
+　001000   11111111 11111111 11111111 11111111  ................ 
+
+13.ポインタ演算子(*)とアドレス演算子(&)
+　ＣソースシンボルおよびSYシンボルについてポインタ演算子およびアドレス演算子の
+　扱いは以下のようになります。
+
+　[Source] Window
+　char	char_var;
+　char	*char_ptr;
+　char	**char_ptr_to_ptr;
+　char_ptr = &char_var;
+　char_ptr_to_ptr = &char_ptr;
+
+　[Command] Window
+　>sy !sym_1000 1000
+
+　[Search result] Window
+　!char_var                        SP +0000 VAR S BYTE 0001
+　!char_ptr                        SP +0003 VAR - PTR  0000
+　!char_ptr_to_ptr                 SP +0007 VAR - PTR  0000
+　sym_1000                         00001000 LAB - ---- 0000
+
+　!char_ptrはchar型変数(!char_var)へのポインタ
+　!char_ptr_to_ptrはポインタ(!char_ptr)へのポインタ
+
+　13-1 SYシンボルとポインタ演算子
+　[Dump] Window
+　001000   00002345 FFFFFFFF FFFFFFFF FFFFFFFF  E#.............. 
+　002000   FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF  ................ 
+
+　[Command] Window
+　>e 2000 *!sym_1000
+
+　[Dump] Window
+　002000   FFFFFF45 FFFFFFFF FFFFFFFF FFFFFFFF  E............... 
+　シンボル!sym_1000 のアドレス（00001000番地）に記述されている値 (00002345) を
+　2000番地にbyte型（デフォルト）で書き込みます。
+
+　[Dump] Window
+　001000   00002345 FFFFFFFF FFFFFFFF FFFFFFFF  E#.............. 
+　002340   FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF  ................ 
+　[Command] Window
+　>e *!sym_1000 33
+
+　[Dump] Window
+　002340   FFFFFFFF FFFF33FF FFFFFFFF FFFFFFFF  .....3.......... 
+　シンボル!sym_1000 のアドレス（00001000番地）に記述されている値 (00002345) の
+　アドレス（00002345番地）にデータ33が書き込まれます。
+
+　13-2 SYシンボルとアドレス演算子
+　SYシンボルにアドレス演算子の設定はできません。
+　>e 2000 &!sym_1000
+　Invalid symbol name.
+　>e &!sym_1000 55
+　Invalid symbol name.
+
+　13-3 Ｃソースシンボルとポインタ演算子
+　[Command] Window
+　>var *!char_ptr;h
+　*char_ptr = H'33
+　ポインタ変数(*!char_ptr)の値は変数(!char_var)の値と同一です。
+
+　>var **!char_ptr_to_ptr;h
+　**char_ptr_to_ptr = H'33
+　ポインタへのポインタ変数(**!char_ptr_to_ptr)の値は、変数(!char_var)の値と同一
+　です。
+
+　>var *!char_ptr_to_ptr;h
+　*char_ptr_to_ptr = H'F7E1
+　ポインタへのポインタ変数 (**!char_ptr_to_ptr) の値を格納しているアドレス変数
+　(!char_var)のアドレスと同一です
+
+　Ｃソースシンボルでは、Ｃソースにて設定されたポインタレベル以上にポインタ演算
+　子の設定はできません。
+
+　[Command] Window
+　>var **!char_ptr;h
+　Invalid formula.
+　>var *!char_var
+　Invalid formula.
+　>var *!char_var;h
+　Invalid formula.
+
+　13-4 Ｃソースシンボルとアドレス演算子
+　[Command] Window
+　>var &!char_var
+　&char_var = H'00F7E1
+　変数(!char_var)のアドレス
+
+　>var &*!char_ptr
+　char_ptr = H'F7E1
+　ポインタ変数(*!char_ptr)の値を格納しているアドレス変数(!char_var) のアドレス
+　と同一です
+
+　>var &**!char_ptr_to_ptr
+　*char_ptr_to_ptr = H'F7E1
+　ポインタへのポインタ変数 (**!char_ptr_to_ptr) の値 (!int_var) を格納している
+　アドレス変数(!char_var)のアドレスと同一です
+
+　>var &!char_ptr
+　&char_ptr = H'00F7E4
+　ポインタ(!char_ptr)のアドレス
+
+　>var &*!char_ptr_to_ptr
+　char_ptr_to_ptr = H'F7E4
+　ポインタへのポインタ (!char_ptr_to_ptr) がアクセスするポインタ (!char_ptr)の
+　アドレス
+
+　>var &!char_ptr_to_ptr
+　&char_ptr_to_ptr = H'00F7E8
+　ポインタへのポインタ(!char_ptr_to_ptr)のアドレス
+
+
+14.パラレルダンプウインドウ
+    K10,K11ポートだけリアルタイムに変化しません。
+
+15.INIファイル
+    INIファイル上のCCFile=ファイル名を指定すると強制終了します。
+

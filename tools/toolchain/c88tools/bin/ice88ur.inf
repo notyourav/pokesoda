@@ -1,0 +1,58 @@
+[Version]
+Signature="$CHICAGO$"
+Class=USB
+provider=%MfgName%
+LayoutFile=layout.inf
+
+[Manufacturer]
+%MfgName%=SECTION_0
+
+[SECTION_0]
+%USB\VID_04B8&PID_0501.DeviceDesc%=ICE88UR.Dev, USB\VID_04B8&PID_0501
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+ICE88UR.Files.Ext = 10,System32\Drivers
+ICE88UR.Files.Inf = 10,INF
+
+[ICE88UR.Dev]
+CopyFiles=ICE88UR.Files.Ext, ICE88UR.Files.Inf
+AddReg=ICE88UR.AddReg
+
+[ICE88UR.Dev.NT]
+CopyFiles=ICE88UR.Files.Ext, ICE88UR.Files.Inf
+AddReg=ICE88UR.AddReg
+
+[ICE88UR.Dev.NT.Services]
+Addservice = ICE88UR, 0x00000002, ICE88UR.AddService
+
+[ICE88UR.AddService]
+DisplayName    = %ICE88UR.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 2                  ; SERVICE_AUTO_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\ICE88UR.sys
+LoadOrderGroup = Base
+
+[ICE88UR.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,ICE88UR.sys
+HKLM,"System\Currentcontrolset\Services\ICE88UR\Parameters","MaximumTransferSize",0x10001,4096
+HKLM,"System\Currentcontrolset\Services\ICE88UR\Parameters","DebugLevel",0x10001,2
+
+
+[ICE88UR.Files.Ext]
+ICE88UR.sys
+
+[ICE88UR.Files.Inf]
+ICE88UR.Inf
+
+
+;---------------------------------------------------------------;
+
+[Strings]
+MfgName="SEIKO EPSON CORP."
+USB\VID_04B8&PID_0501.DeviceDesc="In-Circuit Emulator for S1C88 Family"
+ICE88UR.SvcDesc="ICE88UR USB Driver"

@@ -1,0 +1,159 @@
+/**************************************************************************
+**
+**	FILE        :  @(#)s1c88316.mem	1.2
+**
+**	VERSION     :  99/04/19
+**
+**	DESCRIPTION :  External memory description for S1C88316
+**		       - single chip MCU mode (default) 
+**		       - expanded 64k MCU mode
+**		       - expanded 64k MPU mode
+**		       - expanded 512k MCU mode (mimimum/maximum)
+**		       - expanded 512k MPU mode (mimimum/maximum)
+**		       The user should select the mode by adding or 
+**		       removing comments.
+**
+**		       Note: MPU configurations need adaption of 
+**		             s1c88316.cpu file 	
+**
+**	COPYRIGHT   :  2000 SEIKO EPSON CORPORATION
+**
+**************************************************************************/
+
+memory {
+////////////////////////////////////////////////////////////////////////
+//
+//	S I N G L E   C H I P   M C U   M O D E
+//
+//
+	/////////////////////////////////////////////////////////
+	//
+	// external bus is empty
+	// 
+	bus external_bus {
+		mau 8;
+	}
+
+	/////////////////////////////////////////////////////////
+	//
+	// chips
+
+	/* only on-chip memory available in single chip mode */
+
+
+////////////////////////////////////////////////////////////////////////
+//	
+//	E X P A N D E D   6 4 K   M C U   M O D E  
+//	NOTE: Example configuration, with external memory area defined 
+//	      as writable (ram) memory
+//
+
+	/////////////////////////////////////////////////////////
+	//
+	// external bus
+	// 
+  //	bus external_bus {
+  //		mau 8;
+  //		mem addr=0x4000 chips= e_ram;
+  //	}
+
+	/////////////////////////////////////////////////////////
+	//
+	// chip 
+	//
+  //	chips e_ram attr=w mau=8 size=0xb000;
+
+
+
+////////////////////////////////////////////////////////////////////////
+//	
+//	E X P A N D E D   6 4 K   M P U   M O D E  
+//	NOTE: Example configuration, with external memory area defined 
+//	      as writable (ram) memory
+//	      The s1c88316.cpu should be adapted
+//
+
+	/////////////////////////////////////////////////////////
+	//
+	// external bus
+	// 
+  //	bus external_bus {
+  //		mau 8;
+  //		mem addr=0x0 chips= e_ram;
+  //	}
+
+	/////////////////////////////////////////////////////////
+	//
+	// chip 
+	//
+  //	chips e_ram attr=w mau=8 size=0xf000;
+
+
+////////////////////////////////////////////////////////////////////////
+//	
+//	E X P A N D E D   5 1 2 K   M C U   M O D E  (MINIMUM + MAXIMUM)
+//	NOTE: Example configuration, with external memory 
+//	      - 0x80000-0x180000 read-only (rom) memory
+//	      - 0x180000-0x280000 writable (ram) memory
+//
+
+	/////////////////////////////////////////////////////////
+	//
+	// external bus
+	// 
+  //	bus external_bus {
+  //		mau 8;
+  //		mem addr=0x80000  chips= e_rom;
+  //		mem addr=0x180000 chips= e_ram;
+  //	}
+
+	/////////////////////////////////////////////////////////
+	//
+	// chips
+	// - external rom, 8 bits addressable, 1M size
+	// - external ram, 8 bits addressable, 1M size
+	//
+  //	chips e_rom attr=r mau=8 size=0x100000;
+  //	chips e_ram attr=w mau=8 size=0x100000;
+
+
+////////////////////////////////////////////////////////////////////////
+//	
+//	E X P A N D E D   5 1 2 K   M P U   M O D E  (MINIMUM + MAXIMUM)
+//	NOTE: Example configuration, with external memory 
+//	      - 0-0x7fff  read-only (rom) memory
+//	      - 0x8000-0xefff writable (ram) memory
+//	      - 0x10000-0x0fffff read-only (rom) memory
+//	      - 0x100000-0x1fffff writable (ram) memory
+//	      The s1c88316.cpu should be adapted
+//
+
+	/////////////////////////////////////////////////////////
+	//
+	// external bus
+	// 
+  //	bus external_bus {
+  //		mau 8;
+  //		mem addr=0x0      chips= e_rom0;
+  //		mem addr=0x8000   chips= e_ram0;
+  //		mem addr=0x10000  chips= e_rom1;
+  //		mem addr=0x100000 chips= e_ram1;
+  //	}
+
+	/////////////////////////////////////////////////////////
+	//
+	// chips
+	// - external rom, 8 bits addressable, 32k size
+	// - external ram, 8 bits addressable, 28k size
+	// - external rom, 8 bits addressable, 960k size
+	// - external ram, 8 bits addressable, 1M  size
+	//
+  //	chips e_rom0 attr=r mau=8 size=0x8000;
+  //	chips e_ram0 attr=w mau=8 size=0x7000;
+  //	chips e_rom1 attr=r mau=8 size=0xf0000;
+  //	chips e_ram1 attr=w mau=8 size=0x100000;
+
+}
+
+
+

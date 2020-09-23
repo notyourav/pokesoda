@@ -1,0 +1,186 @@
+* E0C88409 FUNCTION OPTION DOCUMENT V 1.11
+*
+* FILE NAME    T88409.FDC
+* USER'S NAME  
+* INPUT DATE   '98/04/22
+*
+* #E0C88409 OPTION
+* *** OPTION NO.1 ***
+* --- OSC1 SYSTEM CLOCK ---
+*     CRYSTAL  -------------------------------------------   SELECTED
+ OPT0101 01
+*
+* *** OPTION NO.2 ***
+* --- OSC3 SYSTEM CLOCK ---
+*     CRYSTAL  -------------------------------------------   SELECTED
+ OPT0201 01
+*
+* *** OPTION NO.3 ***
+* --- MULTIPLE KEY ENTRY RESET ---
+*     NOT USE  -------------------------------------------   SELECTED
+ OPT0301 01
+*
+* *** OPTION NO.4 ***
+* --- MPU MODE INITIAL SET ---
+*     4M MAXIMUM  ----------------------------------------   SELECTED
+ OPT0401 01
+*
+* *** OPTION NO.5 ***
+* --- INPUT PORT PULL UP RESISTOR ---
+*     K00                  WITH RESISTOR  ----------------   SELECTED
+*     K01                  WITH RESISTOR  ----------------   SELECTED
+*     K02                  WITH RESISTOR  ----------------   SELECTED
+*     K03                  WITH RESISTOR  ----------------   SELECTED
+*     K04                  WITH RESISTOR  ----------------   SELECTED
+*     K05                  WITH RESISTOR  ----------------   SELECTED
+*     K06                  WITH RESISTOR  ----------------   SELECTED
+*     K07                  WITH RESISTOR  ----------------   SELECTED
+*     K10                  WITH RESISTOR  ----------------   SELECTED
+*     K11                  WITH RESISTOR  ----------------   SELECTED
+*     K12                  WITH RESISTOR  ----------------   SELECTED
+*     K13                  WITH RESISTOR  ----------------   SELECTED
+*     XRESET               WITH RESISTOR  ----------------   SELECTED
+*     XMPU                 WITH RESISTOR  ----------------   SELECTED
+ OPT0501 01
+ OPT0502 01
+ OPT0503 01
+ OPT0504 01
+ OPT0505 01
+ OPT0506 01
+ OPT0507 01
+ OPT0508 01
+ OPT0509 01
+ OPT0510 01
+ OPT0511 01
+ OPT0512 01
+ OPT0513 01
+ OPT0514 01
+*
+* *** OPTION NO.6 ***
+* --- I/O PORT PULL UP RESISTOR ---
+*     P00                  WITH RESISTOR  ----------------   SELECTED
+*     P01                  WITH RESISTOR  ----------------   SELECTED
+*     P02                  WITH RESISTOR  ----------------   SELECTED
+*     P03                  WITH RESISTOR  ----------------   SELECTED
+*     P04                  WITH RESISTOR  ----------------   SELECTED
+*     P05                  WITH RESISTOR  ----------------   SELECTED
+*     P06                  WITH RESISTOR  ----------------   SELECTED
+*     P07                  WITH RESISTOR  ----------------   SELECTED
+*     P10                  WITH RESISTOR  ----------------   SELECTED
+*     P11                  WITH RESISTOR  ----------------   SELECTED
+*     P12                  WITH RESISTOR  ----------------   SELECTED
+*     P13                  WITH RESISTOR  ----------------   SELECTED
+*     P14                  WITH RESISTOR  ----------------   SELECTED
+*     P15                  WITH RESISTOR  ----------------   SELECTED
+*     P16                  WITH RESISTOR  ----------------   SELECTED
+*     P17                  WITH RESISTOR  ----------------   SELECTED
+*     P20                  GATE DIRECT  ------------------   SELECTED
+*     P21                  GATE DIRECT  ------------------   SELECTED
+*     P22                  GATE DIRECT  ------------------   SELECTED
+*     P23                  GATE DIRECT  ------------------   SELECTED
+*     P30                  GATE DIRECT  ------------------   SELECTED
+*     P31                  GATE DIRECT  ------------------   SELECTED
+*     P32                  WITH RESISTOR  ----------------   SELECTED
+*     P33                  WITH RESISTOR  ----------------   SELECTED
+*     P34                  WITH RESISTOR  ----------------   SELECTED
+*     P35                  WITH RESISTOR  ----------------   SELECTED
+*     P36                  WITH RESISTOR  ----------------   SELECTED
+*     P37                  WITH RESISTOR  ----------------   SELECTED
+ OPT0601 01
+ OPT0602 01
+ OPT0603 01
+ OPT0604 01
+ OPT0605 01
+ OPT0606 01
+ OPT0607 01
+ OPT0608 01
+ OPT0609 01
+ OPT0610 01
+ OPT0611 01
+ OPT0612 01
+ OPT0613 01
+ OPT0614 01
+ OPT0615 01
+ OPT0616 01
+*OPT0617 02
+*OPT0618 02
+*OPT0619 02
+*OPT0620 02
+*OPT0621 02
+*OPT0622 02
+ OPT0623 01
+ OPT0624 01
+ OPT0625 01
+ OPT0626 01
+ OPT0627 01
+ OPT0628 01
+*
+* *** OPTION NO.7 ***
+* --- RAM OPTION ---
+*     LCD RAM USE 3.5K  ----------------------------------   SELECTED
+ OPT0701 07
+ OPT0702 07
+ OPT0703 07
+ OPT0704 07
+ OPT0705 07
+*
+* *** OPTION NO.8 ***
+* --- TOUCH PANEL CONTROLLER DRIVE PORT ---
+*     USE  -----------------------------------------------   SELECTED
+ OPT0801 01
+*
+* *** OPTION NO.9 ***
+* --- TPC INPUT PORT ---
+*     P30                  USE  --------------------------   SELECTED
+*     P31                  USE  --------------------------   SELECTED
+*     P32                  NOT USE  ----------------------   SELECTED
+*     P33                  NOT USE  ----------------------   SELECTED
+*     P34                  NOT USE  ----------------------   SELECTED
+*     P35                  NOT USE  ----------------------   SELECTED
+ OPT0901 01
+ OPT0902 01
+ OPT0903 02
+ OPT0904 02
+ OPT0905 02
+ OPT0906 02
+*
+* *** OPTION NO.10 ***
+* --- TPC INPUT PORT TYPE ---
+*     P30                  Y INPUT  ----------------------   SELECTED
+*     P31                  X INPUT  ----------------------   SELECTED
+*     P32                  NOT USE  ----------------------   SELECTED
+*     P33                  NOT USE  ----------------------   SELECTED
+*     P34                  NOT USE  ----------------------   SELECTED
+*     P35                  NOT USE  ----------------------   SELECTED
+ OPT1001 01
+ OPT1002 01
+ OPT1003 01
+ OPT1004 01
+ OPT1005 01
+ OPT1006 01
+*
+*
+* SEIKO EPSON'S AREA
+*
+*
+ OPT1101 01
+*
+ OPT1201 01
+*
+ OPT1301 01
+*
+ OPT1401 01
+*
+ OPT1501 01
+*
+ OPT1601 01
+*
+ OPT1701 01
+*
+ OPT1801 01
+*
+ OPT1901 01
+*
+ OPT2001 01
+\\END
+

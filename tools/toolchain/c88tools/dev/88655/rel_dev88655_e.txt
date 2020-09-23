@@ -1,0 +1,30 @@
+===============================================================================
+	DEV88655 Version 5.00
+	REL_DEV88655_E.TXT
+	Jan 27, 2006
+	SEIKO EPSON CORP.
+===============================================================================
+
+Contents
+----
+1.  Release history
+2.  Difference from manual
+3.  Restriction
+4.  The method of the installation
+
+1. Release history
+------------------
+  Ver 5.00    First release
+
+2. Difference from manual
+-------------------------
+Å@None
+
+
+3. Restriction
+--------------
+  None
+
+4. The method of the installation
+  Please thaw S5U1C88655D45.zip on the folder of .../EPSON/S1C88/DEV/.
+  After that, 88655 folder is made, and various files are installed under that.
