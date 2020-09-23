@@ -11,5 +11,5 @@ This project builds the following ROM:
 
 Msys2 is required in order to build the ROM. (Due to a limitation with the official compiler, WSL is nonviable.)
 
-1. Place baserom.min in the root directory
+1. Place `baserom.min` in the root directory
 2. Run `make`
