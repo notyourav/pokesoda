@@ -1,0 +1,95 @@
+	; HEADER
+	DB 0B5h, 0F1h ; 64d8
+	DB 0A4h, 0C1h, 81h, 94h, 1Fh ; 64da
+
+	ASCII "II", 22h, "II!II$II", 22h, "IIIIIIII&II" ; 64df
+	DB 1Fh ; 64f6
+	ASCII "II", 22h, "II!II" ; 64f7
+	DB 1Dh ; 64ff
+	ASCII "II" ; 6500
+	DB 1Fh ; 6502
+	ASCII "IIIII" ; 6503
+	DB 1Dh ; 6508
+	ASCII "III", 22h, "!" ; 6509
+	DB 1Fh ; 650e
+	ASCII "II", 22h, "II!II$II", 22h, "IIIII" ; 650f
+	DB 1Ah ; 6520
+	ASCII "II" ; 6521
+	DB 1Eh ; 6523
+	ASCII "II" ; 6524
+	DB 1Fh ; 6526
+	ASCII "II", 22h, "II!II" ; 6527
+	DB 1Dh ; 652f
+	ASCII "II" ; 6530
+	DB 1Fh ; 6532
+	ASCII "IIIIIIII" ; 6533
+	DB 1Fh, 21h, 22h, 0C3h, 94h, 85h, 29h, 81h ; 653b
+	DB 28h ; 6543
+	ASCII "IIIII" ; 6544
+	DB 85h, 27h, 81h, 26h ; 6549
+	ASCII "IIIII%&%&IIIIIIII", 22h, "! " ; 654d
+	DB 1Fh ; 6561
+	ASCII "IIIIIIII" ; 6562
+	DB 1Fh, 21h, 22h, 85h, 29h, 81h, 28h ; 656a
+	ASCII "IIIII" ; 6571
+	DB 85h, 27h, 81h, 26h ; 6576
+	ASCII "IIIII%&%&IIIIIIII", 22h, "" ; 657a
+	DB 1Fh, 1Eh, 26h, 29h, 2Ah, 2Bh ; 658c
+	ASCII "IIIII" ; 6592
+	DB 13h ; 6597
+	ASCII "II" ; 6598
+	DB 16h ; 659a
+	ASCII "II" ; 659b
+	DB 15h ; 659d
+	ASCII "II" ; 659e
+	DB 18h ; 65a0
+	ASCII "II" ; 65a1
+	DB 16h ; 65a3
+	ASCII "IIIIIIII" ; 65a4
+	DB 83h, 1Ah, 81h, 13h ; 65ac
+	ASCII "II" ; 65b0
+	DB 16h ; 65b2
+	ASCII "II" ; 65b3
+	DB 15h ; 65b5
+	ASCII "II" ; 65b6
+	DB 11h ; 65b8
+	ASCII "II" ; 65b9
+	DB 13h ; 65bb
+	ASCII "IIIIIIIII" ; 65bc
+	DB 16h, 15h, 13h ; 65c5
+	ASCII "II" ; 65c8
+	DB 16h ; 65ca
+	ASCII "II" ; 65cb
+	DB 15h ; 65cd
+	ASCII "II" ; 65ce
+	DB 18h ; 65d0
+	ASCII "II" ; 65d1
+	DB 16h ; 65d3
+	ASCII "IIIII" ; 65d4
+	DB 83h, 0Eh, 12h, 81h, 13h ; 65d9
+	ASCII "II" ; 65de
+	DB 16h ; 65e0
+	ASCII "II" ; 65e1
+	DB 15h ; 65e3
+	ASCII "II" ; 65e4
+	DB 11h ; 65e6
+	ASCII "II" ; 65e7
+	DB 13h ; 65e9
+	ASCII "IIIIIIII" ; 65ea
+	DB 13h, 15h, 16h, 85h, 1Dh, 81h, 1Ch ; 65f2
+	ASCII "IIIII" ; 65f9
+	DB 85h, 1Bh, 81h, 1Ah ; 65fe
+	ASCII "IIIII" ; 6602
+	DB 19h, 1Ah, 19h, 1Ah ; 6607
+	ASCII "IIIIIIII" ; 660b
+	DB 16h, 15h, 14h, 13h ; 6613
+	ASCII "IIIIIIII" ; 6617
+	DB 13h, 15h, 16h, 85h, 1Dh, 81h, 1Ch ; 661f
+	ASCII "IIIII" ; 6626
+	DB 85h, 1Bh, 81h, 1Ah ; 662b
+	ASCII "IIIII" ; 662f
+	DB 19h, 1Ah, 19h, 1Ah ; 6634
+	ASCII "IIIIIIII" ; 6638
+	DB 16h, 13h, 12h, 1Ah, 1Dh, 1Eh, 1Fh ; 6640
+	ASCII "IIIII" ; 6647
+	DB 0F2h

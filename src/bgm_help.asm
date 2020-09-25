@@ -1,0 +1,111 @@
+	; HEADER
+	DB 0B3h, 0F1h, 0A4h, 0C2h, 98h, 81h, 2Ah ; 664c
+
+	ASCII "III%I" ; 6654
+	DB 1Eh ; 6659
+	ASCII "I", 22h, "I%I*I" ; 665a
+	DB 0C3h ; 6661
+	ASCII "II" ; 6662
+	DB 12h ; 6664
+	ASCII "I" ; 6665
+	DB 12h ; 6666
+	ASCII "III" ; 6667
+	DB 12h ; 666a
+	ASCII "I" ; 666b
+	DB 0C2h, 29h ; 666c
+	ASCII "III%I" ; 666e
+	DB 1Dh ; 6673
+	ASCII "I", 22h, "I%I)I" ; 6674
+	DB 0C3h ; 667b
+	ASCII "II" ; 667c
+	DB 11h ; 667e
+	ASCII "I" ; 667f
+	DB 11h ; 6680
+	ASCII "III" ; 6681
+	DB 11h ; 6684
+	ASCII "I" ; 6685
+	DB 0C2h, 28h ; 6686
+	ASCII "III%I" ; 6688
+	DB 1Ch ; 668d
+	ASCII "I", 22h, "I%I(I" ; 668e
+	DB 0C3h ; 6695
+	ASCII "II" ; 6696
+	DB 10h ; 6698
+	ASCII "I" ; 6699
+	DB 10h ; 669a
+	ASCII "III" ; 669b
+	DB 10h ; 669e
+	ASCII "I" ; 669f
+	DB 0C2h, 27h ; 66a0
+	ASCII "III#I" ; 66a2
+	DB 1Bh ; 66a7
+	ASCII "I I#I'I" ; 66a8
+	DB 0C3h ; 66af
+	ASCII "II" ; 66b0
+	DB 0Fh ; 66b2
+	ASCII "I" ; 66b3
+	DB 0Fh ; 66b4
+	ASCII "III" ; 66b5
+	DB 0Fh ; 66b8
+	ASCII "I" ; 66b9
+	DB 0C2h, 23h ; 66ba
+	ASCII "III%I'III)I*I%I", 22h, "I" ; 66bc
+	DB 85h, 94h, 2Ah, 81h, 98h, 26h ; 66cd
+	ASCII "I(I&I%I(I&I" ; 66d3
+	DB 0B4h, 25h ; 66de
+	ASCII "I#I$I" ; 66e0
+	DB 0B5h, 94h, 87h, 25h, 81h, 0B3h, 98h, 2Ah ; 66e5
+	ASCII "III%I" ; 66ed
+	DB 1Eh ; 66f2
+	ASCII "I", 22h, "I%I*I" ; 66f3
+	DB 0C3h ; 66fa
+	ASCII "II" ; 66fb
+	DB 12h ; 66fd
+	ASCII "I" ; 66fe
+	DB 12h ; 66ff
+	ASCII "III" ; 6700
+	DB 12h ; 6703
+	ASCII "I" ; 6704
+	DB 0C2h, 29h ; 6705
+	ASCII "III%I" ; 6707
+	DB 1Dh ; 670c
+	ASCII "I", 22h, "I%I)I" ; 670d
+	DB 0C3h ; 6714
+	ASCII "II" ; 6715
+	DB 11h ; 6717
+	ASCII "I" ; 6718
+	DB 11h ; 6719
+	ASCII "III" ; 671a
+	DB 11h ; 671d
+	ASCII "I" ; 671e
+	DB 0C2h, 28h ; 671f
+	ASCII "III%I" ; 6721
+	DB 1Ch ; 6726
+	ASCII "I", 22h, "I%I(I" ; 6727
+	DB 0C3h ; 672e
+	ASCII "II" ; 672f
+	DB 10h ; 6731
+	ASCII "I" ; 6732
+	DB 10h ; 6733
+	ASCII "III" ; 6734
+	DB 10h ; 6737
+	ASCII "I" ; 6738
+	DB 0C2h, 27h ; 6739
+	ASCII "III#I" ; 673b
+	DB 1Bh ; 6740
+	ASCII "I I#I'I" ; 6741
+	DB 0C3h ; 6748
+	ASCII "II" ; 6749
+	DB 0Fh ; 674b
+	ASCII "I" ; 674c
+	DB 0Fh ; 674d
+	ASCII "III" ; 674e
+	DB 0Fh ; 6751
+	ASCII "I" ; 6752
+	DB 0C3h, 23h ; 6753
+	ASCII "III%I'III)I*I%I", 22h, "I" ; 6755
+	DB 94h, 85h, 1Eh, 81h, 98h, 20h ; 6766
+	ASCII "III", 22h, "I#III%I" ; 676c
+	DB 94h, 85h, 27h, 26h, 81h, 98h, 25h ; 6777
+	ASCII "I'I%I$I%I'I" ; 677e
+	DB 94h, 87h, 25h, 0F2h

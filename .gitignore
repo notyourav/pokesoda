@@ -1,0 +1,6 @@
+src/*.obj
+*.eep
+*.out
+*.obj
+*.min
+*.map
