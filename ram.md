@@ -13,6 +13,7 @@ Address     | Description
 14F3        | vibrato?
 14FA        | seems to control what sound effect is played.
 14FB        | sound effect switch (?)
+150B        | handle 32Hz interrupt 
 15AF:2      | uptime in seconds
 15B1        | cursor X
 15B2        | cursor Y
@@ -29,5 +30,6 @@ Address     | Description
 166F        | frame count LO
 1670        | frame count HI
 1695        | title screen update timer?
+2028        | timer interrupt #hz?
 2D71        | next subprogram addr
 620B        | music table?

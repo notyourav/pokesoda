@@ -1,5 +1,7 @@
 ; これはテキストエディタを強制的にSHIFT JISモードにするために使われる日本語の一行です。
 
+include "src/global.inc"
+
 DEFSECT ".rom0", CODE AT 2100H
 SECT ".rom0"
 ; ----------------------
@@ -7,180 +9,180 @@ SECT ".rom0"
 ; ---------------------- ; 2100
 reset_vector:
 
-	LD NB,#00h ; 2102
-	JRL Entry
+	LD NB, #00h
+	JRL __START
 
 ; ---------------------- ; 2105
 prc_frame_copy_irq:
 
-	LD NB,#00h ; 2108
+	LD NB, #00h
 	JRL IRQ_FrameCopy
 
 ; ---------------------- ; 210b
 prc_render_irq:
 
-	LD NB,#00h ; 210e
+	LD NB, #00h
 	JRL IRQ_Render
 
 ; ---------------------- ; 2111
 timer_2h_underflow_irq:
 
-	LD NB,#00h ; 2114
+	LD NB, #00h
 	JRL IRQ_Timer2HI_Underflow
 
 ; ---------------------- ; 2117
 timer_2l_underflow_irq:
 
-	LD NB,#00h ; 211a
+	LD NB, #00h
 	JRL IRQ_Timer2LO_Underflow
 
 ; ---------------------- ; 211d
 timer_1h_underflow_irq:
 
-	LD NB,#00h ; 2120
+	LD NB, #00h
 	JRL IRQ_Timer1HI_Underflow
 
 ; ---------------------- ; 2123
 timer_1l_underflow_irq:
 
-	LD NB,#00h ; 2126
+	LD NB, #00h
 	JRL IRQ_Timer1LO_Underflow
 
 ; ---------------------- ; 2129
 timer_3h_underflow_irq:
 
-	LD NB,#00h ; 212c
+	LD NB, #00h
 	JRL IRQ_Timer3HI_Underflow
 
 ; ---------------------- ; 212f
 timer_3_cmp_irq:
 
-	LD NB,#00h ; 2132
+	LD NB, #00h
 	JRL IRQ_Timer3Cmp
 
 ; ---------------------- ; 2135
 timer_32hz_irq:
 
-	LD NB,#00h ; 2138
+	LD NB, #00h
 	JRL IRQ_Timer_32hz
 
 ; ---------------------- ; 213b
 timer_8hz_irq:
 
-	LD NB,#00h ; 213e
+	LD NB, #00h
 	JRL IRQ_Timer_8hz
 
 ; ---------------------- ; 2141
 timer_2hz_irq:
 
-	LD NB,#00h ; 2144
+	LD NB, #00h
 	JRL IRQ_Timer_2hz
 
 ; ---------------------- ; 2147
 timer_1hz_irq:
 
-	LD NB,#00h ; 214a
+	LD NB, #00h
 	JRL IRQ_Timer_1hz
 
 ; ---------------------- ; 214d
 ir_rx_irq:
 
-	LD NB,#00h ; 2150
+	LD NB, #00h
 	JRL IRQ_IR
 
 ; ---------------------- ; 2153
 shake_irq:
 
-	LD NB,#00h ; 2156
+	LD NB, #00h
 	JRL IRQ_Shake
 
 ; ---------------------- ; 2159
 key_power_irq:
 
-	LD NB,#00h ; 215c
+	LD NB, #00h
 	JRL loc_0x003571
 
 ; ---------------------- ; 215f
 key_right_irq:
 
-	LD NB,#00h ; 2162
+	LD NB, #00h
 	JRL IRQ_KeyRight
 
 ; ---------------------- ; 2165
 key_left_irq:
 
-	LD NB,#00h ; 2168
+	LD NB, #00h
 	JRL IRQ_KeyLeft
 
 ; ---------------------- ; 216b
 key_down_irq:
 
-	LD NB,#00h ; 216e
+	LD NB, #00h
 	JRL IRQ_KeyDown
 
 ; ---------------------- ; 2171
 key_up_irq:
 
-	LD NB,#00h ; 2174
+	LD NB, #00h
 	JRL IRQ_KeyUp
 
 ; ---------------------- ; 2177
 key_c_irq:
 
-	LD NB,#00h ; 217a
+	LD NB, #00h
 	JRL IRQ_KeyC
 
 ; ---------------------- ; 217d
 key_b_irq:
 
-	LD NB,#00h ; 2180
+	LD NB, #00h
 	JRL IRQ_KeyB
 
 ; ---------------------- ; 2183
 key_a_irq:
 
-	LD NB,#00h ; 2186
+	LD NB, #00h
 	JRL IRQ_KeyA
 
 ; ---------------------- ; 2189
 unknown_irq0:
 
-	ADD A,A ; 218c
-	ADD A,A ; 218d
-	ADD A,A ; 218e
-	ADD A,A ; 218f
-	ADD A,A ; 2190
-	ADD A,A
+	ADD A, A
+	ADD A, A
+	ADD A, A
+	ADD A, A
+	ADD A, A
+	ADD A, A
 
 ; ---------------------- ; 2191
 unknown_irq1:
 
-	ADD A,A ; 2192
-	ADD A,A ; 2193
-	ADD A,A ; 2194
-	ADD A,A ; 2195
-	ADD A,A ; 2196
-	ADD A,A
+	ADD A, A
+	ADD A, A
+	ADD A, A
+	ADD A, A
+	ADD A, A
+	ADD A, A
 
 ; ---------------------- ; 2197
 unknown_irq2:
 
-	ADD A,A ; 2198
-	ADD A,A ; 2199
-	ADD A,A ; 219a
-	ADD A,A ; 219b
-	ADD A,A ; 219c
-	ADD A,A
+	ADD A, A
+	ADD A, A
+	ADD A, A
+	ADD A, A
+	ADD A, A
+	ADD A, A
 
 ; ---------------------- ; 219d
 cartridge_irq:
 
-	ADD A,A ; 219e
-	ADD A,A ; 219f
-	ADD A,A ; 21a0
-	ADD A,A ; 21a1
-	ADD A,A ; 21a2
-	ADD A,A
+	ADD A, A
+	ADD A, A
+	ADD A, A
+	ADD A, A
+	ADD A, A
+	ADD A, A
 
 ; ---------------------- ; 21a3
 	ASCII "NINTENDO" ; 21a4
@@ -204,49 +206,49 @@ cartridge_irq:
 loc_0x0021F4:
 
 	; something to do with sleep mode?
-	LD EP,#00h ; 21f4
-	AND [BR:23h],#0BFh ; 21f7
+	LD EP, #00h
+	AND [BR:23h], #0BFh
 
 	RET
 
 ; ---------------------- ; 21fa
 loc_0x0021FB:
 
-	LD EP,#00h ; 21fb
+	LD EP, #00h
 
 	; IRQ stuff
-	LD A,[BR:20h] ; 21fe
-	AND A,#3Fh ; 2200
-	OR A,#40h ; 2202
-	LD [BR:20h],A ; 2204
-	OR [BR:23h],#40h ; 2206
+	LD A, [BR:20h]
+	AND A, #3Fh
+	OR A, #40h
+	LD [BR:20h], A
+	OR [BR:23h], #40h
 
-	LD A,[BR:20h] ; 2209
-	AND A,#0FCh ; 220b
-	LD [BR:20h],A ; 220d
-	AND [BR:23h],#0FDh ; 220f
+	LD A, [BR:20h]
+	AND A, #0FCh
+	LD [BR:20h], A
+	AND [BR:23h], #0FDh
 
-	LD A,[BR:20h] ; 2212
-	AND A,#0CFh ; 2214
-	OR A,#20h ; 2216
-	LD [BR:20h],A ; 2218
-	OR [BR:23h],#20h ; 221a
+	LD A, [BR:20h]
+	AND A, #0CFh
+	OR A, #20h
+	LD [BR:20h], A
+	OR [BR:23h], #20h
 
-	LD A,[BR:21h] ; 221d
-	AND A,#3Fh ; 221f
-	OR A,#80h ; 2221
-	LD [BR:21h],A ; 2223
+	LD A, [BR:21h]
+	AND A, #3Fh
+	OR A, #80h
+	LD [BR:21h], A
 
-	LD A,[1AB8h] ; 2225
-	AND A,A ; 2229
-	JRS Z,loc_0x00223A ; 222a
+	LD A, [1AB8h]
+	AND A, A
+	JRS Z, loc_0x00223A
 
-	OR [BR:24h],#20h ; 222c
+	OR [BR:24h], #20h
 
 	; 256hz timer enable
-	OR [BR:40h],#02h ; 222f
-	LD A,#01h ; 2232
-	LD [163Ah],A ; 2234
+	OR [BR:40h], #02h
+	LD A, #01h
+	LD [163Ah], A
 
 	JRS loc_0x002242
 
@@ -1646,53 +1648,54 @@ loc_0x002E65:
 	ASCII "x@" ; 2eb1
 	DB 0F8h
 ; ---------------------- ; 2eb3
-Entry:
+global __START
+__START:
 
-	CARL minlib_splash_screen ; 2eb4
+	CARL minlib_splash_screen
 
-	CPL B ; 2eb7
-	LD [1665h],B ; 2eb9
-	LD [1666h],H ; 2ebd
+	CPL B
+	LD [1665h], B
+	LD [1666h], H
 
-	AND SC,#3Fh ; 2ec1
-	OR SC,#80h ; 2ec3
-	LD BR,#20h ; 2ec5
+	AND SC,#3Fh
+	OR SC,#80h
+	LD BR,#20h
 
-	XOR A,A ; 2ec7
-	LD EP,A ; 2ec8
-	LD XP,A ; 2eca
-	LD YP,A ; 2ecc
-	AND SC,#0CFh ; 2ece
+	XOR A, A
+	LD EP, A
+	LD XP, A
+	LD YP, A
+	AND SC, #0CFh
 
 	; Load subprogram
 	LD HL, #2D71h
 	LD B, #00h
 	CARL loc_0x002243
 	
-	CARL loc_0x00265C ; 2ed8
-	CARL loc_0x0042CB ; 2edb
-	CARL loc_0x00422C ; 2ede
-	CARL minlib_reset_audio_registers ; 2ee1
-	CARL loc_0x00267F ; 2ee4
+	CARL loc_0x00265C
+	CARL loc_0x0042CB
+	CARL loc_0x00422C
+	CARL minlib_reset_audio_registers
+	CARL loc_0x00267F
 
-	LD [1B0Fh],A ; 2ee7
-	LD NB,#03h ; 2eeb
-	CARL loc_0x018000 ; 2eee
+	LD [1B0Fh], A
+	LD NB, #03h
+	CARL loc_0x018000
 
-	LD NB,#03h ; 2ef1
-	CARL loc_0x01801C ; 2ef4
+	LD NB, #03h
+	CARL loc_0x01801C
 
-	LD NB,#03h ; 2ef7
-	CARL loc_0x018035 ; 2efa
+	LD NB, #03h
+	CARL loc_0x018035
 
-	AND SC,#3Fh ; 2efd
+	AND SC, #3Fh
 
-	LD HL,#3608h ; 2eff
-	LD B,#00h ; 2f02
-	LD [161Fh],HL ; 2f04
-	LD [1621h],B ; 2f07
+	LD HL, #3608h
+	LD B, #00h
+	LD [161Fh], HL
+	LD [1621h], B
 
-	LD NB,#00h ; 2f0b
+	LD NB, #00h
 	JRL MainLoop
 
 ; ---------------------- ; 2f0e
@@ -1771,15 +1774,16 @@ loc_0x002F11:
 
 	RET
 
-; ---------------------- ;
+; ---------------------- ; 2F6D
 Module_Gameplay:
 	LD HL, #1672h
 	BIT [HL], #0FFh
 	JRL Z, loc_0x002F11
 
+	; 3852E
 	LD [HL], #00h
 	LD NB, #07h
-	CARL loc_0x00852E
+	CARL lbl_0x03852E
 
 	LD NB, #02h
 	CARL loc_0x009D05
@@ -2189,31 +2193,31 @@ IRQ_FrameCopy:
 
 	RETE
 
-; ---------------------- ; 34dd
+; ---------------------- ; 34DE
 IRQ_Render:
 
-	PUSH ALE ; 34de
-	XOR A,A ; 34e0
-	LD EP,A ; 34e1
+	PUSH ALE
+	XOR A, A
+	LD EP, A
 
 	; disable interrupt
-	LD BR,#20h ; 34e3
-	LD [BR:27h],#40h ; 34e5
+	LD BR, #20h
+	LD [BR:27h], #40h
 
-	LD XP,A ; 34e8
-	LD YP,A ; 34ea
+	LD XP, A
+	LD YP, A
 
-	AND SC,#0CFh ; 34ec
+	AND SC, #(OFF_D & OFF_U)
 
 	; increase frame count
-	LD BA,[166Fh] ; 34ee
-	INC BA ; 34f1
-	LD [166Fh],BA ; 34f2
+	LD BA, [166Fh]
+	INC BA
+	LD [166Fh], BA
 
-	CARL DoCurrentProc ; 34f5
-	CARL loc_0x002987 ; 34f8
+	CARL DoCurrentProc
+	CARL loc_0x002987
 
-	POP ALE ; 34fb
+	POP ALE
 
 	RETE
 
@@ -2283,23 +2287,26 @@ IRQ_Timer3Cmp:
 	RETE
 
 ; ---------------------- ; 3557
+
+
 IRQ_Timer_32hz:
 
-	PUSH ALE ; 3558
+	PUSH ALE
 
-	XOR A,A ; 355a
-	LD EP,A ; 355b
-	LD BR,#20h ; 355d
-	LD [BR:28h],#20h ; 355f
+	; A = callee page?
+	XOR A,A
+	LD EP, A
+	LD BR, #20h
+	LD [BR:28h], #20h
 
-	LD XP,A ; 3562
-	LD YP,A ; 3564
+	LD XP, A
+	LD YP, A
 
-	AND SC,#0CFh ; 3566
+	AND SC, #(OFF_D & OFF_U)
 
-	CARL loc_0x004299 ; 3568
+	CARL handle32hz
 
-	POP ALE ; 356b
+	POP ALE
 
 	RETE
 
@@ -3988,39 +3995,40 @@ loc_0x004283:
 	DB 85h, 8Ch, 94h, 9Bh, 0A3h, 0AAh, 0B1h, 0B9h ; 4290
 	DB 0C0h
 ; ---------------------- ; 4298
-loc_0x004299:
+handle32hz:
 
-	LD BR,#20h ; 4299
-	LD EP,#00h ; 429b
+	; 20:00
+	LD BR,#20h
+	LD EP,#00h
 
-	LD A,[150Bh] ; 429e
-	AND A,A ; 42a2
-	JRS Z,loc_0x0042CA ; 42a3
+	LD A,[150Bh]
+	AND A, A
+	JRS Z, handle32hz_done
 
-	DEC A ; 42a5
-	LD [150Bh],A ; 42a6
-	JRL Z,loc_0x0042C4 ; 42aa
+	DEC A
+	LD [150Bh], A
+	JRL Z, loc_0x0042C4
 
-	LD B,[150Ah] ; 42ad
-	LD A,[150Ch] ; 42b1
-	ADD A,B ; 42b5
-	LD [150Ch],A ; 42b6
-	JRS NC,loc_0x0042C4 ; 42ba
+	LD B, [150Ah]
+	LD A, [150Ch]
+	ADD A, B
+	LD [150Ch], A
+	JRS NC, loc_0x0042C4
 
-	OR [BR:60h],#10h ; 42bc
-	OR [BR:61h],#10h ; 42bf
+	OR [BR:60h],#10h
+	OR [BR:61h],#10h
 
-	JRS loc_0x0042CA
+	JRS handle32hz_done
 
-; ---------------------- ; 42c2
 loc_0x0042C4:
 
-	OR [BR:60h],#10h ; 42c4
-	AND [BR:61h],#0EFh ; 42c7
+	OR [BR:60h],#10h
+	AND [BR:61h],#0EFh
 
-loc_0x0042CA:
+handle32hz_done:
 
 	RET
+
 ; ---------------------- ; 42ca
 loc_0x0042CB:
 
@@ -7000,28 +7008,28 @@ minlib_song_table:
 	DB 0F0h, 0B5h
 	
 	; 6343
-	include "bgm_break.asm"
+	include "audio/bgm_break.asm"
 
 
-	include "bgm_settings.asm"
+	include "audio/bgm_settings.asm"
 	
 	; 646c
-	include "bgm_menu.asm"
+	include "audio/bgm_menu.asm"
 
 	; 64df
-	include "bgm_itembox.asm"
+	include "audio/bgm_itembox.asm"
 
 
-	include "bgm_help.asm"
+	include "audio/bgm_help.asm"
 	
 
-	include "bgm_connect.asm"
+	include "audio/bgm_connect.asm"
 
 	; 6872
-	include "bgm_pokeselect.asm"
+	include "audio/bgm_pokeselect.asm"
 
 	; 694C
-	include "bgm_title.asm"
+	include "audio/bgm_title.asm"
 
 
 	DB 0B3h, 0F1h, 0A4h, 0C1h, 81h ; 69a5
@@ -16439,19 +16447,61 @@ loc_0x011CEA:
 	DB 0F1h, 05h ; 11cf9
 	ASCII "h" ; 11cfb
 	DB 0C1h, 04h, 00h, 0D5h, 11h, 16h, 0E4h, 0F8h ; 11cfc
-	DB 0F8h, 0CEh, 0C5h, 00h, 0B8h, 0B1h, 15h, 0BCh ; 11d04
-	DB 00h, 13h, 0B8h, 0B3h, 15h, 0BCh, 02h, 13h ; 11d0c
-	DB 0B8h, 0B5h, 15h, 0BCh, 04h, 13h, 0B8h, 0B7h ; 11d14
-	DB 15h, 0BCh, 06h, 13h, 0B8h, 0B9h, 15h, 0BCh ; 11d1c
-	DB 08h, 13h, 0B8h, 0BBh, 15h, 0BCh, 0Ah, 13h ; 11d24
-	DB 0B8h, 0BDh, 15h, 0BCh, 0Ch, 13h, 0B8h, 0BFh ; 11d2c
-	DB 15h, 0BCh, 0Eh, 13h, 0B8h, 0C1h, 15h, 0BCh ; 11d34
-	DB 10h, 13h, 0B8h, 0C3h, 15h, 0BCh, 12h, 13h ; 11d3c
-	DB 0B8h, 0C5h, 15h, 0BCh, 14h, 13h, 0B8h, 0C7h ; 11d44
-	DB 15h, 0BCh, 16h, 13h, 0B8h, 0C9h, 15h, 0BCh ; 11d4c
-	DB 18h, 13h, 0B8h, 0CBh, 15h, 0BCh, 1Ah, 13h ; 11d54
-	DB 0B8h, 0CDh, 15h, 0BCh, 1Ch, 13h, 0B8h, 0CFh ; 11d5c
-	DB 15h, 0BCh, 1Eh, 13h, 0B8h, 0D1h, 15h, 0BCh ; 11d64
+	DB 0F8h
+	
+	; ---------------------- ; 11d05
+	
+	LD EP, #00h
+
+	LD BA, [15B1h]
+	LD [1300h], BA
+
+	LD BA, [15B3h]
+	LD [1302h], BA
+
+	LD BA, [15B5h]
+	LD [1304h], BA
+
+	LD BA, [15B7h]
+	LD [1306h], BA
+
+	LD BA, [15B9h]
+	LD [1308h], BA
+
+	LD BA, [15BBh]
+	LD [130Ah], BA
+
+	LD BA, [15BDh]
+	LD [130Ch], BA
+
+	LD BA, [15BFh]
+	LD [130Eh], BA
+
+	LD BA, [15C1h]
+	LD [1310h], BA
+
+	LD BA, [15C3h]
+	LD [1312h], BA
+
+	LD BA, [15C5h]
+	LD [1314h], BA
+
+	LD BA, [15C7h]
+	LD [1316h], BA
+
+	LD BA, [15C9h]
+	LD [1318h], BA
+
+	LD BA, [15CBh]
+	LD [131Ah], BA
+
+	LD BA, [15CDh]
+	LD [131Ch], BA
+
+	LD BA, [15CFh]
+	LD [131Eh], BA
+
+	DB 0B8h, 0D1h, 15h, 0BCh ; 11d64
 	DB 20h, 13h, 0B8h, 0D3h, 15h, 0BCh, 22h, 13h ; 11d6c
 	DB 0B8h, 0D5h, 15h, 0BCh, 24h, 13h, 0B8h, 0D7h ; 11d74
 	DB 15h, 0BCh, 26h, 13h, 0B8h, 0D9h, 15h, 0BCh ; 11d7c
@@ -23165,18 +23215,19 @@ SECT ".rom3"
 ; ---------------------- ; 17fff
 loc_0x018000:
 
-	LD EP,#00h ; 18000
-	LD A,#00h ; 18003
-	LD [1503h],A ; 18005
+	LD EP, #00h
 
-	LD A,#00h ; 18009
-	LD [1504h],A ; 1800b
+	LD A, #00h
+	LD [1503h], A
 
-	LD A,#00h ; 1800f
-	LD [1505h],A ; 18011
+	LD A,#00h
+	LD [1504h], A
 
-	LD A,#00h ; 18015
-	LD [1506h],A ; 18017
+	LD A, #00h
+	LD [1505h], A
+
+	LD A, #00h
+	LD [1506h], A
 
 	RET
 
@@ -30429,821 +30480,13 @@ loc_0x018F4E:
 	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 1ffe9
 	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 1fff1
 	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 1fff9
-DEFSECT ".rom4", CODE AT 020000H
-SECT ".rom4"
-; ---------------------- ; 1ffff
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20000
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20008
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20010
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20018
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20020
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20028
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20030
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20038
-	DB 0FFh, 01h, 01h, 01h, 01h, 01h, 00h, 00h ; 20040
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20048
-	DB 00h, 0FEh, 9Ah, 0BAh, 0BAh, 0BAh, 0FFh, 0F5h ; 20050
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20058
-	DB 00h, 00h, 00h, 81h, 0C0h, 0C0h, 00h, 01h ; 20060
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20068
-	DB 0B5h, 0B5h, 0CFh, 7Eh, 3Bh, 21h, 0FBh, 82h ; 20070
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20078
-	DB 00h, 0E0h, 80h, 01h, 00h, 00h, 00h, 01h ; 20080
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20088
-	DB 0FFh, 11h, 7Fh, 0DAh, 0ABh, 81h, 0EBh, 9Eh ; 20090
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20098
-	DB 01h, 01h, 03h, 00h, 00h, 00h, 0Fh, 8Fh ; 200a0
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 200a8
-	DB 0F2h, 0FEh, 9Ch, 0E7h, 89h, 0BFh, 0D0h ; 200b0
-	ASCIZ "p" ; 200b7
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 200b9
-	DB 81h, 01h, 00h, 00h, 00h, 01h, 01h, 0FFh ; 200c1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 200c9
-	DB 7Eh, 0DAh, 0ABh, 81h, 0EBh, 9Eh, 0F2h, 00h ; 200d1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 01h ; 200d9
-	DB 03h, 00h, 00h, 00h, 0Fh, 83h, 80h, 0FFh ; 200e1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FEh ; 200e9
-	DB 9Ch, 0E7h, 89h, 0BFh, 0D0h, 7Ch ; 200f1
-	ASCIZ "w" ; 200f7
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 80h ; 200f9
-	DB 00h, 00h, 00h, 0C0h, 0C0h, 81h, 00h, 0FFh ; 20101
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20109
-	ASCII "A" ; 20110
-	DB 0F7h, 85h, 0FFh, 25h, 3Fh ; 20111
-	ASCII "f" ; 20116
-	DB 0DBh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20117
-	DB 00h, 00h, 18h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2011f
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20127
-	DB 0FFh, 0BDh, 0E7h, 00h, 00h, 00h, 00h, 00h ; 2012f
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20137
-	DB 00h, 0FFh, 80h, 00h, 00h, 07h, 07h, 07h ; 2013f
-	DB 03h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20147
-	DB 0FFh, 00h, 7Fh, 0C1h, 0BFh, 0B8h, 0C8h, 0F8h ; 2014f
-	DB 9Ch, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20157
-	DB 00h, 00h, 00h, 00h, 0Fh, 87h, 00h, 00h ; 2015f
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20167
-	DB 0FFh, 0E7h, 89h, 0BFh, 0D0h ; 2016f
-	ASCII "x" ; 20174
-	DB 0CFh, 0B1h, 0B7h, 00h, 00h, 00h, 00h, 00h ; 20175
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2017d
-	DB 00h, 00h, 87h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20185
-	DB 0FFh, 0FFh, 0FFh, 0B5h, 0FFh, 0FDh, 0B7h, 0B5h ; 2018d
-	DB 0B5h, 0CFh ; 20195
-	ASCIZ "x" ; 20197
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20199
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 201a1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 201a9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 201b1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 201b9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 201c1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 201c9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 201d1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 201d9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 201e1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 201e9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 201f1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 201f9
-	DB 0E3h, 80h, 80h, 00h, 00h, 00h, 0C0h, 0FFh ; 20201
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20209
-	DB 1Ch ; 20211
-	ASCII "wA" ; 20212
-	DB 0F7h, 85h, 0FFh, 25h, 00h, 00h, 00h, 00h ; 20214
-	DB 00h, 00h, 00h, 00h, 80h, 80h, 80h, 00h ; 2021c
-	DB 00h, 00h, 03h, 03h, 0FFh, 0FFh, 0FFh, 0FFh ; 20224
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 7Fh ; 2022c
-	ASCII "GQ" ; 20231
-	DB 0EBh, 0B1h, 0C7h, 0FCh, 9Ch, 00h, 00h, 00h ; 20233
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2023b
-	DB 0Fh, 83h, 01h, 01h, 01h, 0FFh, 0FFh, 0FFh ; 20243
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0E7h, 89h, 0BFh ; 2024b
-	DB 0D0h, 7Ch, 0C6h, 0BAh, 82h, 00h, 00h, 00h ; 20253
-	DB 00h, 00h, 00h, 00h, 00h, 01h, 01h, 01h ; 2025b
-	DB 01h, 01h, 01h, 01h, 01h, 0FFh, 0FFh, 0FFh ; 20263
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FAh, 86h, 0FEh ; 2026b
-	DB 9Ah, 0BAh, 0BAh, 0B2h, 0FEh, 00h, 00h, 00h ; 20273
-	DB 00h, 00h, 00h, 00h, 00h, 01h, 00h, 00h ; 2027b
-	DB 00h, 11h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20283
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0CAh, 0BBh, 0A1h ; 2028b
-	DB 0BBh, 0EEh, 00h, 00h, 00h, 00h, 00h, 00h ; 20293
-	DB 00h, 00h, 00h, 00h, 00h, 0FFh, 0FFh, 0FFh ; 2029b
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 202a3
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h, 00h, 00h ; 202ab
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 202b3
-	DB 00h, 00h, 00h, 00h, 00h, 0C3h, 81h, 81h ; 202bb
-	DB 81h, 81h, 81h, 81h, 81h, 0FFh, 0FFh, 0FFh ; 202c3
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 3Ch ; 202cb
-	ASCIZ "fZZf~Bv" ; 202d1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 81h ; 202d9
-	DB 81h, 81h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 202e1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 202e9
-	ASCIZ "nB~" ; 202f0
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 202f4
-	DB 00h, 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh ; 202fc
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20304
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h ; 2030c
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20314
-	DB 00h, 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh ; 2031c
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20324
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h ; 2032c
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20334
-	DB 00h, 00h, 00h, 00h, 0C3h, 81h, 81h, 81h ; 2033c
-	DB 81h, 81h, 81h, 81h, 0FFh, 0FFh, 0FFh, 0FFh ; 20344
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 3Ch ; 2034c
-	ASCIZ "fZZf~Bj" ; 20351
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0C1h ; 20359
-	DB 0C1h, 81h, 81h, 81h, 0C1h, 0C1h, 0F1h, 0FFh ; 20361
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 2Ah ; 20369
-	DB 3Ah, 7Eh ; 20371
-	ASCII "Bj*:" ; 20373
-	DB 0Eh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20377
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2037f
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20387
-	DB 0FFh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2038f
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20397
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2039f
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 203a7
-	DB 0FFh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 203af
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 203b7
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 203bf
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 203c7
-	DB 0FFh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 203cf
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 203d7
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 203df
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 203e7
-	DB 0FFh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 203ef
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 203f7
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 203ff
-	DB 0FFh, 1Fh, 1Fh, 1Fh, 0Fh, 0Fh, 0Fh, 07h ; 20407
-	DB 07h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2040f
-	DB 00h, 0E0h, 0E0h, 0E0h, 0F0h, 0F0h, 0F0h, 88h ; 20417
-	DB 88h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2041f
-	DB 0FFh, 07h, 03h, 03h, 03h, 01h, 01h, 01h ; 20427
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2042f
-	DB 00h, 88h, 84h, 84h, 84h, 82h, 82h, 82h ; 20437
-	DB 81h, 0FFh, 0FFh, 7Fh, 7Fh, 7Fh, 3Fh, 3Fh ; 2043f
-	DB 3Fh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20447
-	DB 00h, 00h, 00h, 80h, 80h, 80h, 40h, 40h ; 2044f
-	DB 0C0h, 81h, 81h, 80h, 80h, 80h, 80h, 80h ; 20457
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2045f
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20467
-	DB 0FFh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2046f
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20477
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2047f
-	DB 0FFh, 1Fh, 1Fh, 1Fh, 0Fh, 0Fh, 0Fh, 07h ; 20487
-	DB 07h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2048f
-	DB 00h, 0E0h, 0E0h, 0E0h, 0F0h, 0F0h, 0F0h, 0F8h ; 20497
-	DB 0F8h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2049f
-	DB 0FFh, 07h, 03h, 03h, 03h, 01h, 01h, 01h ; 204a7
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 204af
-	DB 00h, 0F8h, 0FCh, 0FCh, 0FCh, 82h, 82h, 82h ; 204b7
-	DB 81h, 0FFh, 0FFh, 7Fh, 7Fh, 7Fh, 3Fh, 3Fh ; 204bf
-	DB 3Fh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 204c7
-	DB 00h, 00h, 00h, 80h, 80h, 80h, 40h, 40h ; 204cf
-	DB 0C0h, 81h, 81h, 80h, 80h, 80h, 80h, 80h ; 204d7
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 204df
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 204e7
-	DB 0FFh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 204ef
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 204f7
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 204ff
-	DB 0FFh, 1Fh, 1Fh, 1Fh, 0Fh, 0Fh, 0Fh, 07h ; 20507
-	DB 07h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2050f
-	DB 00h, 0E0h, 0E0h, 0E0h, 0F0h, 0F0h, 0F0h, 0F8h ; 20517
-	DB 0F8h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2051f
-	DB 0FFh, 07h, 03h, 03h, 03h, 01h, 01h, 01h ; 20527
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2052f
-	DB 00h, 0F8h, 0FCh, 0FCh, 0FCh, 0FEh, 0FEh, 0FEh ; 20537
-	DB 0FFh, 0FFh, 0FFh, 7Fh, 7Fh, 7Fh, 3Fh, 3Fh ; 2053f
-	DB 3Fh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20547
-	DB 00h, 00h, 00h, 80h, 80h, 80h, 40h, 40h ; 2054f
-	DB 0C0h, 0FFh, 0FFh, 80h, 80h, 80h, 80h, 80h ; 20557
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2055f
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20567
-	DB 0FFh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2056f
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20577
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2057f
-	DB 0FFh, 1Fh, 1Fh, 1Fh, 0Fh, 0Fh, 0Fh, 07h ; 20587
-	DB 07h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2058f
-	DB 00h, 0E0h, 0E0h, 0E0h, 0F0h, 0F0h, 0F0h, 0F8h ; 20597
-	DB 0F8h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2059f
-	DB 0FFh, 07h, 03h, 03h, 03h, 01h, 01h, 01h ; 205a7
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 205af
-	DB 00h, 0F8h, 0FCh, 0FCh, 0FCh, 0FEh, 0FEh, 0FEh ; 205b7
-	DB 0FFh, 0FFh, 0FFh, 7Fh, 7Fh, 7Fh, 3Fh, 3Fh ; 205bf
-	DB 3Fh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 205c7
-	DB 00h, 00h, 00h, 80h, 80h, 80h, 0C0h, 0C0h ; 205cf
-	DB 0C0h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 205d7
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 205df
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 205e7
-	DB 0FFh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 205ef
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 205f7
-	DB 00h, 0FFh, 81h, 81h, 0C3h, 0E7h, 0FFh, 0FFh ; 205ff
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20607
-	DB 0FFh, 00h, 7Eh ; 2060f
-	ASCII "B$" ; 20612
-	DB 18h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20614
-	DB 00h, 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh ; 2061c
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20624
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h ; 2062c
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20634
-	DB 00h, 00h, 00h, 00h, 0FFh, 81h, 81h, 0C3h ; 2063c
-	DB 0E7h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20644
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 00h, 7Eh, 7Eh, 3Ch ; 2064c
-	DB 18h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20654
-	DB 00h, 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh ; 2065c
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20664
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h ; 2066c
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20674
-	DB 00h, 00h, 00h, 00h, 0FFh, 0F9h, 0F1h, 0E1h ; 2067c
-	DB 0E1h, 0F1h, 0F9h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20684
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 00h, 06h, 0Ah, 12h ; 2068c
-	DB 12h, 0Ah, 06h, 00h, 00h, 00h, 00h, 00h ; 20694
-	DB 00h, 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh ; 2069c
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 206a4
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h ; 206ac
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 206b4
-	DB 00h, 00h, 00h, 00h, 0FFh, 0F9h, 0F1h, 0E1h ; 206bc
-	DB 0E1h, 0F1h, 0F9h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 206c4
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 00h, 06h, 0Eh, 1Eh ; 206cc
-	DB 1Eh, 0Eh, 06h, 00h, 00h, 00h, 00h, 00h ; 206d4
-	DB 00h, 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh ; 206dc
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 206e4
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h ; 206ec
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 206f4
-	DB 00h, 00h, 00h, 00h, 0CFh, 0C7h, 0C3h, 0C1h ; 206fc
-	DB 0C1h, 0C3h, 0C7h, 0CFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20704
-	DB 0FFh, 0FFh, 0FFh, 0FFh ; 2070c
-	ASCIZ "0($", 22h, "", 22h, "$(0" ; 20710
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20719
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20721
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20729
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20731
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0CFh ; 20739
-	DB 0C7h, 0C3h, 0C1h, 0C1h, 0C3h, 0C7h, 0CFh, 0FFh ; 20741
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20749
-	ASCIZ "08<>><80" ; 20750
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20759
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20761
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20769
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20771
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20779
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20781
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20789
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20791
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20799
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 207a1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 207a9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 207b1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 207b9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 207c1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 207c9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 207d1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 207d9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 207e1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 207e9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 207f1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 207f9
-	DB 87h, 00h, 00h, 00h, 03h, 00h, 00h, 0FFh ; 20801
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20809
-	ASCII "x" ; 20811
-	DB 0CFh, 0B1h, 0B7h, 0B4h, 0FFh, 81h, 00h, 00h ; 20812
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2081a
-	DB 00h, 00h, 01h, 01h, 01h, 01h, 0FFh, 0FFh ; 20822
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FBh ; 2082a
-	DB 81h, 0FBh, 0FEh, 82h, 0BEh, 0FEh, 00h, 00h ; 20832
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 81h, 81h ; 2083a
-	DB 01h, 00h, 00h, 00h, 01h, 01h, 0FFh, 0FFh ; 20842
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2084a
-	ASCII "zF" ; 20850
-	DB 0FEh, 9Bh, 81h, 0ABh, 0CEh, 96h, 00h, 00h ; 20852
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 01h, 00h ; 2085a
-	DB 00h, 00h, 01h, 03h, 81h, 80h, 0FFh, 0FFh ; 20862
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FEh, 0EBh ; 2086a
-	DB 81h, 0F3h, 0B6h, 0CCh, 7Eh, 7Bh, 00h, 00h ; 20872
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2087a
-	DB 00h, 00h, 01h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20882
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0C1h, 0BBh ; 2088a
-	DB 0A1h, 0BBh, 0FEh, 00h, 00h, 00h, 00h, 00h ; 20892
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 0FFh, 0FFh ; 2089a
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 208a2
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h, 00h ; 208aa
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 208b2
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 0FFh, 0E3h ; 208ba
-	DB 0E0h, 00h, 00h, 00h, 0E0h, 0C0h, 0FFh, 0FFh ; 208c2
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h, 1Ch ; 208ca
-	DB 17h, 0F5h, 85h, 0F5h, 17h, 3Dh, 00h, 00h ; 208d2
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 0C0h, 0C0h ; 208da
-	DB 0C0h, 0C7h, 0C0h, 0C0h, 0C0h, 00h, 0FFh, 0FFh ; 208e2
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 2Fh, 2Dh ; 208ea
-	DB 2Fh, 28h, 3Fh, 21h ; 208f2
-	ASCII "5" ; 208f6
-	DB 0F5h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 208f7
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 208ff
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20907
-	DB 0FFh, 81h, 0FFh, 0B1h, 0BFh, 0BFh, 81h, 0FFh ; 2090f
-	DB 0FBh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20917
-	DB 00h, 00h, 00h, 01h, 01h, 01h, 07h, 07h ; 2091f
-	DB 07h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20927
-	DB 0FFh, 81h, 0BBh, 0AAh, 0B2h, 0FEh, 0A8h, 0B8h ; 2092f
-	DB 0A8h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20937
-	DB 00h, 00h, 00h, 00h, 0C7h, 0C7h, 0C7h, 0FFh ; 2093f
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20947
-	DB 0FFh, 0FFh, 81h, 0EFh, 28h, 28h ; 2094f
-	ASCIZ "8" ; 20955
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20957
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2095f
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20967
-	DB 0FFh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2096f
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20977
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2097f
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20987
-	DB 0FFh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2098f
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20997
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2099f
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 209a7
-	DB 0FFh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 209af
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 209b7
-	DB 00h, 00h, 00h, 00h, 18h, 0FFh, 0FFh, 0FFh ; 209bf
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 209c7
-	DB 0FFh, 0FFh, 81h, 0BDh, 0E7h, 00h, 00h, 00h ; 209cf
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 209d7
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 209df
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 209e7
-	DB 0FFh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 209ef
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 209f7
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 209ff
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20a07
-	DB 0FFh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20a0f
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20a17
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 18h, 00h, 00h ; 20a1f
-	DB 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20a27
-	DB 0FFh, 00h, 00h, 00h, 00h, 0E7h, 0BDh, 81h ; 20a2f
-	DB 0FFh, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20a37
-	DB 00h, 0FFh, 81h, 81h, 81h, 81h, 0FFh, 0FFh ; 20a3f
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20a47
-	DB 0FFh, 00h, 7Eh ; 20a4f
-	ASCIZ "BZ~" ; 20a52
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20a56
-	DB 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20a5e
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20a66
-	DB 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h, 00h ; 20a6e
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20a76
-	DB 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20a7e
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20a86
-	DB 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h, 00h ; 20a8e
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20a96
-	DB 00h, 00h, 0FFh, 0FFh, 0FFh, 81h, 81h, 81h ; 20a9e
-	DB 81h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20aa6
-	DB 0FFh, 0FFh, 00h, 00h, 00h, 7Eh ; 20aae
-	ASCIZ "ZB~" ; 20ab4
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20ab8
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20ac0
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20ac8
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20ad0
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20ad8
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20ae0
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20ae8
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20af0
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20af8
-	DB 0FFh, 0C1h, 0C1h, 00h, 00h, 00h, 0C1h, 80h ; 20b00
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20b08
-	DB 00h, 3Eh, 2Ah, 0EBh, 81h, 0EBh, 2Ah, 7Fh ; 20b10
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20b18
-	DB 80h, 00h, 00h, 01h, 01h, 01h, 01h, 01h ; 20b20
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20b28
-	ASCII "U" ; 20b30
-	DB 0D5h, 0ABh, 0AAh, 0FEh, 0C6h, 0BAh, 82h, 00h ; 20b31
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 01h ; 20b39
-	DB 01h, 01h, 00h, 00h, 00h, 01h, 01h, 0FFh ; 20b41
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FAh ; 20b49
-	DB 86h, 0FEh, 0FBh, 81h, 0FBh, 9Eh, 86h, 00h ; 20b51
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 01h ; 20b59
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20b61
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0DAh ; 20b69
-	DB 0FFh, 95h, 95h, 81h, 0D5h, 0FFh, 0B7h, 00h ; 20b71
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20b79
-	DB 00h, 00h, 03h, 1Fh, 0FFh, 0FFh, 0FFh, 0FFh ; 20b81
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0D5h ; 20b89
-	DB 0E5h, 97h, 0BCh, 0E0h, 00h, 00h, 00h, 00h ; 20b91
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20b99
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20ba1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20ba9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20bb1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20bb9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20bc1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20bc9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20bd1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20bd9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20be1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20be9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20bf1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 03h ; 20bf9
-	DB 03h, 01h, 00h, 00h, 00h, 00h, 0E0h, 0FFh ; 20c01
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FCh ; 20c09
-	DB 94h, 0F6h, 83h, 0F1h, 95h, 0F1h, 1Fh, 00h ; 20c11
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0E0h ; 20c19
-	DB 0E0h, 01h, 01h, 01h, 0E0h, 00h, 00h, 0FFh ; 20c21
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 11h ; 20c29
-	DB 1Bh, 0FAh, 82h, 0FAh, 1Fh, 0F5h, 81h, 00h ; 20c31
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20c39
-	DB 00h, 00h, 01h, 01h, 01h, 01h, 01h, 0FFh ; 20c41
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0B5h ; 20c49
-	DB 0B5h, 0FFh, 0BAh, 0BAh, 0BEh, 82h, 0FEh, 00h ; 20c51
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 01h ; 20c59
-	DB 00h, 00h, 00h, 01h, 01h, 0C0h, 0C0h, 0FFh ; 20c61
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0EAh ; 20c69
-	DB 93h, 0A1h, 8Bh, 0AEh, 0FEh, 3Bh, 21h, 00h ; 20c71
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20c79
-	DB 01h, 00h, 0E0h, 00h, 00h, 00h, 00h, 0FFh ; 20c81
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FBh ; 20c89
-	DB 82h, 0FFh, 11h, 0FFh, 0B7h, 0D5h, 0E5h, 00h ; 20c91
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20c99
-	DB 01h, 01h, 01h, 00h, 00h, 80h, 0F1h, 0FFh ; 20ca1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 97h ; 20ca9
-	DB 0BEh, 0FAh, 0A2h, 0ABh, 0C1h, 7Bh, 0Eh, 00h ; 20cb1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20cb9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20cc1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20cc9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20cd1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20cd9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20ce1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20ce9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20cf1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20cf9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20d01
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20d09
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20d11
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20d19
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20d21
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20d29
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20d31
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20d39
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20d41
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20d49
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20d51
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20d59
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20d61
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20d69
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20d71
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20d79
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20d81
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20d89
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20d91
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20d99
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20da1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20da9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20db1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20db9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20dc1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20dc9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20dd1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20dd9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20de1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20de9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20df1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20df9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20e01
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20e09
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20e11
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20e19
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20e21
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20e29
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20e31
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20e39
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20e41
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20e49
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20e51
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20e59
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20e61
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20e69
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20e71
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20e79
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20e81
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20e89
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20e91
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20e99
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20ea1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20ea9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20eb1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20eb9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20ec1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20ec9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20ed1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20ed9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20ee1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20ee9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20ef1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20ef9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20f01
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20f09
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20f11
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20f19
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20f21
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20f29
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20f31
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20f39
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20f41
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20f49
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20f51
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20f59
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20f61
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20f69
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20f71
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20f79
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20f81
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20f89
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20f91
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20f99
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20fa1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20fa9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20fb1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20fb9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20fc1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20fc9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20fd1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20fd9
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 20fe1
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 20fe9
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 20ff1
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0FFh ; 20ff9
-	DB 0C3h, 0C1h, 0C1h, 0F1h, 0F1h, 0FFh, 0FFh, 0FFh ; 21001
-	DB 0F0h, 0E0h, 0E0h, 0E3h, 0E3h, 0FFh, 0FFh, 00h ; 21009
-	DB 3Ch, 26h, 3Ah, 0Ah, 0Eh, 00h, 00h, 00h ; 21011
-	DB 0Fh, 19h, 17h, 14h, 1Ch, 00h, 00h, 0FFh ; 21019
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21021
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 21029
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21031
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0F1h ; 21039
-	DB 0F1h, 0C1h, 0C1h, 0C3h, 0FFh, 0FFh, 0FFh, 0E3h ; 21041
-	DB 0E3h, 0E0h, 0E0h, 0F0h, 0FFh, 0FFh, 0FFh, 0Eh ; 21049
-	DB 0Ah, 3Ah, 26h, 3Ch, 00h, 00h, 00h, 1Ch ; 21051
-	DB 14h, 17h, 19h, 0Fh, 00h, 00h, 00h, 0FFh ; 21059
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21061
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h ; 21069
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21071
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 0E1h ; 21079
-	DB 0E0h, 0E0h, 0F8h, 0F8h, 0FFh, 0FFh, 0FFh, 0E1h ; 21081
-	DB 0C1h, 0C1h, 0C7h, 0C7h, 0FFh, 0FFh, 0FFh, 1Eh ; 21089
-	DB 13h, 1Dh, 05h, 07h, 00h, 00h, 00h, 1Eh ; 21091
-	ASCIZ "2.(8" ; 21099
-	DB 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2109e
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 210a6
-	DB 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h, 00h ; 210ae
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 210b6
-	DB 00h, 00h, 0FFh, 0F8h, 0F8h, 0E0h, 0E0h, 0E1h ; 210be
-	DB 0FFh, 0FFh, 0FFh, 0C7h, 0C7h, 0C1h, 0C1h, 0E1h ; 210c6
-	DB 0FFh, 0FFh, 00h, 07h, 05h, 1Dh, 13h, 1Eh ; 210ce
-	DB 00h, 00h, 00h ; 210d6
-	ASCII "8(.2" ; 210d9
-	DB 1Eh, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 210dd
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 210e5
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 210ed
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 210f5
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 210fd
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21105
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2110d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21115
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2111d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21125
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2112d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21135
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2113d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21145
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2114d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21155
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2115d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21165
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2116d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21175
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2117d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21185
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2118d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21195
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2119d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 211a5
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 211ad
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 211b5
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 211bd
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 211c5
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 211cd
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 211d5
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 211dd
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 211e5
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 211ed
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 211f5
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 211fd
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21205
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2120d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21215
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2121d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21225
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2122d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21235
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2123d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21245
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2124d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21255
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2125d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21265
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2126d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21275
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2127d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21285
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2128d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21295
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2129d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 212a5
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 212ad
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 212b5
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 212bd
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 212c5
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 212cd
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 212d5
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 212dd
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 212e5
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 212ed
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 212f5
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 212fd
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21305
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2130d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21315
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2131d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21325
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2132d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21335
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2133d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21345
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2134d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21355
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2135d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21365
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2136d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21375
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2137d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21385
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2138d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21395
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2139d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 213a5
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 213ad
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 213b5
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 213bd
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 213c5
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 213cd
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 213d5
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 213dd
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 213e5
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 213ed
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 213f5
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 213fd
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21405
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2140d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21415
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 2141d
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21425
-	DB 0FFh, 0FFh, 0FFh, 00h, 00h, 00h, 00h, 00h ; 2142d
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21435
-	DB 00h, 00h, 00h, 0FFh, 0FFh, 87h, 83h, 83h ; 2143d
-	DB 0E3h, 0E3h, 0FFh, 0FFh, 0FFh, 0C3h, 83h, 83h ; 21445
-	DB 8Fh, 8Fh, 0FFh, 00h, 00h ; 2144d
-	ASCII "xLt" ; 21452
-	DB 14h, 1Ch, 00h, 00h, 00h, 3Ch ; 21455
-	ASCIZ "d\Pp" ; 2145b
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21460
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21468
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21470
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21478
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21480
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21488
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21490
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21498
-	DB 0FFh, 0FFh, 0E3h, 0E3h, 83h, 83h, 87h, 0FFh ; 214a0
-	DB 0FFh, 0FFh, 8Fh, 8Fh, 83h, 83h, 0C3h, 0FFh ; 214a8
-	DB 00h, 00h, 1Ch, 14h ; 214b0
-	ASCIZ "tLx" ; 214b4
-	DB 00h, 00h ; 214b8
-	ASCIZ "pP\d<" ; 214ba
-	DB 0FFh, 0C3h, 0C1h, 0C1h, 0F1h, 0F1h, 0FFh, 0FFh ; 214c0
-	DB 0FFh, 87h, 07h, 07h, 1Fh, 1Fh, 0FFh, 0FFh ; 214c8
-	DB 00h, 3Ch, 26h, 3Ah, 0Ah, 0Eh, 00h, 00h ; 214d0
-	DB 00h ; 214d8
-	ASCII "x" ; 214d9
-	DB 0C8h, 0B8h, 0A0h, 0E0h, 00h, 00h, 0FFh, 0FFh ; 214da
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 214e2
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h, 00h ; 214ea
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 214f2
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 0FFh, 0FFh ; 214fa
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 21502
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 00h, 00h ; 2150a
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21512
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 0FFh, 0FFh ; 2151a
-	DB 0FFh, 0F1h, 0F1h, 0C1h, 0C1h, 0C3h, 0FFh, 0FFh ; 21522
-	DB 0FFh, 1Fh, 1Fh, 07h, 07h, 87h, 00h, 00h ; 2152a
-	DB 00h, 0Eh, 0Ah, 3Ah, 26h, 3Ch, 00h, 00h ; 21532
-	DB 00h, 0E0h, 0A0h, 0B8h, 0C8h ; 2153a
-	ASCII "x" ; 2153f
-	DB 0FFh, 0FFh, 0C3h, 0C1h, 0C1h, 0F1h, 0F1h, 0FFh ; 21540
-	DB 0FFh, 0FFh, 0C3h, 83h, 83h, 8Fh, 8Fh, 0FFh ; 21548
-	DB 00h, 00h, 3Ch, 26h, 3Ah, 0Ah, 0Eh, 00h ; 21550
-	DB 00h, 00h, 3Ch ; 21558
-	ASCIZ "d\Pp" ; 2155b
-	DB 0FFh, 0FFh, 0F1h, 0F1h, 0C1h, 0C1h, 0C3h, 0FFh ; 21560
-	DB 0FFh, 0FFh, 8Fh, 8Fh, 83h, 83h, 0C3h, 0FFh ; 21568
-	DB 00h, 00h, 0Eh, 0Ah, 3Ah, 26h, 3Ch, 00h ; 21570
-	DB 00h, 00h ; 21578
-	ASCIZ "pP\d<" ; 2157a
-	DB 0FFh, 0E1h, 0E0h, 0E0h, 0F8h, 0F8h, 0FFh, 0FFh ; 21580
-	DB 0FFh, 87h, 07h, 07h, 1Fh, 1Fh, 0FFh, 0FFh ; 21588
-	DB 00h, 1Eh, 13h, 1Dh, 05h, 07h, 00h, 00h ; 21590
-	DB 00h ; 21598
-	ASCII "x" ; 21599
-	DB 0C8h, 0B8h, 0A0h, 0E0h, 00h, 00h, 0FFh, 0FFh ; 2159a
-	DB 0FFh, 0F8h, 0F8h, 0E0h, 0E0h, 0E1h, 0FFh, 0FFh ; 215a2
-	DB 0FFh, 1Fh, 1Fh, 07h, 07h, 87h, 00h, 00h ; 215aa
-	DB 00h, 07h, 05h, 1Dh, 13h, 1Eh, 00h, 00h ; 215b2
-	DB 00h, 0E0h, 0A0h, 0B8h, 0C8h ; 215ba
-	ASCII "x" ; 215bf
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 1Fh, 1Fh ; 215c0
-	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0F0h, 0F0h ; 215c8
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 0E0h, 20h ; 215d0
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 0Fh, 08h ; 215d8
-	DB 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh ; 215e0
-	DB 0F0h, 0F8h, 0F8h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h ; 215e8
-	DB 0A0h, 0A0h, 60h, 0E0h, 20h, 0A0h, 0A0h, 60h ; 215f0
-	DB 0Dh, 05h, 06h, 0Fh, 08h, 0Dh, 0Dh, 0Ah ; 215f8
-	DB 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh ; 21600
-	DB 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h ; 21608
-	DB 0E0h, 20h, 0A0h, 0A0h, 0A0h, 0E0h, 60h, 0A0h ; 21610
-	DB 0Fh, 08h, 0Ah, 0Ah, 0Ah, 0Fh, 0Bh, 0Ah ; 21618
-	DB 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh ; 21620
-	DB 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0F8h ; 21628
-	DB 0A0h, 0A0h, 0E0h, 60h, 0A0h, 0A0h, 0A0h, 0E0h ; 21630
-	DB 0Ah, 0Dh, 0Fh, 0Bh, 0Ah, 0Ah, 0Dh, 07h ; 21638
-	DB 0FFh, 3Fh, 1Fh, 0Fh, 07h, 07h, 07h, 07h ; 21640
-	DB 0FFh, 0F8h, 0F0h, 0E0h, 0C0h, 0C0h, 0C0h, 0C0h ; 21648
-	DB 00h, 0C0h, 20h, 10h, 0C8h, 0A8h, 0A8h, 0C8h ; 21650
-	DB 00h, 07h, 0Ah, 14h, 29h, 28h, 28h, 29h ; 21658
-	DB 0Fh, 1Fh, 3Fh, 0FFh, 1Fh, 1Fh, 1Fh, 1Fh ; 21660
-	DB 0E0h, 0F0h, 0F8h, 0FFh, 0F0h, 0F0h, 0F0h, 0F0h ; 21668
-	DB 10h, 20h, 0C0h, 00h, 0E0h, 20h, 0A0h, 0A0h ; 21670
-	DB 14h, 0Ah, 07h, 00h, 0Fh, 08h, 0Ah, 0Ah ; 21678
-	DB 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh ; 21680
-	DB 0F0h, 0F8h, 0F0h, 0F0h, 0F0h, 0F0h, 0F8h, 0FFh ; 21688
-	DB 60h, 0E0h, 20h, 0E0h, 0E0h, 20h, 0E0h, 0A0h ; 21690
-	DB 0Dh, 07h, 0Ch, 0Bh, 0Bh, 0Ch, 07h, 00h ; 21698
-	DB 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh ; 216a0
-	DB 0F0h, 0F0h, 0F0h, 0FFh, 0FFh, 0FFh, 0F0h, 0F0h ; 216a8
-	DB 0A0h, 20h, 0A0h, 0A0h, 0E0h, 0A0h, 0A0h, 20h ; 216b0
-	DB 0Fh, 08h, 0Fh, 00h, 00h, 00h, 0Fh, 08h ; 216b8
-	DB 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 1Fh ; 216c0
-	DB 0F0h, 0FFh, 0F8h, 0F0h, 0F0h, 0F0h, 0F0h, 0F0h ; 216c8
-	DB 0A0h, 0A0h, 0E0h, 60h, 0A0h, 0A0h, 60h, 0E0h ; 216d0
-	DB 0Fh, 00h, 07h, 0Ch, 0Bh, 0Bh, 0Ch, 0Fh ; 216d8
-	DB 1Fh, 1Fh, 1Fh, 1Fh, 1Fh, 0FFh, 0FFh, 0FFh ; 216e0
-	DB 0F0h, 0F0h, 0F0h, 0F0h, 0F0h, 0FFh, 0FFh, 0FFh ; 216e8
-	DB 20h, 60h, 0E0h, 20h, 0E0h, 00h, 00h, 00h ; 216f0
-	DB 08h, 0Eh, 0Ch, 08h, 0Fh, 00h, 00h, 00h ; 216f8
-	DB 0FFh, 7Fh, 3Fh, 1Fh, 0Fh, 0Fh, 0Fh, 0Fh ; 21700
-	DB 0FFh, 0F8h, 0F0h, 0E0h, 0C0h, 0C0h, 0C0h, 0C0h ; 21708
-	DB 00h, 80h, 40h, 20h, 90h ; 21710
-	ASCII "PP" ; 21715
-	DB 90h, 00h, 07h, 0Ch, 18h ; 21717
-	ASCII "3113" ; 2171c
-	DB 1Fh, 3Fh, 7Fh, 0FFh, 1Fh, 1Fh, 1Fh, 1Fh ; 21720
-	DB 0E0h, 0F0h, 0F8h, 0FFh, 0F0h, 0F0h, 0F0h, 0F0h ; 21728
-	DB 20h, 40h, 80h, 00h, 0E0h, 20h, 0A0h, 0A0h ; 21730
-	DB 18h, 0Ch, 07h, 00h, 0Fh, 08h, 0Ah, 0Ah ; 21738
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21740
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21748
-	DB 00h, 00h, 00h, 00h, 0E0h, 0B0h, 10h, 0B0h ; 21750
-	DB 0A0h, 20h, 0E0h, 80h, 80h, 80h, 80h, 80h ; 21758
-	DB 0E0h, 0A0h, 0A0h, 0B8h, 0A8h ; 21760
-	ASCII "8" ; 21765
-	DB 0E8h ; 21766
-	ASCII "8" ; 21767
-	DB 0E0h, 0A0h, 0A0h, 20h, 0A0h, 0A0h, 0F0h, 10h ; 21768
-	DB 0F0h, 0F0h, 10h, 0F0h, 0D0h, 0D0h ; 21770
-	ASCII "P" ; 21776
-	DB 0D0h, 10h, 0F0h, 00h, 00h, 00h, 00h, 00h ; 21777
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2177f
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 3Fh ; 21787
-	DB 00h ; 2178f
-	ASCII "2?" ; 21790
-	DB 12h, 00h, 3Eh, 20h, 00h, 02h, 1Ch, 00h ; 21792
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 2179a
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 217a2
-	DB 00h, 00h, 3Eh, 20h, 00h, 02h, 1Ch, 00h ; 217aa
-	DB 3Eh, 20h, 00h, 02h, 1Ch, 00h, 24h, 15h ; 217b2
-	DB 3Dh, 24h, 00h, 00h, 00h, 00h, 04h, 02h ; 217ba
-	ASCII "4PP4" ; 217c2
-	DB 02h, 04h, 00h, 0Ah ; 217c6
-	ASCII "dPPd" ; 217ca
-	DB 0Ah, 00h, 04h, 0Ah, 24h ; 217ce
-	ASCII "PP$" ; 217d3
-	DB 0Ah, 04h, 00h, 00h, 00h, 00h, 00h, 00h ; 217d6
-	DB 00h, 00h ; 217de
 
-	; GRAPHICS
+	INCLUDE "graphics/graphics1.asm"
 
-	INCLUDE "data.asm"
+	INCLUDE "rom2.asm"
+
+	INCLUDE "dialogue.asm"
+
+	INCLUDE "graphics/graphics2.asm"
 
 	END
