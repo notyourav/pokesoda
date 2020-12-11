@@ -1,4 +1,4 @@
-; ï¿½ï¿½ï¿½ï¿½Íƒeï¿½Lï¿½Xï¿½gï¿½Gï¿½fï¿½Bï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½SHIFT JISï¿½ï¿½ï¿½[ï¿½hï¿½É‚ï¿½ï¿½é‚½ï¿½ß‚ÉŽgï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½ï¿½Ìˆï¿½sï¿½Å‚ï¿½ï¿½B
+; ‚±‚ê‚ÍƒeƒLƒXƒgƒGƒfƒBƒ^‚ð‹­§“I‚ÉSHIFT JISƒ‚[ƒh‚É‚·‚é‚½‚ß‚ÉŽg‚í‚ê‚é“ú–{Œê‚Ìˆês‚Å‚·B
 
 include "src/global.inc"
 
@@ -197,7 +197,7 @@ cartridge_irq:
 ; ---------------------- ; 21a3
 	ASCII "NINTENDO" ; 21a4
 	ASCII "MSDJ"
-	ASCIZ "ï¿½ï¿½ï¿½ï¿½Ô»ï¿½"
+	ASCIZ "¿ÀÞÃÔ»Ý"
 
 	DB 00h, 00h, 00h, 00h
 
