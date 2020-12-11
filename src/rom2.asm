@@ -85,10 +85,7 @@
 	ASCII "G" ; 38247
 	DB 0CEh ; 38248
 	ASCII "D" ; 38249
-	DB 06h, 93h, 0FAh
-
-; code?
-	DB 0CFh, 0D8h, 0CEh ; 3824a
+	DB 06h, 93h, 0FAh, 0CFh, 0D8h, 0CEh ; 3824a
 	ASCII "D" ; 38250
 	DB 04h, 0CEh ; 38251
 	ASCII "L" ; 38253
@@ -148,70 +145,85 @@
 	ASCII "D" ; 382ec
 	DB 06h, 0F8h, 0F8h, 3Eh, 82h ; 382ed
 	ASCII "8" ; 382f2
-	DB 82h, 0C7h, 00h, 00h, 0C5h, 16h, 19h, 0CEh ; 382f3
-	DB 0C5h, 00h, 0B1h, 10h, 0C6h, 18h, 00h, 0CFh ; 382fb
-	DB 0C7h, 0CFh, 22h, 0F5h, 0FBh, 0F8h, 0CFh, 0D7h ; 38303
-	DB 0CEh ; 3830b
-	ASCII "T" ; 3830c
-	DB 08h, 0CEh, 5Ch, 09h, 0CEh ; 3830d
-	ASCII "A" ; 38312
-	DB 02h, 0CEh ; 38313
-	ASCII "I" ; 38315
-	DB 03h, 0CEh ; 38316
-	ASCII "D" ; 38318
-	DB 04h, 0CEh ; 38319
-	ASCII "L" ; 3831b
-	DB 05h, 0CEh ; 3831c
-	ASCII "A" ; 3831e
-	DB 04h, 0CEh ; 3831f
-	ASCII "I" ; 38321
-	DB 05h, 0CEh ; 38322
-	ASCII "D" ; 38324
-	DB 02h, 0CEh ; 38325
-	ASCII "L" ; 38327
-	DB 03h ; 38328
-	ASCII "8" ; 38329
-	DB 0CEh ; 3832a
-	ASCII "D" ; 3832b
-	DB 07h, 0CEh ; 3832c
-	ASCII "D" ; 3832e
-	DB 0Ch, 0CEh ; 3832f
-	ASCII "D" ; 38331
-	DB 0Dh, 0CEh ; 38332
-	ASCII "D" ; 38334
-	DB 0Ah, 0CEh ; 38335
-	ASCII "D" ; 38337
-	DB 0Bh, 0CEh ; 38338
-	ASCII "D" ; 3833a
-	DB 0Fh, 0CEh ; 3833b
-	ASCII "D" ; 3833d
-	DB 10h, 0CEh ; 3833e
-	ASCII "D" ; 38340
-	DB 11h, 0CEh ; 38341
-	ASCII "D" ; 38343
-	DB 12h, 0CEh ; 38344
-	ASCII "D" ; 38346
-	DB 13h, 0CEh ; 38347
-	ASCII "D" ; 38349
-	DB 14h, 0CEh ; 3834a
-	ASCII "D" ; 3834c
-	DB 15h, 0A8h, 0CEh ; 3834d
-	ASCII "D" ; 38350
-	DB 16h, 0CEh ; 38351
-	ASCII "L" ; 38353
-	DB 17h, 0B0h, 01h, 0CEh ; 38354
-	ASCII "D" ; 38358
-	DB 06h, 0B0h, 03h, 0CEh ; 38359
-	ASCII "D" ; 3835d
-	DB 0Eh, 0CFh, 0D9h, 0C3h, 06h, 00h, 0F0h, 04h ; 3835e
-	DB 0AAh, 0AEh, 0F8h, 0F4h, 0A6h, 0A2h, 0A0h, 0CEh ; 38366
-	DB 0C7h, 03h, 0C6h, 16h, 19h, 0CEh, 0C6h, 00h ; 3836e
-	DB 0CEh, 0C5h, 00h, 0B1h, 10h ; 38376
-	ASCII "F" ; 3837b
-	DB 0CEh, 28h, 01h, 0E6h, 89h, 0C2h, 18h, 00h ; 3837c
-	DB 0F5h, 0F6h, 0A8h, 0AAh, 0AEh, 0F8h, 0A6h, 0A2h ; 38384
-	DB 0A0h, 0CEh, 0C7h, 03h, 0C6h, 16h, 19h, 0CEh ; 3838c
-	DB 0C6h, 00h, 0CEh, 0C5h, 00h, 0B1h, 10h ; 38394
+	DB 82h
+; ---------------------- ; 382f3
+loc_0x0382F4:
+	LD IY,#0000h ; 382f4
+	LD HL,#1916h ; 382f7
+	LD EP,#00h ; 382fa
+	LD B,#10h ; 382fd
+	LD IX,#0018h ; 382ff
+loc_0x038302:
+	LD [HL],IY ; 38302
+	ADD HL,IX ; 38304
+	DJR NZ,loc_0x038302 ; 38306
+	RET
+; ---------------------- ; 38308
+loc_0x038309:
+	LD [IX],IY ; 38309
+	LD [IX+08h],L ; 3830b
+	LD [IX+09h],H ; 3830e
+	LD A,[IY+02h] ; 38311
+	LD B,[IY+03h] ; 38314
+	LD [IX+04h],A ; 38317
+	LD [IX+05h],B ; 3831a
+	LD A,[IY+04h] ; 3831d
+	LD B,[IY+05h] ; 38320
+	LD [IX+02h],A ; 38323
+	LD [IX+03h],B ; 38326
+	XOR A,A ; 38329
+	LD [IX+07h],A ; 3832a
+	LD [IX+0Ch],A ; 3832d
+	LD [IX+0Dh],A ; 38330
+	LD [IX+0Ah],A ; 38333
+	LD [IX+0Bh],A ; 38336
+	LD [IX+0Fh],A ; 38339
+	LD [IX+10h],A ; 3833c
+	LD [IX+11h],A ; 3833f
+	LD [IX+12h],A ; 38342
+	LD [IX+13h],A ; 38345
+	LD [IX+14h],A ; 38348
+	LD [IX+15h],A ; 3834b
+	POP BA ; 3834e
+	LD [IX+16h],A ; 3834f
+	LD [IX+17h],B ; 38352
+	LD A,#01h ; 38355
+	LD [IX+06h],A ; 38357
+	LD A,#03h ; 3835a
+	LD [IX+0Eh],A ; 3835c
+	LD HL,[IY] ; 3835f
+	ADD IY,#0006h ; 38361
+	CARS loc_0x038369 ; 38364
+	POP IX ; 38366
+	POP IP ; 38367
+	RET
+; ---------------------- ; 38368
+loc_0x038369:
+	JP HL
+; ---------------------- ; 38369
+loc_0x03836A:
+	PUSH IP ; 3836a
+	PUSH IX ; 3836b
+	PUSH BA ; 3836c
+	LD YP,#03h ; 3836d
+	LD IX,#1916h ; 38370
+	LD XP,#00h ; 38373
+	LD EP,#00h ; 38376
+	LD B,#10h ; 38379
+loc_0x03837B:
+	LD A,[IX] ; 3837b
+	OR A,[IX+01h] ; 3837c
+	JRS Z,loc_0x038309 ; 3837f
+	ADD IX,#0018h ; 38381
+	DJR NZ,loc_0x03837B ; 38384
+	POP BA ; 38386
+	POP IX ; 38387
+	POP IP ; 38388
+	RET
+; ---------------------- ; 38389
+	DB 0A6h, 0A2h, 0A0h, 0CEh, 0C7h, 03h, 0C6h, 16h ; 3838a
+	DB 19h, 0CEh, 0C6h, 00h, 0CEh, 0C5h, 00h, 0B1h ; 38392
+	DB 10h ; 3839a
 	ASCII "F" ; 3839b
 	DB 0CEh, 28h, 01h, 0E6h, 0Ch, 0CEh, 40h, 08h ; 3839c
 	DB 0CEh ; 383a4
@@ -222,228 +234,293 @@
 	DB 0CEh, 28h, 01h, 0EEh ; 383b7
 	ASCII "M" ; 383bb
 	DB 0FFh, 0C2h, 18h, 00h, 0F5h, 0F5h, 0A8h, 0AAh ; 383bc
-	DB 0AEh, 0F8h, 0CEh, 0C7h, 03h, 0C6h, 16h, 19h ; 383c4
-	DB 0CEh, 0C6h, 00h, 0CEh, 0C5h, 00h, 0B1h, 10h ; 383cc
-	DB 0CFh, 0B1h ; 383d4
-	ASCII "F" ; 383d6
-	DB 0CEh, 28h, 01h, 0E6h ; 383d7
-	ASCII "K" ; 383db
-	DB 0CEh ; 383dc
-	ASCII "P" ; 383dd
-	DB 04h, 0CEh ; 383de
-	ASCII "X" ; 383e0
-	DB 05h, 0F0h ; 383e1
-	ASCII "K" ; 383e3
-	DB 0CFh, 0E6h, 0C1h, 06h, 00h, 8Eh, 0E7h, 3Bh ; 383e4
-	DB 0CEh ; 383ec
-	ASCII "P" ; 383ed
-	DB 02h, 0CEh ; 383ee
-	ASCII "X" ; 383f0
-	DB 03h, 0CFh, 0EDh, 0CEh, 0C7h, 03h, 0CFh, 0D8h ; 383f1
-	DB 0C3h, 02h, 00h, 97h, 80h, 0E6h, 11h, 0CFh ; 383f9
-	DB 0E4h, 0F0h, 2Bh, 0F1h, 0EFh, 0CFh, 0E3h, 0CEh ; 38401
+	DB 0AEh, 0F8h
+; ---------------------- ; 383c4
+loc_0x0383C6:
+	LD YP,#03h ; 383c6
+	LD IX,#1916h ; 383c9
+	LD XP,#00h ; 383cc
+	LD EP,#00h ; 383cf
+	LD B,#10h ; 383d2
+loc_0x0383D4:
+	PUSH B ; 383d4
+	LD A,[IX] ; 383d6
+	OR A,[IX+01h] ; 383d7
+	JRS Z,loc_0x038426 ; 383da
+	LD L,[IX+04h] ; 383dc
+	LD H,[IX+05h] ; 383df
+	CARS loc_0x03842E ; 383e2
+	LD HL,IX ; 383e4
+	ADD HL,#0006h ; 383e6
+	DEC [HL] ; 383e9
+	JRS NZ,loc_0x038426 ; 383ea
+	LD L,[IX+02h] ; 383ec
+	LD H,[IX+03h] ; 383ef
+	LD IY,HL ; 383f2
+loc_0x0383F4:
+	LD YP,#03h ; 383f4
+	LD BA,[IY] ; 383f7
+	ADD IY,#0002h ; 383f9
+	BIT B,#80h ; 383fc
+	JRS Z,loc_0x038410 ; 383fe
+	LD HL,BA ; 38400
+	CARS loc_0x03842E ; 38402
+	JRS loc_0x0383F4
+; ---------------------- ; 38404
+	DB 0CFh, 0E3h, 0CEh ; 38406
 	ASCII "D" ; 38409
 	DB 02h, 0CEh ; 3840a
 	ASCII "L" ; 3840c
-	DB 03h, 0F1h, 17h, 0CEh ; 3840d
-	ASCII "D" ; 38411
-	DB 06h, 0CFh, 0D8h, 0CEh ; 38412
-	ASCII "D" ; 38416
-	DB 0Ch, 0CEh ; 38417
-	ASCII "L" ; 38419
-	DB 0Dh, 0C3h, 02h, 00h, 0CFh, 0E3h, 0CEh ; 3841a
-	ASCII "D" ; 38421
-	DB 02h, 0CEh ; 38422
-	ASCII "L" ; 38424
-	DB 03h, 0C2h, 18h, 00h, 0CFh, 0B5h, 0F5h, 0A8h ; 38425
-	DB 0F8h, 0F4h, 0C5h ; 3842d
-	ASCII "M" ; 38430
-	DB 16h, 95h, 01h, 0EEh, 0F7h, 00h, 0F3h, 01h ; 38431
-	DB 00h, 0C6h, 16h, 19h, 0CEh, 0C6h, 00h, 0CEh ; 38439
-	DB 0C5h, 00h, 0B1h, 10h, 0CFh, 0B1h ; 38441
-	ASCII "F" ; 38447
-	DB 0CEh, 28h, 01h, 0EEh, 0D6h, 00h ; 38448
-	ASCII "8" ; 3844e
-	DB 0CEh ; 3844f
-	ASCII "D" ; 38450
-	DB 12h, 0B9h ; 38451
-	ASCII "a" ; 38453
-	DB 16h, 0CEh, 40h, 08h, 0CEh, 00h, 0Ah, 0B1h ; 38454
-	DB 00h, 0CFh ; 3845c
-	ASCII "8" ; 3845e
-	DB 0EDh, 0C2h, 00h, 0C1h, 0Dh, 00h, 0CEh, 40h ; 3845f
-	DB 08h, 0B1h, 00h, 0CFh, 19h, 0EDh, 0B5h, 00h ; 38467
-	DB 0CEh, 40h, 0Ah, 0CEh ; 3846f
-	ASCII "D" ; 38473
-	DB 11h, 0CEh, 40h, 08h, 0CEh ; 38474
-	ASCII "D" ; 38479
-	DB 0Fh ; 3847a
-	ASCII "8" ; 3847b
-	DB 0CEh ; 3847c
-	ASCII "D" ; 3847d
-	DB 13h, 0CEh, 40h, 08h, 0B1h, 00h, 0B9h ; 3847e
-	ASCII "a" ; 38485
-	DB 16h, 0CFh, 28h, 0E4h, 13h, 0CEh ; 38486
-	ASCII "T" ; 3848c
-	DB 13h ; 3848d
-	ASCII "J" ; 3848e
-	DB 0CEh, 40h, 11h, 11h, 0CEh ; 3848f
-	ASCII "D" ; 38494
-	DB 11h, 0CEh, 40h, 0Fh, 01h, 0CEh ; 38495
-	ASCII "D" ; 3849b
-	DB 0Fh, 0B9h ; 3849c
-	ASCII "a" ; 3849e
-	DB 16h, 0C1h, 0Eh, 00h, 0CEh, 40h, 08h, 0CEh ; 3849f
-	DB 00h, 0Ah, 0B1h, 00h, 0CFh, 09h, 0E4h, 09h ; 384a7
-	ASCII "H" ; 384af
-	DB 0CEh, 40h, 11h, 11h, 0CEh ; 384b0
-	ASCII "D" ; 384b5
-	DB 11h, 0CEh, 40h, 0Ah, 0CEh, 10h, 11h, 0CEh ; 384b6
-	ASCII "D" ; 384be
-	DB 15h, 0B9h ; 384bf
-	ASCII "c" ; 384c1
-	DB 16h, 0CEh, 40h, 09h, 0CEh, 00h, 0Bh, 0B1h ; 384c2
-	DB 00h, 0CFh ; 384ca
-	ASCII "8" ; 384cc
-	DB 0E5h ; 384cd
-	ASCII "U" ; 384ce
-	DB 0C1h, 09h, 00h, 0CEh, 40h, 09h, 0B1h, 00h ; 384cf
-	DB 0CFh, 19h, 0E5h ; 384d7
-	ASCII "I" ; 384da
-	DB 0CEh, 40h, 0Bh, 0CEh ; 384db
-	ASCII "D" ; 384df
-	DB 12h, 0CEh, 40h, 09h, 0CEh ; 384e0
-	ASCII "D" ; 384e5
-	DB 10h ; 384e6
-	ASCII "8" ; 384e7
-	DB 0CEh ; 384e8
-	ASCII "D" ; 384e9
-	DB 14h, 0CEh, 40h, 09h, 0B1h, 00h, 0B9h ; 384ea
-	ASCII "c" ; 384f1
-	DB 16h, 0CFh, 28h, 0E4h, 13h, 0CEh ; 384f2
-	ASCII "T" ; 384f8
-	DB 14h ; 384f9
-	ASCII "J" ; 384fa
-	DB 0CEh, 40h, 12h, 11h, 0CEh ; 384fb
-	ASCII "D" ; 38500
-	DB 12h, 0CEh, 40h, 10h, 01h, 0CEh ; 38501
-	ASCII "D" ; 38507
-	DB 10h, 0B9h ; 38508
-	ASCII "c" ; 3850a
-	DB 16h, 0C1h, 0Ah, 00h, 0CEh, 40h, 09h, 0CEh ; 3850b
-	DB 00h, 0Bh, 0B1h, 00h, 0CFh, 09h, 0E4h, 09h ; 38513
-	ASCII "H" ; 3851b
-	DB 0CEh, 40h, 12h, 11h, 0CEh ; 3851c
-	ASCII "D" ; 38521
-	DB 12h, 0C2h, 18h, 00h, 0CFh, 0B5h, 89h, 0EFh ; 38522
-	DB 1Ah, 0FFh, 0F8h, 0F8h
-
-global lbl_0x03852E
-lbl_0x03852E:
-	
-	LD HL, #164Dh
-	BIT [HL], #01h
-	JRL Z, lbl_0x0385AE
-
-	JRL lbl_0x038539
-
-lbl_0x038539:
-
-	LD IX, #1916h
-	LD XP, #00h
-
-	LD EP, #00h
-	
-	LD B, #10h
-	PUSH B
-	
-	LD A, [IX]
-	OR A, [IX+1h]
-	JRS Z, lbl_0x0385A6
-
-	LD A, [IX+12h]
-	AND A, A
-	JRS Z, lbl_0x0385A6
-
-	LD A, [IX+0Ch]
-	LD B, [IX+0Dh]
-	LD IY, BA
-	LD A, [IX+0Eh]
-	LD YP, A
-
-	LD A, [IX+0Ah]
-	LD L, [IX+14h]
-	MLT
-	
-	LD A, [IX+13h]
-	LD B, #00h
-
-	ADD HL, BA
-	ADD IY, HL
-	DB 0CEh, 40h, 10h, 15h ; 38570
-	ASCII "c" ; 38574
-	DB 16h, 0B2h, 10h, 0CEh, 0D8h, 0CEh, 40h, 0Fh ; 38575
-	DB 15h ; 3857d
-	ASCII "a" ; 3857e
-	DB 16h, 0B1h, 00h, 0CFh, 20h, 0C1h, 60h, 13h ; 3857f
-	DB 0CEh, 40h, 12h, 22h, 0Fh, 0A1h, 0CEh ; 38587
-	ASCII "H" ; 3858e
-	DB 11h, 0CEh, 0B0h, 0Fh ; 3858f
-	ASCII "o" ; 38593
-	DB 93h, 91h, 0F5h, 0FCh, 0CEh ; 38594
-	ASCII "P" ; 38599
-	DB 15h, 0B3h, 00h, 0CFh ; 3859a
-	ASCII "C" ; 3859e
-	DB 0A9h, 0C1h, 10h, 00h, 88h, 0E7h, 0E7h
-lbl_0x0385A6:
-	DB 0C2h ; 3859f
-	DB 18h, 00h, 0CFh, 0B5h, 0F5h, 98h, 0F8h
-; ---------------------- ; 385AE
-lbl_0x0385AE:
-
-	LD IX, #1916h
-	LD XP, #00h
-
-	LD EP, #00h
-	LD B, #10h
-
-lbl_0x0385B9:
-
-	PUSH B
-
-	LD A, [IX]
-	OR A, [IX+01h]
-	JRS Z, lbl_0x0385FF
-
-	LD A, [IX+0Ah]
-	OR A, [IX+0Bh]
-	JRS Z, lbl_0x0385FF
-	
-	DB 0CEh, 40h, 0Ch, 0CEh ; 385c9
-	ASCII "H" ; 385cd
-	DB 0Dh, 0CFh, 0ECh, 0CEh, 40h, 0Eh, 0CEh, 0CFh ; 385ce
-	DB 0CEh, 40h, 09h, 0B2h, 18h, 0CEh, 0D8h, 0CEh ; 385d6
-	DB 40h, 08h, 0B1h, 00h, 0CFh, 20h, 0C1h, 60h ; 385de
-	DB 13h, 0CEh, 40h, 0Bh, 22h, 0Fh, 0A1h, 0CEh ; 385e6
-	ASCII "H" ; 385ee
-	DB 0Ah, 0CEh, 0B0h, 0Fh ; 385ef
-	ASCII "o" ; 385f3
-	DB 93h, 91h, 0F5h, 0FCh, 0A9h, 0C1h, 18h, 00h ; 385f4
-	DB 88h, 0E7h, 0EEh
-lbl_0x0385FF:
-
-	ADD IX, #0018h
-	POP B
-
-	DJR NZ, lbl_0x0385B9 
+	DB 03h, 0F1h, 17h
+; ---------------------- ; 3840d
+loc_0x038410:
+	LD [IX+06h],A ; 38410
+	LD BA,[IY] ; 38413
+	LD [IX+0Ch],A ; 38415
+	LD [IX+0Dh],B ; 38418
+	ADD IY,#0002h ; 3841b
+	LD BA,IY ; 3841e
+	LD [IX+02h],A ; 38420
+	LD [IX+03h],B ; 38423
+loc_0x038426:
+	ADD IX,#0018h ; 38426
+	POP B ; 38429
+	DJR NZ,loc_0x0383D4 ; 3842b
 	RET
-
-; ---------------------- ;
-	DB 92h, 90h, 90h, 94h, 90h ; 38604
-	DB 90h, 90h, 90h, 90h, 90h, 90h, 90h, 93h ; 3860c
-	DB 90h, 90h, 91h, 92h, 90h, 90h, 94h, 90h ; 38614
-	DB 95h, 95h, 90h, 90h, 95h, 95h, 90h, 93h ; 3861c
-	DB 90h, 90h, 91h ; 38624
+; ---------------------- ; 3842d
+loc_0x03842E:
+	JP HL
+; ---------------------- ; 3842e
+loc_0x03842F:
+	LD HL,#164Dh ; 3842f
+	BIT [HL],#01h ; 38432
+	JRL Z,loc_0x03852D ; 38434
+	JRL loc_0x03843A
+; ---------------------- ; 38437
+loc_0x03843A:
+	LD IX,#1916h ; 3843a
+	LD XP,#00h ; 3843d
+	LD EP,#00h ; 38440
+	LD B,#10h ; 38443
+loc_0x038445:
+	PUSH B ; 38445
+	LD A,[IX] ; 38447
+	OR A,[IX+01h] ; 38448
+	JRL Z,loc_0x038523 ; 3844b
+	XOR A,A ; 3844e
+	LD [IX+12h],A ; 3844f
+	LD HL,[1661h] ; 38452
+	LD A,[IX+08h] ; 38455
+	ADD A,[IX+0Ah] ; 38458
+	LD B,#00h ; 3845b
+	CP HL,BA ; 3845d
+	JRL NC,loc_0x038523 ; 3845f
+	ADD HL,#000Dh ; 38462
+	LD A,[IX+08h] ; 38465
+	LD B,#00h ; 38468
+	CP BA,HL ; 3846a
+	JRL NC,loc_0x038523 ; 3846c
+	LD A,[IX+0Ah] ; 3846f
+	LD [IX+11h],A ; 38472
+	LD A,[IX+08h] ; 38475
+	LD [IX+0Fh],A ; 38478
+	XOR A,A ; 3847b
+	LD [IX+13h],A ; 3847c
+	LD A,[IX+08h] ; 3847f
+	LD B,#00h ; 38482
+	LD HL,[1661h] ; 38484
+	SUB HL,BA ; 38487
+	JRS C,loc_0x03849D ; 38489
+	LD [IX+13h],L ; 3848b
+	LD B,L ; 3848e
+	LD A,[IX+11h] ; 3848f
+	SUB A,B ; 38492
+	LD [IX+11h],A ; 38493
+	LD A,[IX+0Fh] ; 38496
+	ADD A,B ; 38499
+	LD [IX+0Fh],A ; 3849a
+loc_0x03849D:
+	LD HL,[1661h] ; 3849d
+	ADD HL,#000Eh ; 384a0
+	LD A,[IX+08h] ; 384a3
+	ADD A,[IX+0Ah] ; 384a6
+	LD B,#00h ; 384a9
+	SUB BA,HL ; 384ab
+	JRS C,loc_0x0384B7 ; 384ad
+	LD B,A ; 384af
+	LD A,[IX+11h] ; 384b0
+	SUB A,B ; 384b3
+	LD [IX+11h],A ; 384b4
+loc_0x0384B7:
+	LD A,[IX+0Ah] ; 384b7
+	SUB A,[IX+11h] ; 384ba
+	LD [IX+15h],A ; 384bd
+	LD HL,[1663h] ; 384c0
+	LD A,[IX+09h] ; 384c3
+	ADD A,[IX+0Bh] ; 384c6
+	LD B,#00h ; 384c9
+	CP HL,BA ; 384cb
+	JRS NC,loc_0x038523 ; 384cd
+	ADD HL,#0009h ; 384cf
+	LD A,[IX+09h] ; 384d2
+	LD B,#00h ; 384d5
+	CP BA,HL ; 384d7
+	JRS NC,loc_0x038523 ; 384d9
+	LD A,[IX+0Bh] ; 384db
+	LD [IX+12h],A ; 384de
+	LD A,[IX+09h] ; 384e1
+	LD [IX+10h],A ; 384e4
+	XOR A,A ; 384e7
+	LD [IX+14h],A ; 384e8
+	LD A,[IX+09h] ; 384eb
+	LD B,#00h ; 384ee
+	LD HL,[1663h] ; 384f0
+	SUB HL,BA ; 384f3
+	JRS C,loc_0x038509 ; 384f5
+	LD [IX+14h],L ; 384f7
+	LD B,L ; 384fa
+	LD A,[IX+12h] ; 384fb
+	SUB A,B ; 384fe
+	LD [IX+12h],A ; 384ff
+	LD A,[IX+10h] ; 38502
+	ADD A,B ; 38505
+	LD [IX+10h],A ; 38506
+loc_0x038509:
+	LD HL,[1663h] ; 38509
+	ADD HL,#000Ah ; 3850c
+	LD A,[IX+09h] ; 3850f
+	ADD A,[IX+0Bh] ; 38512
+	LD B,#00h ; 38515
+	SUB BA,HL ; 38517
+	JRS C,loc_0x038523 ; 38519
+	LD B,A ; 3851b
+	LD A,[IX+12h] ; 3851c
+	SUB A,B ; 3851f
+	LD [IX+12h],A ; 38520
+loc_0x038523:
+	ADD IX,#0018h ; 38523
+	POP B ; 38526
+	DEC B ; 38528
+	JRL NZ,loc_0x038445 ; 38529
+	RET
+; ---------------------- ; 3852c
+loc_0x03852D:
+	RET
+; ---------------------- ; 3852d
+loc_0x03852E:
+	LD HL,#164Dh ; 3852e
+	BIT [HL],#01h ; 38531
+	JRL Z,loc_0x0385AE ; 38533
+	JRL loc_0x038539
+; ---------------------- ; 38536
+loc_0x038539:
+	LD IX,#1916h ; 38539
+	LD XP,#00h ; 3853c
+	LD EP,#00h ; 3853f
+	LD B,#10h ; 38542
+loc_0x038544:
+	PUSH B ; 38544
+	LD A,[IX] ; 38546
+	OR A,[IX+01h] ; 38547
+	JRS Z,loc_0x0385A6 ; 3854a
+	LD A,[IX+12h] ; 3854c
+	AND A,A ; 3854f
+	JRS Z,loc_0x0385A6 ; 38550
+	LD A,[IX+0Ch] ; 38552
+	LD B,[IX+0Dh] ; 38555
+	LD IY,BA ; 38558
+	LD A,[IX+0Eh] ; 3855a
+	LD YP,A ; 3855d
+	LD A,[IX+0Ah] ; 3855f
+	LD L,[IX+14h] ; 38562
+	MLT ; 38565
+	LD A,[IX+13h] ; 38567
+	LD B,#00h ; 3856a
+	ADD HL,BA ; 3856c
+	ADD IY,HL ; 3856e
+	LD A,[IX+10h] ; 38570
+	SUB A,[1663h] ; 38573
+	LD L,#10h ; 38576
+	MLT ; 38578
+	LD A,[IX+0Fh] ; 3857a
+	SUB A,[1661h] ; 3857d
+	LD B,#00h ; 38580
+	ADD HL,BA ; 38582
+	ADD HL,#1360h ; 38584
+	LD A,[IX+12h] ; 38587
+	AND A,#0Fh ; 3858a
+loc_0x03858C:
+	PUSH HL ; 3858c
+	LD B,[IX+11h] ; 3858d
+	AND B,#0Fh ; 38590
+loc_0x038593:
+	LD [HL],[IY] ; 38593
+	INC IY ; 38594
+	INC HL ; 38595
+	DJR NZ,loc_0x038593 ; 38596
+	LD L,[IX+15h] ; 38598
+	LD H,#00h ; 3859b
+	ADD IY,HL ; 3859d
+	POP HL ; 3859f
+	ADD HL,#0010h ; 385a0
+	DEC A ; 385a3
+	JRS NZ,loc_0x03858C ; 385a4
+loc_0x0385A6:
+	ADD IX,#0018h ; 385a6
+	POP B ; 385a9
+	DJR NZ,loc_0x038544 ; 385ab
+	RET
+; ---------------------- ; 385ad
+loc_0x0385AE:
+	LD IX,#1916h ; 385ae
+	LD XP,#00h ; 385b1
+	LD EP,#00h ; 385b4
+	LD B,#10h ; 385b7
+loc_0x0385B9:
+	PUSH B ; 385b9
+	LD A,[IX] ; 385bb
+	OR A,[IX+01h] ; 385bc
+	JRS Z,loc_0x0385FF ; 385bf
+	LD A,[IX+0Ah] ; 385c1
+	OR A,[IX+0Bh] ; 385c4
+	JRS Z,loc_0x0385FF ; 385c7
+	LD A,[IX+0Ch] ; 385c9
+	LD B,[IX+0Dh] ; 385cc
+	LD IY,BA ; 385cf
+	LD A,[IX+0Eh] ; 385d1
+	LD YP,A ; 385d4
+	LD A,[IX+09h] ; 385d6
+	LD L,#18h ; 385d9
+	MLT ; 385db
+	LD A,[IX+08h] ; 385dd
+	LD B,#00h ; 385e0
+	ADD HL,BA ; 385e2
+	ADD HL,#1360h ; 385e4
+	LD A,[IX+0Bh] ; 385e7
+	AND A,#0Fh ; 385ea
+loc_0x0385EC:
+	PUSH HL ; 385ec
+	LD B,[IX+0Ah] ; 385ed
+	AND B,#0Fh ; 385f0
+loc_0x0385F3:
+	LD [HL],[IY] ; 385f3
+	INC IY ; 385f4
+	INC HL ; 385f5
+	DJR NZ,loc_0x0385F3 ; 385f6
+	POP HL ; 385f8
+	ADD HL,#0018h ; 385f9
+	DEC A ; 385fc
+	JRS NZ,loc_0x0385EC ; 385fd
+loc_0x0385FF:
+	ADD IX,#0018h ; 385ff
+	POP B ; 38602
+	DJR NZ,loc_0x0385B9 ; 38604
+	RET
+; ---------------------- ; 38606
+	DB 92h, 90h, 90h, 94h, 90h, 90h, 90h, 90h ; 38607
+	DB 90h, 90h, 90h, 90h, 93h, 90h, 90h, 91h ; 3860f
+	DB 92h, 90h, 90h, 94h, 90h, 95h, 95h, 90h ; 38617
+	DB 90h, 95h, 95h, 90h, 93h, 90h, 90h, 91h ; 3861f
 	ASCII "M" ; 38627
 	DB 82h, 0EFh, 82h ; 38628
 	ASCII "n" ; 3862b
@@ -594,15 +671,26 @@ lbl_0x0385FF:
 	DB 87h ; 387d5
 	ASCII "k" ; 387d6
 	DB 87h, 5Dh, 87h, 0CEh, 0D0h, 0AAh, 15h, 0CEh ; 387d7
-	DB 0D1h, 0ABh, 15h, 22h, 03h, 0E7h, 08h, 0CEh ; 387df
-	DB 0BCh, 02h, 0E7h, 03h, 0B1h, 0Dh ; 387e7
-	ASCII "A" ; 387ed
-	DB 0C7h, 0FAh, 87h, 0CEh, 0C7h, 03h, 0B1h, 00h ; 387ee
-	DB 0CFh ; 387f6
-	ASCII "BG" ; 387f7
-	DB 0F8h, 00h, 1Fh, 1Ch, 1Fh, 1Eh, 1Fh, 1Eh ; 387f9
-	DB 1Fh, 1Fh, 1Eh, 1Fh, 1Eh, 1Fh, 1Dh, 0A6h ; 38801
-	DB 0A2h, 0CEh, 0D0h, 0BAh, 1Ah, 0B1h, 00h, 0C6h ; 38809
+	DB 0D1h, 0ABh, 15h
+; ---------------------- ; 387df
+loc_0x0387E2:
+	AND A,#03h ; 387e2
+	JRS NZ,loc_0x0387ED ; 387e4
+	CP B,#02h ; 387e6
+	JRS NZ,loc_0x0387ED ; 387e9
+	LD B,#0Dh ; 387eb
+loc_0x0387ED:
+	LD A,B ; 387ed
+	LD IY,#87FAh ; 387ee
+	LD YP,#03h ; 387f1
+	LD B,#00h ; 387f4
+	ADD IY,BA ; 387f6
+	LD A,[IY] ; 387f8
+	RET
+; ---------------------- ; 387f9
+	DB 00h, 1Fh, 1Ch, 1Fh, 1Eh, 1Fh, 1Eh, 1Fh ; 387fa
+	DB 1Fh, 1Eh, 1Fh, 1Eh, 1Fh, 1Dh, 0A6h, 0A2h ; 38802
+	DB 0CEh, 0D0h, 0BAh, 1Ah, 0B1h, 00h, 0C6h ; 3880a
 	ASCII "I" ; 38811
 	DB 88h, 0CEh, 0C6h, 03h, 0CFh, 40h ; 38812
 	ASCII "G" ; 38818
@@ -1102,22 +1190,39 @@ lbl_0x0385FF:
 	ASCII "C" ; 38ed3
 	DB 8Eh, 5Dh, 8Eh ; 38ed4
 	ASCII "w" ; 38ed7
-	DB 8Eh, 0BAh, 8Eh, 0EFh, 82h, 0F0h, 82h, 0C5h ; 38ed8
-	DB 81h, 1Bh, 0CEh, 0D0h ; 38ee0
-	ASCII "B" ; 38ee4
-	DB 16h, 96h, 04h, 0E6h, 1Eh, 86h ; 38ee5
-	ASCII "E2H" ; 38eeb
-	DB 0E4h, 27h, 0B5h, 00h, 0B0h, 01h, 0CEh, 0D4h ; 38eee
-	DB 82h, 1Bh, 0CEh, 0D0h, 0B5h, 1Ah, 3Ah, 0FFh ; 38ef6
-	DB 0CEh, 0D4h, 0B5h, 1Ah, 0F2h, 0C2h, 97h, 0F1h ; 38efe
-	DB 10h, 0B5h, 00h, 0CEh, 0D0h ; 38f06
-	ASCII "D" ; 38f0b
-	DB 16h, 96h, 04h, 0E7h, 06h ; 38f0c
-	ASCII "8" ; 38f11
-	DB 0CEh, 0D4h, 82h, 1Bh, 0F8h, 02h, 04h, 04h ; 38f12
-	DB 04h, 04h, 04h, 03h, 01h, 01h, 01h, 01h ; 38f1a
-	DB 01h, 20h, 21h, 22h, 23h, 24h, 25h, 26h ; 38f22
-	DB 27h, 28h, 29h, 2Ah, 2Bh ; 38f2a
+	DB 8Eh, 0BAh, 8Eh, 0EFh, 82h, 0F0h, 82h
+; ---------------------- ; 38ed8
+loc_0x038EDF:
+	LD HL,#1B81h ; 38edf
+	LD A,[1642h] ; 38ee2
+	BIT A,#04h ; 38ee6
+	JRS Z,loc_0x038F07 ; 38ee8
+	INC [HL] ; 38eea
+	LD A,[HL] ; 38eeb
+	CP A,#48h ; 38eec
+	JRS C,loc_0x038F16 ; 38eee
+	LD [HL],#00h ; 38ef0
+	LD A,#01h ; 38ef2
+	LD [1B82h],A ; 38ef4
+	LD A,[1AB5h] ; 38ef8
+	XOR A,#0FFh ; 38efc
+	LD [1AB5h],A ; 38efe
+	CARL loc_0x0026C6 ; 38f02
+	JRS loc_0x038F16
+; ---------------------- ; 38f05
+loc_0x038F07:
+	LD [HL],#00h ; 38f07
+	LD A,[1644h] ; 38f09
+	BIT A,#04h ; 38f0d
+	JRS NZ,loc_0x038F16 ; 38f0f
+	XOR A,A ; 38f11
+	LD [1B82h],A ; 38f12
+loc_0x038F16:
+	RET
+; ---------------------- ; 38f16
+	DB 02h, 04h, 04h, 04h, 04h, 04h, 03h, 01h ; 38f17
+	DB 01h, 01h, 01h, 01h, 20h, 21h, 22h, 23h ; 38f1f
+	DB 24h, 25h, 26h, 27h, 28h, 29h, 2Ah, 2Bh ; 38f27
 	ASCII "0123456789:;@ABCDEFGHIJKPQRSTUVWXYZ[`abcdefghijkpqrstuvwxyz{" ; 38f2f
 	DB 80h, 81h, 82h, 83h, 84h, 85h, 86h, 87h ; 38f6b
 	DB 88h, 89h, 8Ah, 8Bh, 02h, 04h, 04h, 04h ; 38f73
