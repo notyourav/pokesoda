@@ -3,6 +3,7 @@ Address     | Description
 ------------|-------------
 1000:2F8    | screen buffer
 1300        | sprite oam
+1360        | tilemap
 14E0:2      | bgm note address?
 14E3        | song index? not always unique
 14E5        | bgm speed

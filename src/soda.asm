@@ -2,10 +2,20 @@
 
 include "src/global.inc"
 
+DEFSECT ".ram", CODE AT 1000H
+SECT ".ram"
+
+screenbuf: DS 2F8h
+unk2F8: DS 8h
+sprite_oam: DS 60h
+tilemap: DS 100h
+
 DEFSECT ".rom0", CODE AT 2100H
 SECT ".rom0"
 ; ----------------------
+
 	ASCII "MN"
+
 ; ---------------------- ; 2100
 reset_vector:
 
@@ -196,13 +206,34 @@ cartridge_irq:
 	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21bf
 	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21c7
 	DB 00h ; 21cf
-	ASCII "8" ; 21d0
-	DB 0CEh, 0D4h, 87h, 16h, 0CFh, 0B2h, 0CFh, 0B1h ; 21d1
-	DB 0CEh, 0D8h, 0BDh, 85h, 16h, 0CFh, 0B4h, 0CFh ; 21d9
-	DB 0B6h, 0CEh, 0D8h, 0B8h, 86h, 16h, 0CFh, 01h ; 21e1
-	DB 0BCh, 86h, 16h, 0B8h, 85h, 16h, 0CEh, 0D2h ; 21e9
-	DB 87h, 16h, 0F8h
-; ---------------------- ; 21f1
+
+; ---------------------- ; 21cf
+loc_0x0021D0:
+
+	XOR A, A
+
+	LD [1687h], A
+
+	PUSH L
+	PUSH B
+	MLT
+	
+	LD [1685h], HL
+	
+	POP A
+	POP L
+	MLT
+
+	LD BA, [1686h]
+	ADD BA, HL
+	LD [1686h], BA
+
+	LD BA, [1685h]
+	LD L, [1687h]
+
+	RET
+
+; ---------------------- ; 21f3
 loc_0x0021F4:
 
 	; something to do with sleep mode?
@@ -220,11 +251,13 @@ loc_0x0021FB:
 	LD A, [BR:20h]
 	AND A, #3Fh
 	OR A, #40h
+
 	LD [BR:20h], A
 	OR [BR:23h], #40h
 
 	LD A, [BR:20h]
 	AND A, #0FCh
+
 	LD [BR:20h], A
 	AND [BR:23h], #0FDh
 
@@ -252,7 +285,6 @@ loc_0x0021FB:
 
 	JRS loc_0x002242
 
-; ---------------------- ; 2238
 loc_0x00223A:
 
 	AND [BR:24h],#0DFh ; 223a
@@ -264,7 +296,6 @@ loc_0x002242:
 	RET
 
 ; ---------------------- ; 2242
-
 loc_0x002243:
 
 	PUSH SC
@@ -272,6 +303,7 @@ loc_0x002243:
 	OR SC,  #10000000b
 
 	PUSH EP
+
 	LD EP, #00h
 
 	; Set module address
@@ -284,9 +316,24 @@ loc_0x002243:
 	RET
 
 ; ---------------------- ; 2255
-	DB 0A7h, 9Ch, 3Fh, 9Dh, 80h, 0A5h, 0CEh, 0C5h ; 2256
-	DB 00h, 0BDh, 17h, 16h, 0CEh, 0D5h, 19h, 16h ; 225e
-	DB 0ADh, 0AFh, 0F8h
+loc_0x002256:
+
+	PUSH SC ; 2256
+	AND SC,#3Fh ; 2257
+	OR SC,#80h ; 2259
+
+	PUSH EP ; 225b
+
+	LD EP,#00h ; 225c
+
+	LD [1617h],HL ; 225f
+	LD [1619h],B ; 2262
+
+	POP EP ; 2266
+	POP SC ; 2267
+
+	RET
+
 ; ---------------------- ; 2266
 loc_0x002269:
 
@@ -298,6 +345,7 @@ loc_0x002269:
 	PUSH EP ; 226e
 
 	LD EP,#00h ; 226f
+
 	LD [161Ah],HL ; 2272
 	LD [161Ch],B ; 2275
 
@@ -317,6 +365,7 @@ loc_0x00227C:
 	PUSH EP ; 2281
 
 	LD EP,#00h ; 2282
+
 	LD [161Fh],HL ; 2285
 	LD [1621h],B ; 2288
 
@@ -336,6 +385,7 @@ loc_0x00228F:
 	PUSH EP ; 2294
 
 	LD EP,#00h ; 2295
+
 	LD [1622h],HL ; 2298
 	LD [1624h],B ; 229b
 
@@ -350,22 +400,86 @@ loc_0x00228F:
 	RET
 
 ; ---------------------- ; 22aa
-	DB 0A7h, 9Ch, 3Fh, 9Dh, 80h, 0A5h, 0CEh, 0C5h ; 22ab
-	DB 00h, 0BDh, 22h, 16h, 0CEh, 0D5h, 24h, 16h ; 22b3
-	DB 0ADh, 0C7h, 0E8h, 14h, 0CEh, 0C4h, 02h, 0F2h ; 22bb
-	DB 0C0h ; 22c3
-	ASCII "x" ; 22c4
-	DB 0AFh, 0F8h
+loc_0x0022AB:
+
+	PUSH SC ; 22ab
+
+	AND SC,#3Fh ; 22ac
+	OR SC,#80h ; 22ae
+
+	PUSH EP ; 22b0
+
+	LD EP,#00h ; 22b1
+
+	LD [1622h],HL ; 22b4
+	LD [1624h],B ; 22b7
+
+	POP EP ; 22bb
+
+	LD IY,#14E8h ; 22bc
+	LD NB,#02h ; 22bf
+	CARL loc_0x011B84 ; 22c2
+
+	POP SC ; 22c5
+
+	RET
+
+; ---------------------- ; 22c6
 loc_0x0022C7:
-	DB 0A5h, 0CEh, 0C5h, 00h, 0BDh, 25h ; 22c5
-	DB 16h, 0CEh, 0D5h, 27h, 16h, 0ADh, 0F8h, 0A5h ; 22cd
-	DB 0CEh, 0C5h, 00h, 0B9h, 25h, 16h, 0CEh, 0D1h ; 22d5
-	DB 27h, 16h, 0ADh, 0F8h
+
+	PUSH EP ; 22c7
+
+	LD EP,#00h ; 22c8
+
+	LD [1625h],HL ; 22cb
+	LD [1627h],B ; 22ce
+
+	POP EP ; 22d2
+
+	RET
+
+; ---------------------- ; 22d3
+loc_0x0022D4:
+
+	PUSH EP ; 22d4
+
+	LD EP,#00h ; 22d5
+
+	LD HL,[1625h] ; 22d8
+	LD B,[1627h] ; 22db
+
+	POP EP ; 22df
+
+	RET
+
+; ---------------------- ; 22e0
 loc_0x0022E1:
-	DB 0A5h, 0CEh, 0C5h, 00h ; 22dd
-	DB 0BDh, 28h, 16h, 0CEh, 0D5h, 2Ah, 16h, 0ADh ; 22e5
-	DB 0F8h, 0A5h, 0CEh, 0C5h, 00h, 0B9h, 28h, 16h ; 22ed
-	DB 0CEh, 0D1h, 2Ah, 16h, 0ADh, 0F8h
+
+	PUSH EP ; 22e1
+
+	LD EP,#00h ; 22e2
+
+	LD [1628h],HL ; 22e5
+	LD [162Ah],B ; 22e8
+
+	POP EP ; 22ec
+
+	RET
+
+; ---------------------- ; 22ed
+loc_0x0022EE:
+
+	PUSH EP ; 22ee
+
+	LD EP,#00h ; 22ef
+
+	LD HL,[1628h] ; 22f2
+	LD B,[162Ah] ; 22f5
+
+	POP EP ; 22f9
+
+	RET
+
 ; ---------------------- ; 22f5
 DoCurrentProc:
 
@@ -424,12 +538,21 @@ loc_0x002332:
 loc_0x002338:
 
 	CARL WaitNextFrame ; 2338
+
 	LD [BR:80h],#00h ; 233b
 
 	RET
 
 ; ---------------------- ; 233e
-	DB 0F2h, 0EEh, 0FFh, 0DDh, 80h, 08h, 0F8h
+loc_0x00233F:
+
+	CARL WaitNextFrame ; 233f
+
+	LD [BR:80h],#08h ; 2342
+
+	RET
+
+; ---------------------- ; 2345
 loc_0x002346:
 
 	LD HL, #1672h
@@ -454,178 +577,801 @@ loc_0x002350:
 	RET
 
 ; ----------------------
-	ASCII "v" ; 2356
-	DB 92h, 93h, 98h, 0E7h, 0FBh, 0F8h
+loc_0x002356:
+
+	LD [IY],[IX] ; 2356
+
+	INC IX ; 2357
+	INC IY ; 2358
+
+	DEC BA ; 2359
+
+	JRS NZ,loc_0x002356 ; 235a
+
+	RET
+
+; ---------------------- ; 235c
 loc_0x00235D:
-	DB 0CEh, 0C5h ; 2357
-	DB 00h, 0CEh, 0C6h, 00h, 0C5h, 3Ch, 16h, 0C6h ; 235f
-	DB 3Bh, 16h ; 2367
-	ASCII "eDR:" ; 2369
-	DB 0FFh ; 236d
-	ASCII "h>H#" ; 236e
-	DB 0CEh, 0D4h, 3Dh, 16h ; 2372
-	ASCII "A&" ; 2376
-	DB 0CEh, 0D4h, 3Eh, 16h, 0CEh ; 2378
-	ASCII "6" ; 237d
-	DB 0E7h, 22h, 0CEh, 0D0h, 40h, 16h, 88h, 0CEh ; 237e
-	DB 0D4h, 40h, 16h, 0E7h, 10h, 0CEh, 0D0h ; 2386
-	ASCII "H" ; 238d
-	DB 16h, 0CEh, 0D4h, 40h, 16h ; 238e
-	ASCII "E" ; 2393
-	DB 0CEh, 0D4h, 3Fh, 16h, 0F1h, 18h ; 2394
-	ASCII "8" ; 239a
-	DB 0CEh, 0D4h, 3Fh, 16h, 0F1h, 11h, 0CEh, 0D0h ; 239b
-	ASCII "G" ; 23a3
-	DB 16h, 0CEh, 0D4h, 40h, 16h, 0CEh, 0D0h, 3Dh ; 23a4
-	DB 16h, 0CEh, 0D4h, 3Fh, 16h, 0C5h ; 23ac
-	ASCII "k" ; 23b2
-	DB 16h, 95h, 04h, 0E6h, 14h, 0B8h, 3Bh, 16h ; 23b3
-	DB 0BCh ; 23bb
-	ASCII "A" ; 23bc
-	DB 16h, 0B8h, 3Dh, 16h, 0BCh ; 23bd
-	ASCII "C" ; 23c2
-	DB 16h, 0B8h, 3Fh, 16h, 0BCh ; 23c3
-	ASCII "E" ; 23c8
-	DB 16h, 0F8h, 0C4h, 00h, 00h, 0BCh ; 23c9
-	ASCII "A" ; 23cf
-	DB 16h, 0BCh ; 23d0
-	ASCII "C" ; 23d2
-	DB 16h, 0BCh ; 23d3
-	ASCII "E" ; 23d5
-	DB 16h, 0F8h, 0A5h, 0B1h, 00h, 0CFh, 00h, 0CFh ; 23d6
-	DB 0E4h, 0C1h, 0E9h, 23h, 0CEh, 0C5h, 00h, 0CFh ; 23de
-	DB 0C0h, 0ADh, 0F8h, 01h, 00h, 02h, 00h, 04h ; 23e6
-	DB 00h, 08h, 00h, 10h, 00h, 20h, 00h, 40h ; 23ee
-	DB 00h, 80h, 00h, 00h, 01h, 00h, 02h, 00h ; 23f6
-	DB 04h, 00h, 08h, 00h, 10h, 00h, 20h, 00h ; 23fe
-	DB 40h, 00h, 80h, 0A5h, 0CEh, 0C5h, 02h, 0B3h ; 2406
-	DB 00h, 0CFh, 21h, 0C1h, 80h ; 240e
-	ASCII "J" ; 2413
-	DB 0CFh, 0C0h, 0ADh, 0F8h, 0A5h, 0CEh, 0C5h, 02h ; 2414
-	DB 0B3h, 00h, 0CFh, 21h, 0C1h, 00h ; 241c
-	ASCII "J" ; 2422
-	DB 0CFh, 0C0h, 0ADh, 0F8h, 0A5h, 0CEh, 0C5h, 02h ; 2423
-	DB 0B3h, 00h, 0CFh, 0E1h, 0CFh, 20h, 0CFh, 20h ; 242b
-	DB 0C1h ; 2433
-	ASCII "CN" ; 2434
-	DB 0CFh, 0C0h, 91h, 91h ; 2436
-	ASCII "U" ; 243a
-	DB 0B3h, 00h, 0ADh, 0F8h, 0A5h, 0CEh, 0C5h, 02h ; 243b
-	DB 0B3h, 00h, 0CFh, 0E1h, 0CFh, 20h, 0CFh, 20h ; 2443
-	DB 0C1h, 83h ; 244b
-	ASCII "M" ; 244d
-	DB 0CFh, 0C0h, 91h, 91h ; 244e
-	ASCII "U" ; 2452
-	DB 0B3h, 00h, 0ADh, 0F8h, 0A5h, 0CEh, 0C5h, 02h ; 2453
-	DB 0B3h, 00h, 0C1h, 80h ; 245b
-	ASCII "LE" ; 245f
-	DB 0CEh, 8Ch, 0CEh, 8Ch, 0ADh, 0F8h, 0CFh, 0E4h ; 2461
-	DB 96h, 80h, 0E6h, 03h, 0CEh, 0A4h, 97h, 80h ; 2469
-	DB 0E6h, 03h, 0CEh, 0A5h, 0CEh, 0B1h, 80h, 0E6h ; 2471
-	DB 40h, 0B2h, 00h, 0CEh, 0B2h, 80h, 0E6h, 1Ch ; 2479
-	ASCII "1" ; 2481
-	DB 0E6h, 16h, 0E4h, 0Ah ; 2482
-	ASCII "Y" ; 2486
-	DB 0CEh, 0D9h, 0F2h, 0CCh, 0FFh, 02h, 0C0h, 0F8h ; 2487
-	ASCII "XA" ; 248f
-	DB 0CEh, 0D9h, 0F2h, 0C2h, 0FFh, 0CEh, 0A4h, 0F8h ; 2491
-	DB 0B0h, 0E0h, 0F8h ; 2499
-	ASCII "1" ; 249c
-	DB 0E6h, 18h, 0E4h, 0Ch ; 249d
-	ASCII "Y" ; 24a1
-	DB 0CEh, 0D9h, 0F2h, 0B1h, 0FFh, 0CEh, 0A4h, 02h ; 24a2
-	DB 0C0h, 0F8h ; 24aa
-	ASCII "XA" ; 24ac
-	DB 0CEh, 0D9h, 0F2h, 0A5h, 0FFh, 02h, 80h, 0F8h ; 24ae
-	DB 0B0h, 0A0h, 0F8h, 0B2h, 00h, 0CEh, 0B2h, 80h ; 24b6
-	DB 0E6h, 1Ch ; 24be
-	ASCII "1" ; 24c0
-	DB 0E6h, 16h, 0E4h, 0Ch ; 24c1
-	ASCII "Y" ; 24c5
-	DB 0CEh, 0D9h, 0F2h, 8Dh, 0FFh, 0CEh, 0A4h, 02h ; 24c6
-	DB 40h, 0F8h ; 24ce
-	ASCII "XA" ; 24d0
-	DB 0CEh, 0D9h, 0F2h, 81h, 0FFh, 0F8h, 0B0h, 20h ; 24d2
-	DB 0F8h ; 24da
-	ASCII "1" ; 24db
-	DB 0E6h, 18h, 0E4h, 0Ah ; 24dc
-	ASCII "Y" ; 24e0
-	DB 0CEh, 0D9h, 0F2h ; 24e1
-	ASCII "r" ; 24e4
-	DB 0FFh, 02h, 40h, 0F8h ; 24e5
-	ASCII "XA" ; 24e9
-	DB 0CEh, 0D9h, 0F2h ; 24eb
-	ASCII "h" ; 24ee
-	DB 0FFh, 0CEh, 0A4h, 02h, 80h, 0F8h, 0B0h, 60h ; 24ef
-	DB 0F8h, 01h, 02h, 04h, 08h, 10h, 20h, 40h ; 24f7
-	DB 80h, 0FEh, 0FDh, 0FBh, 0F7h, 0EFh, 0DFh, 0BFh ; 24ff
-	DB 7Fh, 0A0h, 0A6h, 0A3h, 0CEh, 0C7h, 00h, 0CFh ; 2507
-	DB 0B0h, 0CEh, 8Ch, 0CEh, 8Ch, 0CEh, 8Ch, 0B1h ; 250f
-	DB 00h, 0CFh, 20h, 0CFh, 0B4h, 22h, 07h, 0B1h ; 2517
-	DB 00h, 0C7h, 0F8h, 24h, 0CFh ; 251f
-	ASCII "BE'" ; 2524
-	DB 0ABh, 0AEh, 0A8h, 0F8h, 0CFh, 0B0h, 0A6h, 0A3h ; 2527
-	DB 0CEh, 0C7h, 00h, 0CFh, 0B0h, 0CEh, 8Ch, 0CEh ; 252f
-	DB 8Ch, 0CEh, 8Ch, 0B1h, 00h, 0CFh, 20h, 0CFh ; 2537
-	DB 0B4h, 22h, 07h, 0B1h, 00h, 0C7h, 0F8h, 24h ; 253f
-	DB 0CFh ; 2547
-	ASCII "B" ; 2548
-	DB 0CEh, 2Fh, 0ABh, 0AEh, 0CFh, 0B4h, 0F8h, 0CFh ; 2549
-	DB 0B0h, 0A6h, 0A3h, 0CEh, 0C7h, 00h, 0CFh, 0B0h ; 2551
-	DB 0CEh, 8Ch, 0CEh, 8Ch, 0CEh, 8Ch, 0B1h, 00h ; 2559
-	DB 0CFh, 20h, 0CFh, 0B4h, 22h, 07h, 0B1h, 00h ; 2561
-	DB 0C7h, 00h, 25h, 0CFh ; 2569
-	ASCII "B" ; 256d
-	DB 0CEh, 27h, 0ABh, 0AEh, 0CFh, 0B4h, 0F8h, 0A1h ; 256e
-	ASCII "P" ; 2576
-	DB 0B3h, 00h, 0B0h, 0Ah, 0CEh, 0D9h ; 2577
-	ASCII "CJ", 22h, "" ; 257d
-	DB 0Fh, 0CEh, 0B0h, 0Fh, 0A9h, 0F8h, 0B1h, 00h ; 2580
-	DB 0CFh ; 2588
-	ASCII "B" ; 2589
-	DB 0CFh ; 258a
-	ASCII "B" ; 258b
-	DB 0CFh, 0D9h, 0F4h, 0CEh ; 258c
-	ASCIZ "U" ; 2590
-	DB 0CEh, 5Dh, 01h, 0CEh ; 2592
-	ASCII "E" ; 2596
-	DB 02h, 0CEh ; 2597
-	ASCII "M" ; 2599
-	DB 03h, 0C3h, 04h, 00h, 0F8h, 0C7h, 00h, 10h ; 259a
-	DB 0CEh, 0C7h, 00h, 0B2h, 00h, 0C4h, 00h, 03h ; 25a2
-	DB 0F2h, 0A4h, 0FDh, 0F8h, 0C7h, 60h, 13h, 0CEh ; 25aa
-	DB 0C7h, 00h, 0B2h, 00h, 0C4h, 80h, 01h, 0F2h ; 25b2
-	DB 95h, 0FDh, 0F8h ; 25ba
-	ASCII "8" ; 25bd
-	DB 0C5h, 60h, 13h ; 25be
-	ASCII "h" ; 25c1
-	DB 91h, 80h, 0CFh, 3Bh, 0E7h, 0FAh, 0F8h, 0C7h ; 25c2
-	DB 20h, 14h, 0F1h, 0F0h, 0C7h, 20h, 14h, 0F1h ; 25ca
-	DB 0EBh, 0C7h, 0E0h, 14h, 0F1h, 0E6h ; 25d2
-	ASCII "8" ; 25d8
-	DB 0C5h, 60h, 13h, 0B1h, 08h, 0CFh, 0B1h, 0B1h ; 25d9
-	DB 0Ch ; 25e1
-	ASCII "h" ; 25e2
-	DB 91h, 80h, 0F5h, 0FCh, 0CFh, 23h, 0CFh, 0B5h ; 25e3
-	DB 0F5h, 0F2h, 0F8h, 0C7h, 00h, 00h, 0F1h, 0E6h ; 25eb
-	DB 0C7h, 04h, 00h, 0F1h, 0E1h, 0C7h, 0Ch, 00h ; 25f3
-	DB 0F1h, 0DCh, 0C7h, 60h, 13h, 0CEh, 0C7h, 00h ; 25fb
-	DB 0CFh, 0B1h ; 2603
-	ASCII "v" ; 2605
-	DB 92h, 93h, 0F5h, 0FCh, 0CFh, 0B5h, 0CFh ; 2606
-	ASCII "C" ; 260d
-	DB 88h, 0E7h, 0F3h, 0F8h, 0C4h, 08h, 0Ch, 0C5h ; 260e
-	DB 00h, 00h, 0F1h, 0E4h, 0C4h, 10h, 0Ch, 0C5h ; 2616
-	DB 00h, 00h, 0F1h, 0DCh, 0C4h, 08h, 0Ch, 0C5h ; 261e
-	DB 04h, 00h, 0F1h, 0D4h, 0C4h, 0Ch, 10h, 0C5h ; 2626
-	DB 00h, 00h, 0F1h, 0CCh, 0C4h, 08h, 0Ch, 0C5h ; 262e
-	DB 0Ch, 00h, 0F1h, 0C4h, 0C4h, 08h, 18h, 0C5h ; 2636
-	DB 00h, 00h, 0F1h, 0BCh, 0C4h, 08h, 0Ch, 0C5h ; 263e
-	DB 0Ch, 00h, 0F1h, 0B4h, 0C4h, 10h, 18h, 0C5h ; 2646
-	DB 00h, 00h, 0F1h, 0ACh, 0A0h, 0B0h, 18h, 11h ; 264e
-	DB 0B3h, 00h ; 2656
-	ASCII "P" ; 2658
-	DB 0A8h, 0F1h, 0A2h
+
+	LD EP,#00h ; 235d
+	LD XP,#00h ; 2360
+
+	LD HL,#163Ch ; 2363
+	LD IX,#163Bh ; 2366
+	LD [IX],[HL] ; 2369
+
+	LD A,[BR:52h] ; 236a
+	XOR A,#0FFh ; 236c
+
+	LD [HL],A ; 236e
+	XOR A,[IX] ; 236f
+
+	LD B,A ; 2370
+
+	AND A,[HL] ; 2371
+	LD [163Dh],A ; 2372
+
+	LD A,B ; 2376
+
+	AND A,[IX] ; 2377
+	LD [163Eh],A ; 2378
+
+	CP [HL],[IX] ; 237c
+	JRS NZ,loc_0x0023A1 ; 237e
+
+	LD A,[1640h] ; 2380
+	DEC A ; 2384
+
+	LD [1640h],A ; 2385
+	JRS NZ,loc_0x00239A ; 2389
+
+	LD A,[1648h] ; 238b
+	LD [1640h],A ; 238f
+
+	LD A,[HL] ; 2393
+	LD [163Fh],A ; 2394
+
+	JRS loc_0x0023B1
+
+loc_0x00239A:
+
+	XOR A,A ; 239a
+
+	LD [163Fh],A ; 239b
+
+	JRS loc_0x0023B1
+
+loc_0x0023A1:
+
+	LD A,[1647h] ; 23a1
+	LD [1640h],A ; 23a5
+
+	LD A,[163Dh] ; 23a9
+	LD [163Fh],A ; 23ad
+
+loc_0x0023B1:
+
+	LD HL,#166Bh ; 23b1
+	BIT [HL],#04h ; 23b4
+	JRS Z,loc_0x0023CB ; 23b6
+
+	LD BA,[163Bh] ; 23b8
+	LD [1641h],BA ; 23bb
+
+	LD BA,[163Dh] ; 23be
+	LD [1643h],BA ; 23c1
+
+	LD BA,[163Fh] ; 23c4
+	LD [1645h],BA ; 23c7
+
+	RET
+
+loc_0x0023CB:
+
+	LD BA,#0000h ; 23cb
+
+	LD [1641h],BA ; 23ce
+	LD [1643h],BA ; 23d1
+	LD [1645h],BA ; 23d4
+
+	RET
+
+; ---------------------- ; 23d7
+loc_0x0023D8:
+
+	PUSH EP ; 23d8
+
+	LD B,#00h ; 23d9
+
+	ADD BA,BA ; 23db
+	LD HL,BA ; 23dd
+
+	ADD HL,#23E9h ; 23df
+	LD EP,#00h ; 23e2
+
+	LD BA,[HL] ; 23e5
+
+	POP EP ; 23e7
+
+	RET
+
+; ---------------------- ; 23e8
+	DB 01h, 00h, 02h, 00h, 04h, 00h, 08h, 00h ; 23e9
+	DB 10h, 00h, 20h, 00h, 40h, 00h, 80h, 00h ; 23f1
+	DB 00h, 01h, 00h, 02h, 00h, 04h, 00h, 08h ; 23f9
+	DB 00h, 10h, 00h, 20h, 00h, 40h, 00h, 80h
+; ---------------------- ; 2401
+loc_0x002409:
+
+	PUSH EP ; 2409
+
+	LD EP,#02h ; 240a
+	LD H,#00h ; 240d
+
+	ADD HL,HL ; 240f
+	ADD HL,#4A80h ; 2411
+
+	LD BA,[HL] ; 2414
+
+	POP EP ; 2416
+
+	RET
+
+; ---------------------- ; 2417
+loc_0x002418:
+
+	PUSH EP ; 2418
+
+	LD EP,#02h ; 2419
+	LD H,#00h ; 241c
+
+	ADD HL,HL ; 241e
+	ADD HL,#4A00h ; 2420
+
+	LD BA,[HL] ; 2423
+
+	POP EP ; 2425
+
+	RET
+
+; ---------------------- ; 2426
+loc_0x002427:
+
+	PUSH EP ; 2427
+
+	LD EP,#02h ; 2428
+	LD H,#00h ; 242b
+
+	LD BA,HL ; 242d
+	ADD HL,BA ; 242f
+	ADD HL,BA ; 2431
+	ADD HL,#4E43h ; 2433
+
+	LD BA,[HL] ; 2436
+
+	INC HL ; 2438
+	INC HL ; 2439
+	LD L,[HL] ; 243a
+
+	LD H,#00h ; 243b
+
+	POP EP ; 243d
+
+	RET
+
+; ---------------------- ; 243e
+loc_0x00243F:
+
+	PUSH EP ; 243f
+
+	LD EP,#02h ; 2440
+	LD H,#00h ; 2443
+
+	LD BA,HL ; 2445
+	ADD HL,BA ; 2447
+	ADD HL,BA ; 2449
+	ADD HL,#4D83h ; 244b
+
+	LD BA,[HL] ; 244e
+
+	INC HL ; 2450
+	INC HL ; 2451
+	LD L,[HL] ; 2452
+
+	LD H,#00h ; 2453
+
+	POP EP ; 2455
+
+	RET
+
+; ---------------------- ; 2456
+loc_0x002457:
+
+	PUSH EP ; 2457
+
+	LD EP,#02h ; 2458
+	LD H,#00h ; 245b
+	ADD HL,#4C80h ; 245d
+
+	LD A,[HL] ; 2460
+
+	SRL A ; 2461
+	SRL A ; 2463
+
+	POP EP ; 2465
+
+	RET
+; ---------------------- ; 2466
+loc_0x002467:
+
+	LD HL,BA ; 2467
+
+	BIT A,#80h ; 2469
+	JRS Z,loc_0x00246F ; 246b
+
+	NEG A ; 246d
+
+loc_0x00246F:
+
+	BIT B,#80h ; 246f
+	JRS Z,loc_0x002475 ; 2471
+
+	NEG B ; 2473
+
+loc_0x002475:
+
+	AND L,#80h ; 2475
+	JRS Z,loc_0x0024B9 ; 2478
+
+	LD L,#00h ; 247a
+	AND H,#80h ; 247c
+	JRS Z,loc_0x00249C ; 247f
+
+	CP A,B ; 2481
+	JRS Z,loc_0x002499 ; 2482
+
+	JRS C,loc_0x00248F ; 2484
+
+	LD H,B ; 2486
+	DIV ; 2487
+
+	CARL loc_0x002457 ; 2489
+
+	ADD A,#0C0h ; 248c
+
+	RET
+
+loc_0x00248F:
+
+	LD H,A ; 248f
+	LD A,B ; 2490
+	DIV ; 2491
+
+	CARL loc_0x002457 ; 2493
+
+	NEG A ; 2496
+
+	RET
+
+loc_0x002499:
+
+	LD A,#0E0h ; 2499
+
+	RET
+
+loc_0x00249C:
+
+	CP A,B ; 249c
+	JRS Z,loc_0x0024B6 ; 249d
+
+	JRS C,loc_0x0024AC ; 249f
+
+	LD H,B ; 24a1
+	DIV ; 24a2
+
+	CARL loc_0x002457 ; 24a4
+
+	NEG A ; 24a7
+	ADD A,#0C0h ; 24a9
+
+	RET
+
+loc_0x0024AC:
+
+	LD H,A ; 24ac
+	LD A,B ; 24ad
+	DIV ; 24ae
+
+	CARL loc_0x002457 ; 24b0
+
+	ADD A,#80h ; 24b3
+
+	RET
+
+loc_0x0024B6:
+
+	LD A,#0A0h ; 24b6
+
+	RET
+
+loc_0x0024B9:
+
+	LD L,#00h ; 24b9
+	AND H,#80h ; 24bb
+	JRS Z,loc_0x0024DB ; 24be
+
+	CP A,B ; 24c0
+	JRS Z,loc_0x0024D8 ; 24c1
+
+	JRS C,loc_0x0024D0 ; 24c3
+
+	LD H,B ; 24c5
+	DIV ; 24c6
+
+	CARL loc_0x002457 ; 24c8
+
+	NEG A ; 24cb
+	ADD A,#40h ; 24cd
+
+	RET
+
+loc_0x0024D0:
+
+	LD H,A ; 24d0
+	LD A,B ; 24d1
+	DIV ; 24d2
+
+	CARL loc_0x002457 ; 24d4
+
+	RET
+
+loc_0x0024D8:
+
+	LD A,#20h ; 24d8
+
+	RET
+
+loc_0x0024DB:
+
+	CP A,B ; 24db
+	JRS Z,loc_0x0024F5 ; 24dc
+
+	JRS C,loc_0x0024E9 ; 24de
+
+	LD H,B ; 24e0
+	DIV ; 24e1
+
+	CARL loc_0x002457 ; 24e3
+
+	ADD A,#40h ; 24e6
+
+	RET
+
+loc_0x0024E9:
+
+	LD H,A ; 24e9
+	LD A,B ; 24ea
+	DIV ; 24eb
+
+	CARL loc_0x002457 ; 24ed
+
+	NEG A ; 24f0
+	ADD A,#80h ; 24f2
+
+	RET
+
+loc_0x0024F5:
+
+	LD A,#60h ; 24f5
+
+	RET
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+loc_0x0024F8_pool:
+	DB  1,  2,  4,  8,  16,  32,  64, 128
+
+loc_0x002500_pool:
+	DB -2, -3, -5, -9, -17, -33, -65, -129, -96
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+;   Args:
+;     HL: base addr
+;      A: index
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+loc_0x002509:
+
+	PUSH IP
+	PUSH IY
+
+	LD YP, #00h
+
+	PUSH A
+
+	SRL A
+	SRL A
+	SRL A
+
+	LD B, #00h
+
+	; HL = HL + (A * 8)
+	ADD HL, BA
+
+	POP A
+
+	AND A, #07h
+	LD B, #00h
+	
+	; IY = pool + (A % 8)
+	LD IY, #loc_0x0024F8_pool
+	ADD IY, BA
+
+	; A = *HL & *IY
+	LD A, [HL]
+	AND A, [IY]
+
+	POP IY
+	POP IP
+
+	; clobber??
+	POP BA
+
+	RET
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+;   Args:
+;     HL: base addr
+;      A: index
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+loc_0x00252B:
+
+	PUSH A
+	PUSH IP
+	PUSH IY
+
+	LD YP, #00h
+
+	PUSH A
+
+	SRL A
+	SRL A
+	SRL A
+
+	; HL = HL + (A * 8)
+	LD B, #00h
+	ADD HL, BA
+
+	POP A
+
+	AND A, #07h
+	LD B, #00h
+
+	; IY = pool + (A % 8)
+	LD IY, #loc_0x0024F8_pool
+	ADD IY, BA
+
+	; *HL |= *IY
+	OR [HL], [IY]
+
+	POP IY
+	POP IP
+
+	POP A
+
+	RET
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+;   Args:
+;     HL: base addr
+;      A: index
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+loc_0x002550:
+
+	PUSH A
+
+	PUSH IP
+	PUSH IY
+
+	LD YP, #00h
+
+	PUSH A
+
+	SRL A
+	SRL A
+	SRL A
+
+	; HL = HL + (A * 8)
+	LD B, #00h
+	ADD HL, BA
+
+	POP A
+
+	AND A, #07h
+	LD B, #00h
+
+	; IY = pool + (A % 8)
+	LD IY, #loc_0x002500_pool
+	ADD IY, BA
+
+	; *HL |= *IY
+	AND [HL], [IY]
+
+	POP IY
+	POP IP
+
+	POP A
+
+	RET
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Divides by 10
+;   Args:
+;      A: value
+;   Returns:
+;      A: remainder, lo nibble
+;      B: quotient, lo nibble
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+loc_0x002575:
+
+	PUSH HL
+
+	LD L, A
+
+	LD H, #00
+	LD A, #10
+	DIV
+
+	LD A, H
+	LD B, L
+
+	AND A, #15
+	AND B, #15
+
+	POP HL
+
+	RET
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+;   Args:
+;      A: index
+;     IY: base addr
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+loc_0x002586:
+
+	LD B,#00h
+	ADD IY,BA
+	ADD IY,BA
+
+	LD HL, [IY]
+
+	JP HL
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Copies 32 bit value and increase IY
+;   Args: 
+;   L, H: lo
+;   A, B: hi
+;     IY: destination
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+loc_0x00258F:
+
+	LD [IY+0], L
+	LD [IY+1], H
+	LD [IY+2], A
+	LD [IY+3], B
+
+	ADD IY, #4
+
+	RET
+
+; ---------------------- ; 259e
+loc_0x00259F:
+
+	LD IY, #screenbuf
+	LD YP, #00h
+	LD L, #00h
+	LD BA, #0300h
+	CARL loc_0x002350
+
+	RET
+
+; ---------------------- ; 25ad
+loc_0x0025AE:
+
+	LD IY, #tilemap
+	LD YP, #00h
+	LD L, #00h
+	LD BA, #0180h
+	CARL loc_0x002350
+
+	RET
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Zero memory until reaching end address
+;   Args:
+;     IY: end address
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+loc_0x0025BD:
+
+	XOR A, A
+	LD HL, #tilemap
+
+loc_0x0025C1:
+
+	LD [HL], A
+	INC HL
+	INC A
+
+	; HL - IY
+	CP HL, IY
+	JRS NZ, loc_0x0025C1
+
+	RET
+
+; ---------------------- ; 25c8
+loc_0x0025C9:
+
+	LD IY, #1420h
+	JRS loc_0x0025BD
+
+loc_0x0025CE:
+
+	LD IY, #1420h
+	JRS loc_0x0025BD
+
+loc_0x0025D3:
+
+	LD IY, #14E0h
+	JRS loc_0x0025BD
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Zero out 8 evenly spaced 12 byte chunks
+;   Args:
+;     IY: distance between chunks
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+loc_0x0025D8:
+
+	XOR A, A
+
+	LD HL, #tilemap
+	
+	LD B, #8
+
+loc_0x0025DE:
+
+	PUSH B
+
+	LD B, #12
+
+loc_0x0025E2:
+
+	LD [HL], A
+	INC HL
+
+	INC A
+	DJR NZ, loc_0x0025E2
+
+	ADD HL, IY
+
+	POP B
+	DJR NZ, loc_0x0025DE
+
+	RET
+
+; ---------------------- ; 25ed
+loc_0x0025EE:
+
+	LD IY, #0
+	JRS loc_0x0025D8
+
+loc_0x0025F3:
+
+	LD IY, #4
+	JRS loc_0x0025D8
+
+loc_0x0025F8:
+
+	LD IY, #12
+	JRS loc_0x0025D8
+
+; ---------------------- ; 25fb
+loc_0x0025FD:
+
+	LD IY, #tilemap
+	LD YP, #00h
+
+loc_0x002603:
+
+	PUSH B
+
+loc_0x002605:
+
+	LD [IY], [IX]
+
+	INC IX
+
+	INC IY
+	DJR NZ, loc_0x002605
+
+	POP B
+
+	ADD IY, HL
+
+	DEC A
+	JRS NZ, loc_0x002603
+
+	RET
+
+; ---------------------- ; 2611
+loc_0x002612:
+
+	LD BA,#0C08h ; 2612
+	LD HL,#0000h ; 2615
+
+	JRS loc_0x0025FD
+
+loc_0x00261A:
+
+	LD BA,#0C10h ; 261a
+	LD HL,#0000h ; 261d
+
+	JRS loc_0x0025FD
+
+loc_0x002622:
+
+	LD BA,#0C08h ; 2622
+	LD HL,#0004h ; 2625
+
+	JRS loc_0x0025FD
+
+loc_0x00262A:
+
+	LD BA,#100Ch ; 262a
+	LD HL,#0000h ; 262d
+
+	JRS loc_0x0025FD
+
+loc_0x002632:
+
+	LD BA,#0C08h ; 2632
+	LD HL,#000Ch ; 2635
+
+	JRS loc_0x0025FD
+
+loc_0x00263A:
+
+	LD BA,#1808h ; 263a
+	LD HL,#0000h ; 263d
+
+	JRS loc_0x0025FD
+
+loc_0x002642:
+
+	LD BA,#0C08h ; 2642
+	LD HL,#000Ch ; 2645
+
+	JRS loc_0x0025FD
+
+loc_0x00264A:
+
+	LD BA,#1810h ; 264a
+	LD HL,#0000h ; 264d
+
+	JRS loc_0x0025FD
+
+loc_0x002652:
+
+	PUSH BA ; 2652
+
+	LD A,#18h ; 2653
+	SUB A,B ; 2655
+
+	LD H,#00h ; 2656
+	LD L,A ; 2658
+
+	POP BA ; 2659
+
+	JRS loc_0x0025FD
+
 ; ---------------------- ; 2659
 loc_0x00265C:
 
@@ -963,11 +1709,11 @@ loc_0x0028BD:
 	DB 0FDh, 0ABh, 0CFh, 0B5h, 0CFh, 0B4h, 80h ; 297b
 	ASCII "2" ; 2982
 	DB 06h, 0E7h, 0D0h, 0F8h
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 ;   called every frame
 
 	sleep_timeout EQU 5460h
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 loc_0x002987:
 
 	; flag
@@ -8117,9 +8863,9 @@ minlib_song_table:
 	DB 04h, 0CEh ; 796b
 	ASCII "L" ; 796d
 	DB 05h, 0F8h
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 ;   handles cursor movement
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	DB 0CEh ; 796e
 	ASCII "T" ; 7971
 	DB 04h, 0CEh, 5Ch, 05h, 0CEh ; 7972
@@ -16301,9 +17047,9 @@ loc_0x011B95:
 	DB 0F5h, 0EAh, 0F8h
 
 	JP HL
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 ;   something to do with rendering sprites
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 loc_0x011c35: ; 11c35
 
 	CP HL, #1611h
