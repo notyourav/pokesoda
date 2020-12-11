@@ -6,3 +6,4 @@ src/*.obj
 *.map
 stderr.txt
 stdout.txt
+*.sta
