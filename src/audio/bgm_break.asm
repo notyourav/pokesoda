@@ -1,5 +1,5 @@
 	; HEADER
-	DB 0F1h, 0A4h, 0C0h, 94h, 84h, 2Ah
+	DB 0B5h, 0F1h, 0A4h, 0C0h, 94h, 84h, 2Ah
 
 	DB 82h, 26h, 21h, 84h, 2Ah, 84h, 28h ; 6348
 	DB 82h, 25h, 21h, 84h, 28h, 84h, 26h, 82h ; 6350
