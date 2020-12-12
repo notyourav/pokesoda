@@ -2,30 +2,33 @@ TOOLCHAIN_DIR := tools/toolchain
 TARGET = soda
 
 SHA1 := $(shell { command -v sha1sum || command -v shasum; } 2>/dev/null) -c
-
-#C_SOURCES = #src/isr.c src/main.c
+HAS_WINE := $(shell which wine ; echo $$?)
+HAS_WINE64 := $(shell which wine64 ; echo $$?)
 
 ASM_SOURCES = src/soda.asm
 ASM_BUILDDIR = build/src
 
-#ifeq ($(OS), Windows_NT)
+ifneq ($(HAS_WINE), 0)
+	WINE := wine
+	SREC_CAT := srec_cat
+	POKEMINID := PokeMiniD
+	POKEFLASH := pokeflash
+else ifneq ($(HAS_WINE64), 0)
+	WINE := wine64
+	SREC_CAT := srec_cat
+	POKEMINID := PokeMiniD
+	POKEFLASH := pokeflash
+else
 	WINE :=
 	POKEMINID := $(TOOLCHAIN_DIR)/bin-windows/PokeMiniD
 	SREC_CAT := $(TOOLCHAIN_DIR)/bin-windows/srec_cat
 	POKEFLASH := $(TOOLCHAIN_DIR)/bin-windows/pokeflash
-#else # In Unix we use wine and assume the tools are in the PATH
-#	WINE_PREFIX := $(realpath $(TOOLCHAIN_DIR)/wineprefix)
-#	WINE := WINEARCH=win32 WINEPREFIX=$(WINE_PREFIX) wine
-#	SREC_CAT := srec_cat
-#	POKEMINID := PokeMiniD
-#	POKEFLASH := pokeflash
-#endif
+endif
 
 C88_DIR := $(TOOLCHAIN_DIR)/c88tools/bin
 C88 := $(WINE) $(C88_DIR)/c88.exe
 CC88 := $(WINE) $(C88_DIR)/cc88.exe
 LC88 := $(WINE) $(C88_DIR)/lc88.exe
-
 
 LDFLAGS += -Mc
 CFLAGS += -Mc
@@ -46,7 +49,7 @@ COMPILED_ASM = $(C_SOURCES:.c=.c.asm)
 all: $(TARGET).min
 	$(shell dd conv=notrunc if=baserom.min of=$(TARGET).min count=1 bs=8448)
 	@$(SHA1) pokesoda.sha1
-	
+
 assembly: $(COMPILED_ASM)
 
 run: $(TARGET).min
