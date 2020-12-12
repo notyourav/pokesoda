@@ -1,5 +1,3 @@
-; これはテキストエディタを強制的にSHIFT JISモードにするために使われる日本語の一行です。
-
 include "src/global.inc"
 
 DEFSECT ".ram", CODE AT 1000H
@@ -196,7 +194,9 @@ cartridge_irq:
 ; ---------------------- ; 21a3
 	ASCII "NINTENDO" ; 21a4
 	ASCII "MSDJ"
-	ASCIZ "ｿﾀﾞﾃﾔｻﾝ"
+
+	; SJIS name
+	DB 0BFh, 0C0h, 0DEh, 0C3h, 0D4h, 0BBh, 0DDh, 00h
 
 	DB 00h, 00h, 00h, 00h
 
