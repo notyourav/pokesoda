@@ -2,11 +2,10 @@
 
 include "src/global.inc"
 
-DEFSECT ".ram", CODE AT 1000H
+DEFSECT ".ram", DATA AT 1000H
 SECT ".ram"
 
-screenbuf: DS 2F8h
-unk2F8: DS 8h
+screenbuf: DS 300h
 sprite_oam: DS 60h
 tilemap: DS 100h
 
