@@ -1,3 +1,4 @@
+bgm3:
 	; HEADER
 	DB 0B4h, 0F1h, 0A4h, 0C0h, 98h, 81h, 25h ; 63d5
 

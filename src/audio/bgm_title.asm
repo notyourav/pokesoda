@@ -1,3 +1,4 @@
+bgm2:
 	; HEADER
 	DB 0B4h, 0A4h, 0C0h, 81h, 90h ; 6946
 	ASCII "6"

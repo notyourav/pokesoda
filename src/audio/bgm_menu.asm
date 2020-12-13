@@ -1,3 +1,4 @@
+bgm4:
 	; HEADER
 	DB 0B5h, 0F1h, 0A4h, 0C0h, 81h, 98h
 	DB 2Ah ; 646b
