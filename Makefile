@@ -23,26 +23,40 @@ else
 	POKEFLASH := $(TOOLCHAIN_DIR)/bin-windows/pokeflash
 endif
 
-ASM_SOURCES = src/soda.asm
-ASM_BUILDDIR = build/src
+
+# Linking order
+
+SRCS :=	src/ram.asm					\
+		src/rom0.asm				\
+		src/rom1.asm				\
+		src/rom2.asm				\
+		src/rom3.asm				\
+		graphics/graphics1.asm	\
+		src/rom7.asm				\
+		graphics/graphics2.asm
+
+OBJS = $(SRCS:.asm=.obj)
+
+
+# Tools
 
 C88_DIR := $(TOOLCHAIN_DIR)/c88tools/bin
+AS88 := $(WINE) $(C88_DIR)/as88.exe 
 C88 := $(WINE) $(C88_DIR)/c88.exe
 CC88 := $(WINE) $(C88_DIR)/cc88.exe
 LC88 := $(WINE) $(C88_DIR)/lc88.exe
+LK88 := $(WINE) $(C88_DIR)/lk88.exe 
 
-LDFLAGS += -Mc
-CFLAGS += -Mc
 
-LDFLAGS += -cl -v
+# Flags
+
 CFLAGS += -g -I$(TOOLCHAIN_DIR)/include
 LCFLAGS += -e -d pokemini -M
+LKFLAGS += $(OBJS)
+ASFLAGS += -v
 
-OBJS += $(C_SOURCES:.c=.obj)
-OBJS += $(ASM_SOURCES:.asm=.obj)
-COMPILED_ASM = $(C_SOURCES:.c=.c.asm)
 
-#$(shell mkdir -p $(C_BUILDDIR) $(ASM_BUILDDIR) $(DATA_ASM_BUILDDIR))
+# Steps
 
 .SUFFIXES:
 
@@ -69,17 +83,10 @@ flash: $(TARGET).min
 	$(LC88) $(LCFLAGS) -o $@ $<
 
 $(TARGET).out: $(OBJS)
-	$(CC88) $(LDFLAGS) -o $@ $^
-
-%.c.asm: %.c
-	$(C88) $(CFLAGS) -v -o $@ $<
+	$(LK88) $(LKFLAGS) -o $@
 
 %.obj: %.asm
 	$(CC88) $(CFLAGS) -Tc-v -c -v -o $@ $<
-
-%.obj: %.c
-	$(CC88) $(CFLAGS) -Tc-v -c -v -o $@ $<
-
 
 .PHONY: clean
 clean:
