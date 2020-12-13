@@ -1593,6 +1593,7 @@ loc_0x009AAD:
 ; ---------------------- ; 9ab9
 	ASCII "F<2"
 ; ---------------------- ; 9abb
+global loc_0x009ABE
 loc_0x009ABE:
 	PUSH IP ; 9abe
 	PUSH IY ; 9abf
@@ -1613,38 +1614,66 @@ loc_0x009ACF:
 	JRS loc_0x009AE0
 ; ---------------------- ; 9adb
 	ASCII "F<2"
-; ---------------------- ; 9add
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+;   Args:
+;      L: ???
+;     IY: addr
+;   Returns:
+;     SC: ???
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 loc_0x009AE0:
+
 	CARL loc_0x00AA46 ; 9ae0
+
 	JRS Z,loc_0x009B0A ; 9ae3
+
 	LD A,[1ADCh] ; 9ae5
 	LD B,#00h ; 9ae9
 	ADD IY,BA ; 9aeb
+
 	LD A,#64h ; 9aed
 	SUB A,[IY] ; 9aef
+
 	MLT ; 9af0
+
 	LD A,#40h ; 9af2
 	DIV ; 9af4
+
 	LD A,L ; 9af6
+
 	ADD A,[IY] ; 9af7
+
 	PUSH A ; 9af8
+
 	LD BA,#0064h ; 9afa
 	LD NB,#03h ; 9afd
 	CARL loc_0x018FFE ; 9b00
+
 	POP B ; 9b03
+
 	CP A,B ; 9b05
 	JRS Z,loc_0x009B0E ; 9b06
+
 	JRS C,loc_0x009B0E ; 9b08
+
 loc_0x009B0A:
+
 	AND SC,#0FEh ; 9b0a
+
 	JRS loc_0x009B10
-; ---------------------- ; 9b0c
+
 loc_0x009B0E:
+
 	OR SC,#01h ; 9b0e
+
 loc_0x009B10:
+
 	POP IY ; 9b10
 	POP IP ; 9b11
+
 	RET
+
 ; ---------------------- ; 9b12
 	DB 04h, 00h ; 9b13
 	ASCII "m" ; 9b15
@@ -1935,10 +1964,6 @@ loc_0x009CFC:
 	LD A,#0FFh ; 9cfc
 	LD [1AE8h],A ; 9cfe
 	LD BA,#8658h ; 9d02
-
-global loc_0x009D05
-loc_0x009D05:
-
 	CARL loc_0x00A97D ; 9d05
 	RET
 ; ---------------------- ; 9d08
@@ -3957,6 +3982,7 @@ loc_0x00ABD7:
 	OR SC,#01h ; 0abd7
 	RET
 ; ---------------------- ; 0abd9
+global loc_0x00ABDA
 loc_0x00ABDA:
 	LD B,#02h ; 0abda
 	LD A,[1671h] ; 0abdc
@@ -5703,6 +5729,7 @@ loc_0x00BF2E:
 loc_0x00BF31:
 	RET
 ; ---------------------- ; 0bf31
+global loc_0x00BF32
 loc_0x00BF32:
 	LD HL,#1B10h ; 0bf32
 	LD A,[1642h] ; 0bf35
@@ -5924,6 +5951,7 @@ loc_0x00C0F0:
 	LD [1B1Dh],A ; 0c0f2
 	RET
 ; ---------------------- ; 0c0f6
+global loc_0x00C0F7
 loc_0x00C0F7:
 	LD A,#13h ; 0c0f7
 	LD [1B1Dh],A ; 0c0f9

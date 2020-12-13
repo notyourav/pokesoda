@@ -256,7 +256,6 @@ loc_0x010169:
 	PUSH B ; 101e2
 
 	ADD A,#10h ; 101e4
-
 	LD B,#08h ; 101e6
 	LD L,#6Ah ; 101e8
 	LD H,#12h ; 101ea
@@ -2494,6 +2493,7 @@ loc_0x011C35:
 	ADD A,[1913h] ; 11c3b
 	JRS Z,loc_0x011C64 ; 11c3e
 
+	; do not draw if past the right edge of the screen
 	CP A,#70h ; 11c40
 	JRS NC,loc_0x011C64 ; 11c42
 
@@ -2505,6 +2505,7 @@ loc_0x011C35:
 	ADD A,[1914h] ; 11c48
 	JRS Z,loc_0x011C6C ; 11c4b
 
+	; do not draw if past the bottom edge of the screen
 	CP A,#50h ; 11c4d
 	JRS NC,loc_0x011C6C ; 11c4f
 
@@ -2533,7 +2534,6 @@ loc_0x011C63:
 
 	RET
 
-; ---------------------- ; 11c63
 loc_0x011C64:
 
 	LD A,[IY+03h] ; 11c64
@@ -2866,11 +2866,13 @@ loc_0x011EBF:
 global loc_0x011ECF
 loc_0x011ECF:
 
+	; ?
 	LD IX,#168Fh ; 11ecf
 	LD XP,#00h ; 11ed2
 
 	LD EP,#00h ; 11ed5
 
+	; sprite index?
 	LD B,#14h ; 11ed8
 
 loc_0x011EDA:
@@ -2911,12 +2913,16 @@ loc_0x011EFD:
 	JRS loc_0x011EFD
 
 ; ---------------------- ; 11f0f
-	DB 0CFh, 0E3h, 0CEh ; 11f11
-	ASCII "D" ; 11f14
-	DB 02h, 0CEh ; 11f15
-	ASCII "L" ; 11f17
-	DB 03h, 0F1h, 17h
-; ---------------------- ; 11f18
+loc_0x011F11:
+
+	LD BA,IY ; 11f11
+
+	LD [IX+02h],A ; 11f13
+	LD [IX+03h],B ; 11f16
+
+	JRS loc_0x011F31
+
+; ---------------------- ; 11f19
 loc_0x011F1B:
 
 	LD [IX+06h],A ; 11f1b
@@ -7207,6 +7213,7 @@ loc_0x013641:
 	ASCII "q" ; 14d39
 	DB 9Ah, 0FDh ; 14d3a
 	ASCII "J" ; 14d3c
+loc_0x014D3D:
 	DB 0B0h, 09h, 0CEh, 0D4h, 3Fh, 1Bh, 0F8h, 9Dh ; 14d3d
 	DB 99h, 26h, 0CEh, 01h, 00h, 0CCh, 0CAh, 8Eh ; 14d45
 	DB 99h, 9Dh, 99h ; 14d4d
@@ -7383,32 +7390,61 @@ loc_0x013641:
 	DB 99h, 0BEh ; 14fe5
 	ASCII "9" ; 14fe7
 	DB 1Bh, 0F8h, 0E6h, 0CFh, 0B0h, 0D6h, 0E0h ; 14fe8
-	ASCII "OO" ; 14fef
-	DB 97h, 80h, 0E6h, 0Ch, 0CEh, 40h, 0Ah, 01h ; 14ff1
-	DB 96h, 80h, 0E4h, 0Eh ; 14ff9
-	ASCII "8" ; 14ffd
-	DB 0F1h, 0Bh, 0CEh, 40h, 0Ah, 01h ; 14ffe
-	ASCII "2P" ; 15004
-	DB 0E4h, 03h, 0B0h ; 15006
-	ASCII "P" ; 15009
-	DB 0CEh, 0D4h, 12h, 1Bh, 0CEh ; 1500a
-	ASCII "D" ; 1500f
-	DB 0Ah, 93h, 0F8h, 0CEh, 0D0h, 0E9h, 1Ah, 0CEh ; 15010
-	DB 0C4h, 02h, 0F2h ; 15018
-	ASCII "Z" ; 1501b
-	DB 0D4h ; 1501c
-	ASCII "2" ; 1501d
-	DB 02h, 0EEh, 12h, 0Ah ; 1501e
-	ASCII "2" ; 15022
-	DB 07h, 0EEh ; 15023
-	ASCII "H" ; 15025
-	DB 13h, 0C4h, 03h, 00h, 0CEh, 0C4h, 03h, 0F2h ; 15026
-	DB 0CFh, 0BFh, 00h, 0B1h, 00h, 0A6h, 0A2h, 0C6h ; 1502e
-	ASCII "BP" ; 15036
-	DB 0CEh, 0C6h, 01h, 0CFh, 40h, 0CFh, 0D3h, 0AAh ; 15038
-	DB 0AEh, 0F8h ; 15040
-	ASCII "zPzP" ; 15042
-	DB 88h ; 15046
+	ASCII "O"
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Handle pet walking
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+loc_0x014FF0:
+	LD B,[IY] ; 14ff0
+	BIT B,#80h ; 14ff1
+	JRS Z,loc_0x015000 ; 14ff3
+	LD A,[IX+0Ah] ; 14ff5
+	ADD A,B ; 14ff8
+	BIT A,#80h ; 14ff9
+	JRS C,loc_0x01500A ; 14ffb
+	XOR A,A ; 14ffd
+	JRS loc_0x01500A
+; ---------------------- ; 14ffe
+loc_0x015000:
+	LD A,[IX+0Ah] ; 15000
+	ADD A,B ; 15003
+	CP A,#50h ; 15004
+	JRS C,loc_0x01500A ; 15006
+	LD A,#50h ; 15008
+loc_0x01500A:
+	LD [1B12h],A ; 1500a
+	LD [IX+0Ah],A ; 1500e
+	INC IY ; 15011
+	RET
+; ---------------------- ; 15012
+loc_0x015013:
+	LD A,[1AE9h] ; 15013
+	LD NB,#02h ; 15017
+	CARL loc_0x012476 ; 1501a
+	CP A,#02h ; 1501d
+	JRL Z,loc_0x015A33 ; 1501f
+	CP A,#07h ; 15022
+	JRL Z,loc_0x01636E ; 15024
+	LD BA,#0003h ; 15027
+	LD NB,#03h ; 1502a
+	CARL loc_0x018FFE ; 1502d
+	ADD A,A ; 15030
+	LD B,#00h ; 15031
+	PUSH IP ; 15033
+	PUSH IX ; 15034
+	LD IX,#5042h ; 15035
+	LD XP,#01h ; 15038
+	ADD IX,BA ; 1503b
+	LD IY,[IX] ; 1503d
+	POP IX ; 1503f
+	POP IP ; 15040
+	RET
+; ---------------------- ; 15041
+	DB 7Ah ; 15042
+	DB 50h ; 15043
+	DB 7Ah ; 15044
+	DB 50h, 88h ; 15045
 	ASCII "P" ; 15047
 	DB 0B0h ; 15048
 	ASCII "P" ; 15049
@@ -7915,176 +7951,357 @@ loc_0x013641:
 	DB 0BEh ; 1568e
 	ASCII "7" ; 1568f
 	DB 1Bh, 0F8h, 8Eh, 0D6h, 8Dh, 0D7h ; 15690
-	ASCII "zP" ; 15696
-	DB 0B9h ; 15698
-	ASCII "7" ; 15699
-	DB 1Bh, 0C1h, 02h, 00h, 0CFh, 0C1h, 0D5h, 0A6h ; 1569a
-	ASCII "T" ; 156a2
-	DB 0E4h, 06h, 0D5h ; 156a3
-	ASCII "7V" ; 156a6
-	DB 0E4h, 04h, 9Ch, 0FEh, 0F8h, 9Dh, 01h, 0F8h ; 156a8
-	DB 0CEh, 0D0h ; 156b0
-	ASCII "C" ; 156b2
-	DB 16h, 96h, 01h, 0E6h, 1Eh, 0F2h, 02h, 01h ; 156b3
-	DB 0CEh, 0D0h, 0B6h, 1Ah, 20h, 0E6h, 07h, 0B0h ; 156bb
-	DB 01h, 0CEh, 0D4h, 0FAh, 14h, 0B8h, 10h, 1Bh ; 156c3
-	DB 0BCh, 1Eh, 1Bh, 0C4h, 0A5h ; 156cb
-	ASCII "O" ; 156d0
-	DB 0F2h, 7Ch, 0A2h, 0F8h, 0F2h, 0C1h, 0FFh, 0E6h ; 156d1
-	DB 07h, 0CEh, 0C4h, 01h, 0F2h ; 156d9
-	ASCII "S" ; 156de
-	DB 0E8h, 0F8h, 0CEh, 0D0h ; 156df
-	ASCII "C" ; 156e3
-	DB 16h, 96h, 01h, 0E6h, 1Dh, 0F2h, 0D1h, 00h ; 156e4
-	DB 0CEh, 0D0h, 0B6h, 1Ah, 20h, 0E6h, 07h, 0B0h ; 156ec
-	DB 01h, 0CEh, 0D4h, 0FAh, 14h, 0B8h, 10h, 1Bh ; 156f4
-	DB 0BCh, 1Eh, 1Bh, 0B0h, 01h, 0CEh ; 156fc
-	ASCII "D" ; 15702
-	DB 18h, 0F8h ; 15703
-	ASCII "8" ; 15705
-	DB 0CEh ; 15706
-	ASCII "D" ; 15707
-	DB 18h, 0F2h, 8Dh, 0FFh, 0E6h, 07h, 0CEh, 0C4h ; 15708
-	DB 01h, 0F2h, 1Fh, 0E8h, 0F8h, 0F2h, 0DBh, 01h ; 15710
-	DB 0F1h, 22h, 0B9h ; 15718
-	ASCII "9" ; 1571b
-	DB 1Bh, 0C1h, 02h, 00h, 0CFh, 0C0h, 0D4h, 0DDh ; 1571c
-	ASCII "O" ; 15724
-	DB 0E4h, 15h, 0D4h, 0E0h ; 15725
-	ASCII "O" ; 15729
-	DB 0E4h, 25h, 0A3h, 0CEh, 0C4h, 02h, 0F2h, 0E1h ; 1572a
-	DB 0F8h, 0CFh, 0E3h, 0ABh, 0F2h, 17h, 0A2h, 0F1h ; 15732
-	DB 16h, 0F2h, 0FEh, 00h, 0D5h, 00h, 00h, 0E7h ; 1573a
-	DB 09h, 0F2h, 0B9h, 00h, 0D5h, 00h, 00h, 0E6h ; 15742
-	DB 06h, 0CFh, 0E1h, 0F2h, 00h, 0A2h, 0F8h, 0F2h ; 1574a
-	DB 9Fh, 01h, 0F1h, 22h, 0B9h ; 15752
-	ASCII "9" ; 15757
-	DB 1Bh, 0C1h, 02h, 00h, 0CFh, 0C0h, 0D4h, 0DDh ; 15758
-	ASCII "O" ; 15760
-	DB 0E4h, 15h, 0D4h, 0E0h ; 15761
-	ASCII "O" ; 15765
-	DB 0E4h, 25h, 0A3h, 0CEh, 0C4h, 02h, 0F2h, 0A5h ; 15766
-	DB 0F8h, 0CFh, 0E3h, 0ABh, 0F2h, 0DBh, 0A1h, 0F1h ; 1576e
-	DB 16h, 0F2h, 0C2h, 00h, 0D5h, 00h, 00h, 0E7h ; 15776
-	DB 09h, 0F2h, 9Dh, 00h, 0D5h, 00h, 00h, 0E6h ; 1577e
-	DB 06h, 0CFh, 0E1h, 0F2h, 0C4h, 0A1h, 0F8h, 0CEh ; 15786
-	DB 0D0h ; 1578e
-	ASCII "C" ; 1578f
-	DB 16h, 96h, 01h, 0E6h, 07h, 0C4h, 84h ; 15790
-	ASCII "S" ; 15797
-	DB 0F2h, 0B5h, 0A1h, 0F8h, 0CEh, 0D0h, 11h, 1Bh ; 15798
-	DB 02h, 04h, 0CEh ; 157a0
-	ASCII "0" ; 157a3
-	DB 0Eh, 0E4h, 07h, 0C4h ; 157a4
-	ASCII "VV" ; 157a8
-	DB 0F2h, 0A3h, 0A1h, 0F8h, 0CEh, 40h, 0Eh ; 157aa
-	ASCII "2," ; 157b1
-	DB 0E4h, 07h, 0C4h ; 157b3
-	ASCII "qV" ; 157b6
-	DB 0F2h, 95h, 0A1h, 0F8h, 0CEh, 0D0h, 3Fh, 1Bh ; 157b8
-	DB 28h, 0E7h, 24h, 0C5h, 40h, 1Bh ; 157c0
-	ASCII "E(" ; 157c6
-	DB 0E6h, 04h, 8Eh, 0F1h, 1Ah, 0B5h, 03h, 0F2h ; 157c8
-	ASCII "l" ; 157d0
-	DB 0F5h, 0F2h, 0A8h, 0D7h, 0CEh, 0C4h, 01h, 0F2h ; 157d1
-	DB 0E4h, 0C2h, 0E7h, 0Ah, 0F2h, 1Ch, 0D8h, 0CEh ; 157d9
-	DB 0C4h, 01h, 0F2h, 04h, 0E9h, 0F8h, 0CEh, 0D0h ; 157e1
-	DB 0D7h, 1Ah, 0B1h, 00h, 0A6h, 0A3h, 0C7h, 0FBh ; 157e9
-	ASCII "W" ; 157f1
-	DB 0CEh, 0C7h, 01h, 0CFh ; 157f2
-	ASCII "BG" ; 157f6
-	DB 0ABh, 0AEh, 0F8h, 0Ch, 0Fh, 0Dh, 0CEh, 0D0h ; 157f8
-	DB 11h, 1Bh ; 15800
-	ASCII "2$" ; 15802
-	DB 0E4h, 15h, 0F2h, 0DFh, 0FFh, 0CEh, 0D1h, 12h ; 15804
-	DB 1Bh, 01h ; 1580c
-	ASCII "H" ; 1580e
-	DB 0CEh, 0D0h, 10h, 1Bh ; 1580f
-	ASCII "1" ; 15813
-	DB 0E4h, 05h, 0F2h, 0C4h, 00h, 0F8h, 0C5h, 00h ; 15814
-	DB 00h, 0F8h, 0CEh, 0D0h, 11h, 1Bh ; 1581c
-	ASCII "2$" ; 15822
-	DB 0E4h, 12h, 0CEh, 0D0h, 10h, 1Bh, 02h, 09h ; 15824
-	DB 0CEh, 0D1h, 12h, 1Bh ; 1582c
-	ASCII "1" ; 15830
-	DB 0E5h, 05h, 0F2h, 91h, 00h, 0F8h, 0C5h, 00h ; 15831
-	DB 00h, 0F8h, 0CEh, 0D0h, 10h, 1Bh, 02h, 09h ; 15839
-	ASCII "H" ; 15841
-	DB 0CEh, 0D0h, 12h, 1Bh ; 15842
-	ASCII "1" ; 15846
-	DB 0E4h, 26h, 12h, 02h, 0E5h, 02h ; 15847
-	ASCII "81" ; 1584d
-	DB 0E5h ; 1584f
-	ASCII "r" ; 15850
-	DB 0CEh, 0D0h, 11h, 1Bh, 02h, 04h ; 15851
-	ASCII "2$" ; 15857
-	DB 0E4h ; 15859
-	ASCII "h" ; 1585a
-	DB 0C5h, 0FFh ; 1585b
-	ASCII "T2," ; 1585d
-	DB 0E4h ; 15860
-	ASCII "U" ; 15861
-	DB 0C5h, 0A7h ; 15862
-	ASCII "T24" ; 15864
-	DB 0E4h ; 15867
-	ASCII "N" ; 15868
-	DB 0C5h, 13h ; 15869
-	ASCII "U" ; 1586b
-	DB 0F1h ; 1586c
-	ASCII "I" ; 1586d
-	DB 0F2h ; 1586e
-	ASCII "w" ; 1586f
-	DB 0FFh, 0CEh, 0D1h, 12h, 1Bh, 01h, 0CEh, 0D1h ; 15870
-	DB 10h, 1Bh ; 15878
-	ASCII "1" ; 1587a
-	DB 0E5h, 23h, 02h, 03h ; 1587b
-	ASCII "1" ; 1587f
-	DB 0E4h ; 15880
-	ASCII "A" ; 15881
-	DB 0CEh, 0D0h, 11h, 1Bh, 02h, 04h ; 15882
-	ASCII "2$" ; 15888
-	DB 0E4h ; 1588a
-	ASCII "7" ; 1588b
-	DB 0C5h, 27h ; 1588c
-	ASCII "U2," ; 1588e
-	DB 0E4h, 24h, 0C5h, 0BBh ; 15891
-	ASCII "T24" ; 15895
-	DB 0E4h, 1Dh, 0C5h ; 15898
-	ASCII "kU" ; 1589b
-	DB 0F1h, 18h, 0CEh, 0D0h, 11h, 1Bh, 02h, 04h ; 1589d
-	DB 0C5h ; 158a5
-	ASCII "8V2$" ; 158a6
-	DB 0E4h, 0Bh, 0C5h, 0AFh ; 158aa
-	ASCII "U24" ; 158ae
-	DB 0E4h, 04h, 0C5h, 0F3h ; 158b1
-	ASCII "U" ; 158b5
-	DB 0C4h ; 158b6
-	ASCII "q" ; 158b7
-	DB 9Ah, 0F2h, 8Dh, 0A0h, 0B0h, 02h, 0CEh ; 158b8
-	ASCII "D" ; 158bf
-	DB 1Fh, 0F8h, 0C5h, 00h, 00h, 0F8h, 0C5h ; 158c0
-	ASCII "JQ" ; 158c7
-	DB 0CEh, 0D0h, 1Fh, 1Bh ; 158c9
-	ASCII "2," ; 158cd
-	DB 0E4h, 0Bh, 0C5h, 0D8h ; 158cf
-	ASCII "P24" ; 158d3
-	DB 0E4h, 04h, 0C5h, 0BCh ; 158d6
-	ASCII "Q" ; 158da
-	DB 0F8h, 0C5h, 0A0h ; 158db
-	ASCII "R" ; 158de
-	DB 0CEh, 0D0h, 1Fh, 1Bh ; 158df
-	ASCII "2," ; 158e3
-	DB 0E4h, 0Bh, 0C5h, 2Eh ; 158e5
-	ASCII "R24" ; 158e9
-	DB 0E4h, 04h, 0C5h, 12h ; 158ec
-	ASCII "S" ; 158f0
-	DB 0F8h, 0CEh, 0D0h ; 158f1
-	ASCII "C" ; 158f4
-	DB 16h, 96h, 01h, 0E7h, 02h, 0FAh, 0CEh, 0D1h ; 158f5
-	DB 1Eh, 1Bh, 0CEh, 0D0h, 12h, 1Bh ; 158fd
-	ASCII "1" ; 15903
-	DB 0E4h, 06h, 0F2h, 0BEh, 0FFh, 0F1h, 04h, 0F2h ; 15904
-	DB 0CFh, 0FFh, 0CFh, 0E1h, 0F2h, 3Dh, 0A0h, 0F8h ; 1590c
+	ASCII "zP"
+; ---------------------- ; 15696
+loc_0x015698:
+	LD HL,[1B37h] ; 15698
+	ADD HL,#0002h ; 1569b
+	LD HL,[HL] ; 1569e
+	CP HL,#54A6h ; 156a0
+	JRS C,loc_0x0156AA ; 156a3
+	CP HL,#5637h ; 156a5
+	JRS C,loc_0x0156AD ; 156a8
+loc_0x0156AA:
+	AND SC,#0FEh ; 156aa
+	RET
+; ---------------------- ; 156ac
+loc_0x0156AD:
+	OR SC,#01h ; 156ad
+	RET
+; ---------------------- ; 156af
+loc_0x0156B0:
+	LD A,[1643h] ; 156b0
+	BIT A,#01h ; 156b4
+	JRS Z,loc_0x0156D5 ; 156b6
+	CARL loc_0x0157BC ; 156b8
+	LD A,[1AB6h] ; 156bb
+	AND A,A ; 156bf
+	JRS Z,loc_0x0156C8 ; 156c0
+	LD A,#01h ; 156c2
+	LD [14FAh],A ; 156c4
+loc_0x0156C8:
+	LD BA,[1B10h] ; 156c8
+	LD [1B1Eh],BA ; 156cb
+	LD BA,#4FA5h ; 156ce
+	CARL loc_0x00794F ; 156d1
+	RET
+; ---------------------- ; 156d4
+loc_0x0156D5:
+	CARL loc_0x015698 ; 156d5
+	JRS Z,loc_0x0156E0 ; 156d8
+	LD NB,#01h ; 156da
+	CARL loc_0x00BF32 ; 156dd
+loc_0x0156E0:
+	RET
+; ---------------------- ; 156e0
+loc_0x0156E1:
+	LD A,[1643h] ; 156e1
+	BIT A,#01h ; 156e5
+	JRS Z,loc_0x015705 ; 156e7
+	CARL loc_0x0157BC ; 156e9
+	LD A,[1AB6h] ; 156ec
+	AND A,A ; 156f0
+	JRS Z,loc_0x0156F9 ; 156f1
+	LD A,#01h ; 156f3
+	LD [14FAh],A ; 156f5
+loc_0x0156F9:
+	LD BA,[1B10h] ; 156f9
+	LD [1B1Eh],BA ; 156fc
+	LD A,#01h ; 156ff
+	LD [IX+18h],A ; 15701
+	RET
+; ---------------------- ; 15704
+loc_0x015705:
+	XOR A,A ; 15705
+	LD [IX+18h],A ; 15706
+	CARL loc_0x015698 ; 15709
+	JRS Z,loc_0x015714 ; 1570c
+	LD NB,#01h ; 1570e
+	CARL loc_0x00BF32 ; 15711
+loc_0x015714:
+	RET
+; ---------------------- ; 15714
+loc_0x015715:
+	CARL loc_0x0158F2 ; 15715
+	JRS loc_0x01573B
+; ---------------------- ; 15718
+	LD HL,[1B39h] ; 1571a
+	ADD HL,#0002h ; 1571d
+	LD BA,[HL] ; 15720
+	CP BA,#4FDDh ; 15722
+	JRS C,loc_0x01573B ; 15725
+	CP BA,#4FE0h ; 15727
+	JRS C,loc_0x015750 ; 1572a
+	PUSH IY ; 1572c
+	LD NB,#02h ; 1572d
+	CARL loc_0x015013 ; 15730
+	LD BA,IY ; 15733
+	POP IY ; 15735
+	CARL loc_0x00794F ; 15736
+	JRS loc_0x015750
+; ---------------------- ; 15739
+loc_0x01573B:
+	CARL loc_0x01583B ; 1573b
+	CP HL,#0000h ; 1573e
+	JRS NZ,loc_0x01574B ; 15741
+	CARL loc_0x0157FE ; 15743
+	CP HL,#0000h ; 15746
+	JRS Z,loc_0x015750 ; 15749
+loc_0x01574B:
+	LD BA,HL ; 1574b
+	CARL loc_0x00794F ; 1574d
+loc_0x015750:
+	RET
+; ---------------------- ; 15750
+loc_0x015751:
+	CARL loc_0x0158F2 ; 15751
+	JRS loc_0x015777
+; ---------------------- ; 15754
+loc_0x015756:
+	LD HL,[1B39h] ; 15756
+	ADD HL,#0002h ; 15759
+	LD BA,[HL] ; 1575c
+	CP BA,#4FDDh ; 1575e
+	JRS C,loc_0x015777 ; 15761
+	CP BA,#4FE0h ; 15763
+	JRS C,loc_0x01578C ; 15766
+	PUSH IY ; 15768
+	LD NB,#02h ; 15769
+	CARL loc_0x015013 ; 1576c
+	LD BA,IY ; 1576f
+	POP IY ; 15771
+	CARL loc_0x00794F ; 15772
+	JRS loc_0x01578C
+; ---------------------- ; 15775
+loc_0x015777:
+	CARL loc_0x01583B ; 15777
+	CP HL,#0000h ; 1577a
+	JRS NZ,loc_0x015787 ; 1577d
+	CARL loc_0x01581E ; 1577f
+	CP HL,#0000h ; 15782
+	JRS Z,loc_0x01578C ; 15785
+loc_0x015787:
+	LD BA,HL ; 15787
+	CARL loc_0x00794F ; 15789
+loc_0x01578C:
+	RET
+; ---------------------- ; 1578c
+loc_0x01578D:
+	LD A,[1643h] ; 1578d
+	BIT A,#01h ; 15791
+	JRS Z,loc_0x01579B ; 15793
+	LD BA,#5384h ; 15795
+	CARL loc_0x00794F ; 15798
+loc_0x01579B:
+	RET
+; ---------------------- ; 1579b
+loc_0x01579C:
+	LD A,[1B11h] ; 1579c
+	ADD A,#04h ; 157a0
+	CP A,[IX+0Eh] ; 157a2
+	JRS C,loc_0x0157AD ; 157a5
+	LD BA,#5656h ; 157a7
+	CARL loc_0x00794F ; 157aa
+loc_0x0157AD:
+	RET
+; ---------------------- ; 157ad
+loc_0x0157AE:
+	LD A,[IX+0Eh] ; 157ae
+	CP A,#2Ch ; 157b1
+	JRS C,loc_0x0157BB ; 157b3
+	LD BA,#5671h ; 157b5
+	CARL loc_0x00794F ; 157b8
+loc_0x0157BB:
+	RET
+; ---------------------- ; 157bb
+loc_0x0157BC:
+	LD A,[1B3Fh] ; 157bc
+	OR A,A ; 157c0
+	JRS NZ,loc_0x0157E6 ; 157c1
+	LD HL,#1B40h ; 157c3
+	LD A,[HL] ; 157c6
+	OR A,A ; 157c7
+	JRS Z,loc_0x0157CD ; 157c8
+	DEC [HL] ; 157ca
+	JRS loc_0x0157E6
+; ---------------------- ; 157cb
+loc_0x0157CD:
+	LD [HL],#03h ; 157cd
+	CARL loc_0x014D3D ; 157cf
+	CARL loc_0x012F7C ; 157d2
+	LD NB,#01h ; 157d5
+	CARL loc_0x009ABE ; 157d8
+	JRS NZ,loc_0x0157E6 ; 157db
+	CARL loc_0x012FFB ; 157dd
+	LD NB,#01h ; 157e0
+	CARL loc_0x00C0E9 ; 157e3
+loc_0x0157E6:
+	RET
+; ---------------------- ; 157e6
+loc_0x0157E7:
+	LD A,[1AD7h] ; 157e7
+	LD B,#00h ; 157eb
+	PUSH IP ; 157ed
+	PUSH IY ; 157ee
+	LD IY,#57FBh ; 157ef
+	LD YP,#01h ; 157f2
+	ADD IY,BA ; 157f5
+	LD A,[IY] ; 157f7
+	POP IY ; 157f8
+	POP IP ; 157f9
+	RET
+; ---------------------- ; 157fa
+	DB 0Ch, 0Fh, 0Dh
+; ---------------------- ; 157fb
+loc_0x0157FE:
+	LD A,[1B11h] ; 157fe
+	CP A,#24h ; 15802
+	JRS C,loc_0x01581A ; 15804
+	CARL loc_0x0157E7 ; 15806
+	LD B,[1B12h] ; 15809
+	ADD A,B ; 1580d
+	LD B,A ; 1580e
+	LD A,[1B10h] ; 1580f
+	CP A,B ; 15813
+	JRS C,loc_0x01581A ; 15814
+	CARL loc_0x0158DC ; 15816
+	RET
+; ---------------------- ; 15819
+loc_0x01581A:
+	LD HL,#0000h ; 1581a
+	RET
+; ---------------------- ; 1581d
+loc_0x01581E:
+	LD A,[1B11h] ; 1581e
+	CP A,#24h ; 15822
+	JRS C,loc_0x015837 ; 15824
+	LD A,[1B10h] ; 15826
+	ADD A,#09h ; 1582a
+	LD B,[1B12h] ; 1582c
+	CP A,B ; 15830
+	JRS NC,loc_0x015837 ; 15831
+	CARL loc_0x0158C6 ; 15833
+	RET
+; ---------------------- ; 15836
+loc_0x015837:
+	LD HL,#0000h ; 15837
+	RET
+; ---------------------- ; 1583a
+loc_0x01583B:
+	LD A,[1B10h] ; 1583b
+	ADD A,#09h ; 1583f
+	LD B,A ; 15841
+	LD A,[1B12h] ; 15842
+	CP A,B ; 15846
+	JRS C,loc_0x01586E ; 15847
+	SUB A,#02h ; 15849
+	JRS NC,loc_0x01584E ; 1584b
+	XOR A,A ; 1584d
+loc_0x01584E:
+	CP A,B ; 1584e
+	JRS NC,loc_0x0158C2 ; 1584f
+	LD A,[1B11h] ; 15851
+	ADD A,#04h ; 15855
+	CP A,#24h ; 15857
+	JRS C,loc_0x0158C2 ; 15859
+	LD HL,#54FFh ; 1585b
+	CP A,#2Ch ; 1585e
+	JRS C,loc_0x0158B6 ; 15860
+	LD HL,#54A7h ; 15862
+	CP A,#34h ; 15865
+	JRS C,loc_0x0158B6 ; 15867
+	LD HL,#5513h ; 15869
+	JRS loc_0x0158B6
+; ---------------------- ; 1586c
+loc_0x01586E:
+	CARL loc_0x0157E7 ; 1586e
+	LD B,[1B12h] ; 15871
+	ADD A,B ; 15875
+	LD B,[1B10h] ; 15876
+	CP A,B ; 1587a
+	JRS NC,loc_0x01589F ; 1587b
+	ADD A,#03h ; 1587d
+	CP A,B ; 1587f
+	JRS C,loc_0x0158C2 ; 15880
+	LD A,[1B11h] ; 15882
+	ADD A,#04h ; 15886
+	CP A,#24h ; 15888
+	JRS C,loc_0x0158C2 ; 1588a
+	LD HL,#5527h ; 1588c
+	CP A,#2Ch ; 1588f
+	JRS C,loc_0x0158B6 ; 15891
+	LD HL,#54BBh ; 15893
+	CP A,#34h ; 15896
+	JRS C,loc_0x0158B6 ; 15898
+	LD HL,#556Bh ; 1589a
+	JRS loc_0x0158B6
+; ---------------------- ; 1589d
+loc_0x01589F:
+	LD A,[1B11h] ; 1589f
+	ADD A,#04h ; 158a3
+	LD HL,#5638h ; 158a5
+	CP A,#24h ; 158a8
+	JRS C,loc_0x0158B6 ; 158aa
+	LD HL,#55AFh ; 158ac
+	CP A,#34h ; 158af
+	JRS C,loc_0x0158B6 ; 158b1
+	LD HL,#55F3h ; 158b3
+loc_0x0158B6:
+	LD BA,#9A71h ; 158b6
+	CARL loc_0x007948 ; 158b9
+	LD A,#02h ; 158bc
+	LD [IX+1Fh],A ; 158be
+	RET
+; ---------------------- ; 158c1
+loc_0x0158C2:
+	LD HL,#0000h ; 158c2
+	RET
+; ---------------------- ; 158c5
+loc_0x0158C6:
+	LD HL,#514Ah ; 158c6
+	LD A,[1B1Fh] ; 158c9
+	CP A,#2Ch ; 158cd
+	JRS C,loc_0x0158DB ; 158cf
+	LD HL,#50D8h ; 158d1
+	CP A,#34h ; 158d4
+	JRS C,loc_0x0158DB ; 158d6
+	LD HL,#51BCh ; 158d8
+loc_0x0158DB:
+	RET
+; ---------------------- ; 158db
+loc_0x0158DC:
+	LD HL,#52A0h ; 158dc
+	LD A,[1B1Fh] ; 158df
+	CP A,#2Ch ; 158e3
+	JRS C,loc_0x0158F1 ; 158e5
+	LD HL,#522Eh ; 158e7
+	CP A,#34h ; 158ea
+	JRS C,loc_0x0158F1 ; 158ec
+	LD HL,#5312h ; 158ee
+loc_0x0158F1:
+	RET
+; ---------------------- ; 158f1
+loc_0x0158F2:
+	LD A,[1643h] ; 158f2
+	BIT A,#01h ; 158f6
+	JRS NZ,loc_0x0158FB ; 158f8
+	RETS
+; ---------------------- ; 158fa
+loc_0x0158FB:
+	LD B,[1B1Eh] ; 158fb
+	LD A,[1B12h] ; 158ff
+	CP A,B ; 15903
+	JRS C,loc_0x01590B ; 15904
+	CARL loc_0x0158C6 ; 15906
+	JRS loc_0x01590E
+; ---------------------- ; 15909
+loc_0x01590B:
+	CARL loc_0x0158DC ; 1590b
+loc_0x01590E:
+	LD BA,HL ; 1590e
+	CARL loc_0x00794F ; 15910
+	RET
+; ---------------------- ; 15913
 	DB 9Dh, 99h ; 15914
 	ASCII "q" ; 15916
 	DB 9Ah, 01h, 00h, 0F8h, 0CDh, 01h, 00h, 08h ; 15917
@@ -8111,48 +8328,103 @@ loc_0x013641:
 	DB 0CDh, 01h, 00h ; 1596d
 	ASCII "D" ; 15970
 	DB 0CDh, 0C1h, 99h ; 15971
-	ASCII "jY" ; 15974
-	DB 0CEh, 0D0h, 3Fh, 1Bh, 28h, 0E7h, 11h, 0F2h ; 15976
-	DB 0BEh, 0F3h, 0F0h, 0Dh, 0E7h, 0Ah, 0F2h, 7Fh ; 1597e
-	DB 0D6h, 0CEh, 0C4h, 01h, 0F2h, 5Dh, 0E7h, 0F8h ; 15986
-	DB 0CEh, 40h, 0Eh, 02h, 02h, 0CEh, 0D1h, 13h ; 1598e
-	DB 1Bh ; 15996
-	ASCII "1" ; 15997
-	DB 0E5h, 1Ah, 02h, 05h ; 15998
-	ASCII "1" ; 1599c
-	DB 0E4h, 15h, 0CEh, 40h, 0Ah, 02h, 02h, 0CEh ; 1599d
-	DB 0D1h, 12h, 1Bh ; 159a5
-	ASCII "1" ; 159a8
-	DB 0E5h, 09h, 02h, 0Bh ; 159a9
-	ASCII "1" ; 159ad
-	DB 0E4h, 04h, 9Dh, 01h, 0F8h, 9Ch, 0FEh, 0F8h ; 159ae
-	DB 0CEh, 0D0h ; 159b6
-	ASCII "C" ; 159b8
-	DB 16h, 96h, 01h, 0E6h, 1Bh, 0CEh, 0D0h, 0B6h ; 159b9
-	DB 1Ah, 20h, 0E6h, 07h, 0B0h, 1Bh, 0CEh, 0D4h ; 159c1
-	DB 0FAh, 14h, 0F2h, 0AFh, 0D5h, 0F2h ; 159c9
-	ASCII "p" ; 159cf
-	DB 0CFh, 0C4h, 14h ; 159d0
-	ASCII "Y" ; 159d3
-	DB 0F2h ; 159d4
-	ASCII "y" ; 159d5
-	DB 9Fh, 0F8h, 0CEh, 0D0h ; 159d6
-	ASCII "B" ; 159da
-	DB 16h, 96h, 10h, 0E7h, 0Eh, 96h, 08h, 0E6h ; 159db
-	DB 15h, 0CEh, 40h, 0Eh, 28h, 0E6h, 0Fh, 88h ; 159e3
-	DB 0F1h, 09h, 0CEh, 40h, 0Eh ; 159eb
-	ASCII "2)" ; 159f0
-	DB 0E5h, 05h, 80h, 0CEh ; 159f2
-	ASCII "D" ; 159f6
-	DB 0Eh, 0CEh, 0D0h ; 159f7
-	ASCII "B" ; 159fa
-	DB 16h, 96h, 40h, 0E7h, 0Eh, 96h, 20h, 0E6h ; 159fb
-	DB 15h, 0CEh, 40h, 0Ah, 28h, 0E6h, 0Fh, 88h ; 15a03
-	DB 0F1h, 09h, 0CEh, 40h, 0Ah ; 15a0b
-	ASCII "2A" ; 15a10
-	DB 0E5h, 05h, 80h, 0CEh ; 15a12
-	ASCII "D" ; 15a16
-	DB 0Ah, 0F8h, 0BEh ; 15a17
+	ASCII "jY"
+; ---------------------- ; 15974
+loc_0x015976:
+	LD A,[1B3Fh] ; 15976
+	OR A,A ; 1597a
+	JRS NZ,loc_0x01598D ; 1597b
+	CARL loc_0x014D3D ; 1597d
+	CARS loc_0x01598E ; 15980
+	JRS NZ,loc_0x01598D ; 15982
+	CARL loc_0x013005 ; 15984
+	LD NB,#01h ; 15987
+	CARL loc_0x00C0E9 ; 1598a
+loc_0x01598D:
+	RET
+; ---------------------- ; 1598d
+loc_0x01598E:
+	LD A,[IX+0Eh] ; 1598e
+	ADD A,#02h ; 15991
+	LD B,[1B13h] ; 15993
+	CP A,B ; 15997
+	JRS NC,loc_0x0159B3 ; 15998
+	ADD A,#05h ; 1599a
+	CP A,B ; 1599c
+	JRS C,loc_0x0159B3 ; 1599d
+	LD A,[IX+0Ah] ; 1599f
+	ADD A,#02h ; 159a2
+	LD B,[1B12h] ; 159a4
+	CP A,B ; 159a8
+	JRS NC,loc_0x0159B3 ; 159a9
+	ADD A,#0Bh ; 159ab
+	CP A,B ; 159ad
+	JRS C,loc_0x0159B3 ; 159ae
+	OR SC,#01h ; 159b0
+	RET
+; ---------------------- ; 159b2
+loc_0x0159B3:
+	AND SC,#0FEh ; 159b3
+	RET
+; ---------------------- ; 159b5
+loc_0x0159B6:
+	LD A,[1643h] ; 159b6
+	BIT A,#01h ; 159ba
+	JRS Z,loc_0x0159D8 ; 159bc
+	LD A,[1AB6h] ; 159be
+	AND A,A ; 159c2
+	JRS Z,loc_0x0159CB ; 159c3
+	LD A,#1Bh ; 159c5
+	LD [14FAh],A ; 159c7
+loc_0x0159CB:
+	CARL loc_0x012F7C ; 159cb
+	CARL loc_0x012940 ; 159ce
+	LD BA,#5914h ; 159d1
+	CARL loc_0x00794F ; 159d4
+	RET
+; ---------------------- ; 159d7
+loc_0x0159D8:
+	LD A,[1642h] ; 159d8
+	BIT A,#10h ; 159dc
+	JRS NZ,loc_0x0159ED ; 159de
+	BIT A,#08h ; 159e0
+	JRS Z,loc_0x0159F8 ; 159e2
+	LD A,[IX+0Eh] ; 159e4
+	OR A,A ; 159e7
+	JRS Z,loc_0x0159F8 ; 159e8
+	DEC A ; 159ea
+	JRS loc_0x0159F5
+; ---------------------- ; 159eb
+loc_0x0159ED:
+	LD A,[IX+0Eh] ; 159ed
+	CP A,#29h ; 159f0
+	JRS NC,loc_0x0159F8 ; 159f2
+	INC A ; 159f4
+loc_0x0159F5:
+	LD [IX+0Eh],A ; 159f5
+loc_0x0159F8:
+	LD A,[1642h] ; 159f8
+	BIT A,#40h ; 159fc
+	JRS NZ,loc_0x015A0D ; 159fe
+	BIT A,#20h ; 15a00
+	JRS Z,loc_0x015A18 ; 15a02
+	LD A,[IX+0Ah] ; 15a04
+	OR A,A ; 15a07
+	JRS Z,loc_0x015A18 ; 15a08
+	DEC A ; 15a0a
+	JRS loc_0x015A15
+; ---------------------- ; 15a0b
+loc_0x015A0D:
+	LD A,[IX+0Ah] ; 15a0d
+	CP A,#41h ; 15a10
+	JRS NC,loc_0x015A18 ; 15a12
+	INC A ; 15a14
+loc_0x015A15:
+	LD [IX+0Ah],A ; 15a15
+loc_0x015A18:
+	RET
+; ---------------------- ; 15a18
+	DB 0BEh ; 15a19
 	ASCII "9" ; 15a1a
 	DB 1Bh, 0F8h, 19h, 0DAh, 0B6h, 0D9h ; 15a1b
 	ASCII "fY" ; 15a21
@@ -8163,40 +8435,78 @@ loc_0x013641:
 	DB 9Dh, 99h ; 15a2b
 	ASCII "c" ; 15a2d
 	DB 0DAh, 0C1h, 99h ; 15a2e
-	ASCII "2R" ; 15a31
-	DB 0B0h, 0Ch, 0CEh ; 15a33
-	ASCII "D" ; 15a36
-	DB 18h, 0C4h, 07h, 00h, 0CEh, 0C4h, 03h, 0F2h ; 15a37
-	DB 0BEh, 0B5h, 00h, 0B1h, 00h, 0A6h, 0A2h, 0C6h ; 15a3f
-	ASCII "SZ" ; 15a47
-	DB 0CEh, 0C6h, 01h, 0CFh, 40h, 0CFh, 0D3h, 0AAh ; 15a49
-	DB 0AEh, 0F8h, 7Eh ; 15a51
-	ASCII "P~P" ; 15a54
-	DB 88h ; 15a57
-	ASCII "S" ; 15a58
-	DB 88h ; 15a59
-	ASCII "S" ; 15a5a
-	DB 8Ch ; 15a5b
-	ASCII "P" ; 15a5c
-	DB 0B4h ; 15a5d
-	ASCII "P#Z+Z" ; 15a5e
-	DB 0CEh, 40h, 06h, 0CFh, 0B0h, 0F2h, 23h, 00h ; 15a63
-	DB 0CEh, 40h, 06h, 0CFh, 0B5h ; 15a6b
-	ASCII "1" ; 15a70
-	DB 0E7h, 1Ah, 0CEh, 40h, 18h, 28h, 0E6h, 07h ; 15a71
-	DB 88h, 0CEh ; 15a79
-	ASCII "D" ; 15a7b
-	DB 18h, 0F1h, 0Eh, 0A3h, 0F2h, 0B1h, 0FFh, 0CFh ; 15a7c
-	DB 0E3h, 0ABh, 0C5h, 8Dh, 0DAh, 0F2h, 0E5h, 9Eh ; 15a84
-	DB 0F8h, 0B9h ; 15a8c
-	ASCII "9" ; 15a8e
-	DB 1Bh, 0C1h, 02h, 00h, 0CFh, 0C0h, 0D4h, 14h ; 15a8f
-	ASCII "Y" ; 15a97
-	DB 0E4h, 0Dh, 0D4h ; 15a98
-	ASCII "BY" ; 15a9b
-	DB 0E5h, 08h, 0CEh, 40h, 06h, 80h, 0CEh ; 15a9d
-	ASCII "D" ; 15aa4
-	DB 06h, 0F8h ; 15aa5
+	ASCII "2R"
+; ---------------------- ; 15a31
+loc_0x015A33:
+	LD A,#0Ch ; 15a33
+	LD [IX+18h],A ; 15a35
+	LD BA,#0007h ; 15a38
+	LD NB,#03h ; 15a3b
+	CARL loc_0x018FFE ; 15a3e
+	ADD A,A ; 15a41
+	LD B,#00h ; 15a42
+	PUSH IP ; 15a44
+	PUSH IX ; 15a45
+	LD IX,#5A53h ; 15a46
+	LD XP,#01h ; 15a49
+	ADD IX,BA ; 15a4c
+	LD IY,[IX] ; 15a4e
+	POP IX ; 15a50
+	POP IP ; 15a51
+	RET
+; ---------------------- ; 15a52
+loc_0x015A53:
+	LD [BR:50h],[IX] ; 15a53
+	LD [BR:50h],[IX] ; 15a55
+	DEC A ; 15a57
+	LD L,H ; 15a58
+	DEC A ; 15a59
+	LD L,H ; 15a5a
+	DEC BR ; 15a5b
+	LD L,A ; 15a5c
+	LD BR,#50h ; 15a5d
+	AND A,[HL] ; 15a5f
+	LD H,L ; 15a60
+	OR A,[HL] ; 15a61
+	LD H,L ; 15a62
+	LD A,[IX+06h] ; 15a63
+	PUSH A ; 15a66
+	CARL loc_0x015A8D ; 15a68
+	LD A,[IX+06h] ; 15a6b
+	POP B ; 15a6e
+	CP A,B ; 15a70
+	JRS NZ,loc_0x015A8C ; 15a71
+	LD A,[IX+18h] ; 15a73
+	OR A,A ; 15a76
+	JRS Z,loc_0x015A7F ; 15a77
+	DEC A ; 15a79
+	LD [IX+18h],A ; 15a7a
+	JRS loc_0x015A8C
+; ---------------------- ; 15a7d
+loc_0x015A7F:
+	PUSH IY ; 15a7f
+	CARL loc_0x015A33 ; 15a80
+	LD BA,IY ; 15a83
+	POP IY ; 15a85
+	LD HL,#0DA8Dh ; 15a86
+	CARL loc_0x007970 ; 15a89
+loc_0x015A8C:
+	RET
+; ---------------------- ; 15a8c
+loc_0x015A8D:
+	LD HL,[1B39h] ; 15a8d
+	ADD HL,#0002h ; 15a90
+	LD BA,[HL] ; 15a93
+	CP BA,#5914h ; 15a95
+	JRS C,loc_0x015AA6 ; 15a98
+	CP BA,#5942h ; 15a9a
+	JRS NC,loc_0x015AA6 ; 15a9d
+	LD A,[IX+06h] ; 15a9f
+	INC A ; 15aa2
+	LD [IX+06h],A ; 15aa3
+loc_0x015AA6:
+	RET
+; ---------------------- ; 15aa6
 	ASCII "q" ; 15aa7
 	DB 9Ah, 8Dh, 0DAh, 7Eh ; 15aa8
 	ASCII "P" ; 15aac
@@ -8221,37 +8531,87 @@ loc_0x013641:
 	ASCII "q" ; 15ae6
 	DB 9Ah, 0D7h, 0DAh, 0CDh ; 15ae7
 	ASCII "Z" ; 15aeb
-	DB 0A6h, 0A3h, 0CEh, 0D0h, 0D7h, 1Ah, 00h, 0B1h ; 15aec
-	DB 00h, 0C7h, 83h, 5Bh, 0CEh, 0C7h, 01h, 0CFh ; 15af4
-	ASCII "B" ; 15afc
-	DB 0CFh, 0DBh, 0CEh, 0D0h, 3Eh, 1Bh, 0B1h, 00h ; 15afd
-	DB 0CFh ; 15b05
-	ASCII "BG2" ; 15b06
-	DB 0FFh, 0E7h, 08h ; 15b09
-	ASCII "8" ; 15b0c
-	DB 0CEh, 0D4h, 3Eh, 1Bh, 0F1h, 0DCh, 0CFh, 0B0h ; 15b0d
-	DB 0CEh, 0D0h, 3Fh, 1Bh, 28h, 0CFh, 0B4h, 0E7h ; 15b15
-	ASCII "Z" ; 15b1d
-	DB 0CFh, 0B0h, 0C5h, 40h, 1Bh ; 15b1e
-	ASCII "E(" ; 15b23
-	DB 0CFh, 0B4h, 0E6h, 10h, 8Eh, 0CFh, 0B0h, 0B0h ; 15b25
-	DB 01h, 0CEh, 0D4h, 3Dh, 1Bh, 0CFh, 0B4h, 02h ; 15b2d
-	DB 24h, 0F1h ; 15b35
-	ASCII "4" ; 15b37
-	DB 0B5h, 03h, 0CFh, 0B0h, 0F2h, 0FFh, 0F1h, 0F2h ; 15b38
-	DB 3Bh, 0D4h, 0CEh, 0C4h, 01h, 0F2h ; 15b40
-	ASCII "w" ; 15b46
-	DB 0BFh, 0CFh, 0B4h, 0E7h, 18h, 0CFh, 0B0h, 0F2h ; 15b47
-	DB 0B0h, 0D4h, 0CEh, 0C4h, 01h, 0F2h, 0A1h, 0E5h ; 15b4f
-	DB 0B0h, 01h, 0CEh, 0D4h, 3Dh, 1Bh, 0CFh, 0B4h ; 15b57
-	DB 02h, 24h, 0F1h, 09h, 0B0h, 02h, 0CEh, 0D4h ; 15b5f
-	DB 3Dh, 1Bh, 0B0h, 3Fh ; 15b67
-	ASCII "H" ; 15b6b
-	DB 0CEh, 0D0h, 0B6h, 1Ah, 20h, 0E6h, 05h, 0CEh ; 15b6c
-	DB 0D5h, 0FAh, 14h, 0CEh, 0D0h, 3Eh, 1Bh, 80h ; 15b74
-	DB 0CEh, 0D4h, 3Eh, 1Bh, 0ABh, 0AEh, 0F8h, 89h ; 15b7c
-	DB 5Bh, 89h, 5Bh, 89h, 5Bh, 00h, 02h, 04h ; 15b84
-	DB 05h, 07h, 09h, 0Bh, 0Ch, 0FFh, 9Dh, 99h ; 15b8c
+	DB 0A6h, 0A3h
+; ---------------------- ; 15aec
+loc_0x015AEE:
+	LD A,[1AD7h] ; 15aee
+	ADD A,A ; 15af2
+	LD B,#00h ; 15af3
+	LD IY,#5B83h ; 15af5
+	LD YP,#01h ; 15af8
+	ADD IY,BA ; 15afb
+	LD IY,[IY] ; 15afd
+	LD A,[1B3Eh] ; 15aff
+	LD B,#00h ; 15b03
+	ADD IY,BA ; 15b05
+	LD A,[IY] ; 15b07
+loc_0x015B08:
+	CP A,#0FFh ; 15b08
+	JRS NZ,loc_0x015B13 ; 15b0a
+	XOR A,A ; 15b0c
+	LD [1B3Eh],A ; 15b0d
+	JRS loc_0x015AEE
+; ---------------------- ; 15b11
+loc_0x015B13:
+	PUSH A ; 15b13
+	LD A,[1B3Fh] ; 15b15
+	OR A,A ; 15b19
+	POP A ; 15b1a
+	JRS NZ,loc_0x015B77 ; 15b1c
+	PUSH A ; 15b1e
+	LD HL,#1B40h ; 15b20
+	LD A,[HL] ; 15b23
+	OR A,A ; 15b24
+	POP A ; 15b25
+	JRS Z,loc_0x015B38 ; 15b27
+	DEC [HL] ; 15b29
+	PUSH A ; 15b2a
+	LD A,#01h ; 15b2c
+	LD [1B3Dh],A ; 15b2e
+	POP A ; 15b32
+	ADD A,#24h ; 15b34
+	JRS loc_0x015B6B
+; ---------------------- ; 15b36
+loc_0x015B38:
+	LD [HL],#03h ; 15b38
+	PUSH A ; 15b3a
+	CARL loc_0x014D3D ; 15b3c
+	CARL loc_0x012F7C ; 15b3f
+	LD NB,#01h ; 15b42
+	CARL loc_0x009ABE ; 15b45
+	POP A ; 15b48
+	JRS NZ,loc_0x015B63 ; 15b4a
+	PUSH A ; 15b4c
+	CARL loc_0x013000 ; 15b4e
+	LD NB,#01h ; 15b51
+	CARL loc_0x00C0F7 ; 15b54
+	LD A,#01h ; 15b57
+	LD [1B3Dh],A ; 15b59
+	POP A ; 15b5d
+	ADD A,#24h ; 15b5f
+	JRS loc_0x015B6B
+; ---------------------- ; 15b61
+loc_0x015B63:
+	LD A,#02h ; 15b63
+	LD [1B3Dh],A ; 15b65
+	LD A,#3Fh ; 15b69
+loc_0x015B6B:
+	LD B,A ; 15b6b
+	LD A,[1AB6h] ; 15b6c
+	AND A,A ; 15b70
+	JRS Z,loc_0x015B77 ; 15b71
+	LD [14FAh],B ; 15b73
+loc_0x015B77:
+	LD A,[1B3Eh] ; 15b77
+	INC A ; 15b7b
+	LD [1B3Eh],A ; 15b7c
+	POP IY ; 15b80
+	POP IP ; 15b81
+	RET
+; ---------------------- ; 15b82
+	DB 89h, 5Bh, 89h, 5Bh, 89h, 5Bh, 00h, 02h ; 15b83
+	DB 04h, 05h, 07h, 09h, 0Bh, 0Ch, 0FFh, 9Dh ; 15b8b
+	DB 99h ; 15b93
 	ASCII "q" ; 15b94
 	DB 9Ah, 0ECh, 0DAh, 7Bh, 0A7h, 0A0h, 5Bh, 0A8h ; 15b95
 	DB 5Bh, 0B0h, 5Bh, 02h, 00h, 2Ch, 0CDh, 0C1h ; 15b9d
@@ -8261,13 +8621,18 @@ loc_0x013641:
 	DB 0A7h, 0C4h, 5Bh, 0CAh, 5Bh, 0D0h, 5Bh, 01h ; 15bbd
 	DB 00h, 28h, 0CDh, 8Eh, 99h, 01h, 00h ; 15bc5
 	ASCII "X" ; 15bcc
-	DB 0D9h, 8Eh, 99h, 01h, 00h, 80h, 0DDh, 8Eh ; 15bcd
-	DB 99h, 0CEh, 0D0h ; 15bd5
-	ASCII "C" ; 15bd8
-	DB 16h, 96h, 01h, 0E6h, 07h, 0C4h, 92h, 5Bh ; 15bd9
-	DB 0F2h ; 15be1
-	ASCII "l" ; 15be2
-	DB 9Dh, 0F8h ; 15be3
+	DB 0D9h, 8Eh, 99h, 01h, 00h, 80h
+; ---------------------- ; 15bcd
+loc_0x015BD3:
+	LD [BR:8Eh],#99h ; 15bd3
+	LD A,[1643h] ; 15bd6
+	BIT A,#01h ; 15bda
+	JRS Z,loc_0x015BE4 ; 15bdc
+	LD BA,#5B92h ; 15bde
+	CARL loc_0x00794F ; 15be1
+loc_0x015BE4:
+	RET
+; ---------------------- ; 15be4
 	ASCII "q" ; 15be5
 	DB 9Ah, 0D6h, 0DBh, 0B8h, 5Bh, 9Dh, 99h ; 15be6
 	ASCII "q" ; 15bed
@@ -8325,100 +8690,205 @@ loc_0x013641:
 	DB 0CFh, 0C1h, 99h, 0BEh, 5Ch, 04h, 00h, 0ECh ; 15cc9
 	DB 0CEh, 04h, 00h, 00h, 0CFh, 08h, 00h, 14h ; 15cd1
 	DB 0CFh, 04h, 00h, 00h, 0CFh, 0C1h, 99h, 0CEh ; 15cd9
-	DB 5Ch, 0F2h, 0A5h, 00h, 0CEh, 0D0h ; 15ce1
-	ASCII "C" ; 15ce7
-	DB 16h, 96h, 01h, 0E6h, 09h, 0F2h, 0F1h, 00h ; 15ce8
-	DB 0C4h ; 15cf0
-	ASCII "L\" ; 15cf1
-	DB 0F1h, 3Fh, 0CEh, 0D0h ; 15cf3
-	ASCII "B" ; 15cf7
-	DB 16h, 96h ; 15cf8
-	ASCII "8" ; 15cfa
-	DB 0E7h, 0Ah, 96h, 40h, 0E6h, 20h, 0C4h, 91h ; 15cfb
-	DB 5Ch, 0F1h, 2Eh, 0CEh, 40h, 02h, 0CEh ; 15d03
-	ASCII "H" ; 15d0a
-	DB 03h, 0D4h ; 15d0b
-	ASCII "m\" ; 15d0d
-	DB 0E4h, 27h, 0D4h, 7Dh, 5Ch, 0E5h, 22h, 0C4h ; 15d0f
-	DB 7Dh, 5Ch, 0F1h, 19h, 0C4h, 81h, 5Ch, 0F1h ; 15d17
-	DB 14h, 0CEh, 40h, 02h, 0CEh ; 15d1f
-	ASCII "H" ; 15d24
-	DB 03h, 0D4h ; 15d25
-	ASCII "m\" ; 15d27
-	DB 0E4h, 06h, 0D4h, 7Dh, 5Ch, 0E4h, 08h, 0C4h ; 15d29
-	ASCII "m\" ; 15d31
-	DB 0F2h, 1Ah, 9Ch, 0F8h, 0F8h, 0F2h ; 15d33
-	ASCIZ "O" ; 15d39
-	DB 0CEh, 0D0h ; 15d3b
-	ASCII "C" ; 15d3d
-	DB 16h, 96h, 01h, 0E6h, 09h, 0F2h, 0D9h, 00h ; 15d3e
-	DB 0C4h, 9Dh, 5Ch, 0F1h, 3Ah, 0CEh, 0D0h ; 15d46
-	ASCII "B" ; 15d4d
-	DB 16h, 96h ; 15d4e
-	ASCII "X" ; 15d50
-	DB 0E7h, 0Ah, 96h, 20h, 0E6h, 1Bh, 0C4h, 40h ; 15d51
-	DB 5Ch, 0F1h, 29h, 0CEh, 40h, 02h, 0CEh ; 15d59
-	ASCII "H" ; 15d60
-	DB 03h, 0D4h, 0BEh, 5Ch, 0E4h, 22h, 0D4h, 0CEh ; 15d61
-	DB 5Ch, 0E5h, 1Dh, 0C4h, 0CEh, 5Ch, 0F1h, 14h ; 15d69
-	DB 0CEh, 40h, 02h, 0CEh ; 15d71
-	ASCII "H" ; 15d75
-	DB 03h, 0D4h, 0BEh, 5Ch, 0E4h, 06h, 0D4h, 0CEh ; 15d76
-	DB 5Ch, 0E4h, 08h, 0C4h, 0BEh, 5Ch, 0F2h, 0C9h ; 15d7e
-	DB 9Bh, 0F8h, 0F8h, 0CEh, 0D0h ; 15d86
-	ASCII "B" ; 15d8b
-	DB 16h, 96h, 10h, 0E7h, 0Fh, 96h, 08h, 0E6h ; 15d8c
-	DB 18h, 0CEh, 0D0h, 11h, 1Bh, 28h, 0E6h, 11h ; 15d94
-	DB 88h, 0F1h, 0Ah, 0CEh, 0D0h, 11h, 1Bh ; 15d9c
-	ASCII "2-" ; 15da3
-	DB 0E6h, 06h, 80h, 0CEh, 0D4h, 11h, 1Bh, 0CEh ; 15da5
-	DB 0D0h ; 15dad
-	ASCII "B" ; 15dae
-	DB 16h, 96h, 40h, 0E7h, 0Fh, 96h, 20h, 0E6h ; 15daf
-	DB 18h, 0CEh, 0D0h, 10h, 1Bh, 28h, 0E6h, 11h ; 15db7
-	DB 88h, 0F1h, 0Ah, 0CEh, 0D0h, 10h, 1Bh ; 15dbf
-	ASCII "2O" ; 15dc6
-	DB 0E6h, 06h, 80h, 0CEh, 0D4h, 10h, 1Bh, 0B8h ; 15dc8
-	DB 10h, 1Bh, 0F2h, 0AEh, 9Bh, 0F8h, 0BEh ; 15dd0
+	DB 5Ch, 0F2h, 0A5h, 00h
+; ---------------------- ; 15ce1
+loc_0x015CE5:
+	LD A,[1643h] ; 15ce5
+	BIT A,#01h ; 15ce9
+	JRS Z,loc_0x015CF5 ; 15ceb
+	CARL loc_0x015DE0 ; 15ced
+	LD BA,#5C4Ch ; 15cf0
+	JRS loc_0x015D33
+; ---------------------- ; 15cf3
+loc_0x015CF5:
+	LD A,[1642h] ; 15cf5
+	BIT A,#38h ; 15cf9
+	JRS NZ,loc_0x015D06 ; 15cfb
+	BIT A,#40h ; 15cfd
+	JRS Z,loc_0x015D20 ; 15cff
+	LD BA,#5C91h ; 15d01
+	JRS loc_0x015D33
+; ---------------------- ; 15d04
+loc_0x015D06:
+	LD A,[IX+02h] ; 15d06
+	LD B,[IX+03h] ; 15d09
+	CP BA,#5C6Dh ; 15d0c
+	JRS C,loc_0x015D37 ; 15d0f
+	CP BA,#5C7Dh ; 15d11
+	JRS NC,loc_0x015D37 ; 15d14
+	LD BA,#5C7Dh ; 15d16
+	JRS loc_0x015D33
+; ---------------------- ; 15d19
+	DB 0C4h, 81h, 5Ch, 0F1h, 14h
+; ---------------------- ; 15d1b
+loc_0x015D20:
+	LD A,[IX+02h] ; 15d20
+	LD B,[IX+03h] ; 15d23
+	CP BA,#5C6Dh ; 15d26
+	JRS C,loc_0x015D30 ; 15d29
+	CP BA,#5C7Dh ; 15d2b
+	JRS C,loc_0x015D37 ; 15d2e
+loc_0x015D30:
+	LD BA,#5C6Dh ; 15d30
+loc_0x015D33:
+	CARL loc_0x00794F ; 15d33
+	RET
+; ---------------------- ; 15d36
+loc_0x015D37:
+	RET
+; ---------------------- ; 15d37
+loc_0x015D38:
+	CARL loc_0x015D89 ; 15d38
+	LD A,[1643h] ; 15d3b
+	BIT A,#01h ; 15d3f
+	JRS Z,loc_0x015D4B ; 15d41
+	CARL loc_0x015E1E ; 15d43
+	LD BA,#5C9Dh ; 15d46
+	JRS loc_0x015D84
+; ---------------------- ; 15d49
+loc_0x015D4B:
+	LD A,[1642h] ; 15d4b
+	BIT A,#58h ; 15d4f
+	JRS NZ,loc_0x015D5C ; 15d51
+	BIT A,#20h ; 15d53
+	JRS Z,loc_0x015D71 ; 15d55
+	LD BA,#5C40h ; 15d57
+	JRS loc_0x015D84
+; ---------------------- ; 15d5a
+loc_0x015D5C:
+	LD A,[IX+02h] ; 15d5c
+	LD B,[IX+03h] ; 15d5f
+	CP BA,#5CBEh ; 15d62
+	JRS C,loc_0x015D88 ; 15d65
+	CP BA,#5CCEh ; 15d67
+	JRS NC,loc_0x015D88 ; 15d6a
+	LD BA,#5CCEh ; 15d6c
+	JRS loc_0x015D84
+; ---------------------- ; 15d6f
+loc_0x015D71:
+	LD A,[IX+02h] ; 15d71
+	LD B,[IX+03h] ; 15d74
+	CP BA,#5CBEh ; 15d77
+	JRS C,loc_0x015D81 ; 15d7a
+	CP BA,#5CCEh ; 15d7c
+	JRS C,loc_0x015D88 ; 15d7f
+loc_0x015D81:
+	LD BA,#5CBEh ; 15d81
+loc_0x015D84:
+	CARL loc_0x00794F ; 15d84
+	RET
+; ---------------------- ; 15d87
+loc_0x015D88:
+	RET
+; ---------------------- ; 15d88
+loc_0x015D89:
+	LD A,[1642h] ; 15d89
+	BIT A,#10h ; 15d8d
+	JRS NZ,loc_0x015D9F ; 15d8f
+	BIT A,#08h ; 15d91
+	JRS Z,loc_0x015DAC ; 15d93
+	LD A,[1B11h] ; 15d95
+	OR A,A ; 15d99
+	JRS Z,loc_0x015DAC ; 15d9a
+	DEC A ; 15d9c
+	JRS loc_0x015DA8
+; ---------------------- ; 15d9d
+loc_0x015D9F:
+	LD A,[1B11h] ; 15d9f
+	CP A,#2Dh ; 15da3
+	JRS Z,loc_0x015DAC ; 15da5
+	INC A ; 15da7
+loc_0x015DA8:
+	LD [1B11h],A ; 15da8
+loc_0x015DAC:
+	LD A,[1642h] ; 15dac
+	BIT A,#40h ; 15db0
+	JRS NZ,loc_0x015DC2 ; 15db2
+	BIT A,#20h ; 15db4
+	JRS Z,loc_0x015DCF ; 15db6
+	LD A,[1B10h] ; 15db8
+	OR A,A ; 15dbc
+	JRS Z,loc_0x015DCF ; 15dbd
+	DEC A ; 15dbf
+	JRS loc_0x015DCB
+; ---------------------- ; 15dc0
+loc_0x015DC2:
+	LD A,[1B10h] ; 15dc2
+	CP A,#4Fh ; 15dc6
+	JRS Z,loc_0x015DCF ; 15dc8
+	INC A ; 15dca
+loc_0x015DCB:
+	LD [1B10h],A ; 15dcb
+loc_0x015DCF:
+	LD BA,[1B10h] ; 15dcf
+	CARL loc_0x007982 ; 15dd2
+	RET
+; ---------------------- ; 15dd5
+	DB 0BEh ; 15dd6
 	ASCII "9" ; 15dd7
 	DB 1Bh, 0F8h, 0D6h, 0DDh, 89h, 0DDh ; 15dd8
-	ASCII "m\" ; 15dde
-	DB 0CEh, 0D0h, 3Fh, 1Bh, 28h, 0E7h ; 15de0
-	ASCII "7" ; 15de6
-	DB 0F2h ; 15de7
-	ASCII "T" ; 15de8
-	DB 0EFh, 0F2h, 90h, 0D1h, 0B0h, 01h, 0CEh, 0D4h ; 15de9
-	ASCII "A" ; 15df1
-	DB 1Bh, 0CEh, 0D0h, 10h, 1Bh, 12h, 27h, 0E5h ; 15df2
-	DB 02h ; 15dfa
-	ASCII "8" ; 15dfb
-	DB 0CEh, 0D1h, 12h, 1Bh ; 15dfc
-	ASCII "1" ; 15e00
-	DB 0E6h, 0Ch, 0E5h, 19h, 0CEh, 0D0h, 10h, 1Bh ; 15e01
-	DB 02h, 08h ; 15e09
-	ASCII "1" ; 15e0b
-	DB 0E4h, 10h, 0B0h, 02h, 0CEh, 0D4h ; 15e0c
-	ASCII "A" ; 15e12
-	DB 1Bh, 0F2h, 0E5h, 0D1h, 0CEh, 0C4h, 01h, 0F2h ; 15e13
-	DB 0CDh, 0E2h, 0F8h, 0CEh, 0D0h, 3Fh, 1Bh, 28h ; 15e1b
-	DB 0E7h ; 15e23
-	ASCII "7" ; 15e24
-	DB 0F2h, 16h, 0EFh, 0F2h ; 15e25
-	ASCII "R" ; 15e29
-	DB 0D1h, 0B0h, 01h, 0CEh, 0D4h ; 15e2a
-	ASCII "A" ; 15e2f
-	DB 1Bh, 0CEh, 0D0h, 10h, 1Bh, 12h, 08h, 0E5h ; 15e30
-	DB 02h ; 15e38
-	ASCII "8" ; 15e39
-	DB 0CEh, 0D1h, 12h, 1Bh ; 15e3a
-	ASCII "1" ; 15e3e
-	DB 0E6h, 0Ch, 0E5h, 19h, 0CEh, 0D0h, 10h, 1Bh ; 15e3f
-	DB 02h, 27h ; 15e47
-	ASCII "1" ; 15e49
-	DB 0E4h, 10h, 0B0h, 02h, 0CEh, 0D4h ; 15e4a
-	ASCII "A" ; 15e50
-	DB 1Bh, 0F2h, 0A7h, 0D1h, 0CEh, 0C4h, 01h, 0F2h ; 15e51
-	DB 8Fh, 0E2h, 0F8h ; 15e59
+	ASCII "m\"
+; ---------------------- ; 15dde
+loc_0x015DE0:
+	LD A,[1B3Fh] ; 15de0
+	OR A,A ; 15de4
+	JRS NZ,loc_0x015E1D ; 15de5
+	CARL loc_0x014D3D ; 15de7
+	CARL loc_0x012F7C ; 15dea
+	LD A,#01h ; 15ded
+	LD [1B41h],A ; 15def
+	LD A,[1B10h] ; 15df3
+	SUB A,#27h ; 15df7
+	JRS NC,loc_0x015DFC ; 15df9
+	XOR A,A ; 15dfb
+loc_0x015DFC:
+	LD B,[1B12h] ; 15dfc
+	CP A,B ; 15e00
+	JRS Z,loc_0x015E0E ; 15e01
+	JRS NC,loc_0x015E1D ; 15e03
+	LD A,[1B10h] ; 15e05
+	ADD A,#08h ; 15e09
+	CP A,B ; 15e0b
+	JRS C,loc_0x015E1D ; 15e0c
+loc_0x015E0E:
+	LD A,#02h ; 15e0e
+	LD [1B41h],A ; 15e10
+	CARL loc_0x012FFB ; 15e14
+	LD NB,#01h ; 15e17
+	CARL loc_0x00C0E9 ; 15e1a
+loc_0x015E1D:
+	RET
+; ---------------------- ; 15e1d
+loc_0x015E1E:
+	LD A,[1B3Fh] ; 15e1e
+	OR A,A ; 15e22
+	JRS NZ,loc_0x015E5B ; 15e23
+	CARL loc_0x014D3D ; 15e25
+	CARL loc_0x012F7C ; 15e28
+	LD A,#01h ; 15e2b
+	LD [1B41h],A ; 15e2d
+	LD A,[1B10h] ; 15e31
+	SUB A,#08h ; 15e35
+	JRS NC,loc_0x015E3A ; 15e37
+	XOR A,A ; 15e39
+loc_0x015E3A:
+	LD B,[1B12h] ; 15e3a
+	CP A,B ; 15e3e
+	JRS Z,loc_0x015E4C ; 15e3f
+	JRS NC,loc_0x015E5B ; 15e41
+	LD A,[1B10h] ; 15e43
+	ADD A,#27h ; 15e47
+	CP A,B ; 15e49
+	JRS C,loc_0x015E5B ; 15e4a
+loc_0x015E4C:
+	LD A,#02h ; 15e4c
+	LD [1B41h],A ; 15e4e
+	CARL loc_0x012FFB ; 15e52
+	LD NB,#01h ; 15e55
+	CARL loc_0x00C0E9 ; 15e58
+loc_0x015E5B:
+	RET
+; ---------------------- ; 15e5b
 	ASCII "8" ; 15e5c
 	DB 0CEh, 0D4h ; 15e5d
 	ASCII "A" ; 15e5f
@@ -8518,90 +8988,154 @@ loc_0x013641:
 	DB 18h, 0E0h, 0C1h, 99h, 0ACh, 5Fh, 0CEh, 0D0h ; 15ffa
 	DB 10h, 1Bh, 0CEh, 0D1h, 12h, 1Bh ; 16002
 	ASCII "1" ; 16008
-	DB 0E4h, 04h, 0C3h, 02h, 00h, 0CFh, 0DBh, 0F8h ; 16009
-	DB 0B1h, 1Fh, 0CEh, 0D0h ; 16011
-	ASCII "A" ; 16015
-	DB 1Bh ; 16016
-	ASCII "2" ; 16017
-	DB 02h, 0E7h, 03h, 0B1h, 27h, 0CEh, 0D0h, 10h ; 16018
-	DB 1Bh, 11h, 0E5h, 02h ; 16020
-	ASCII "8" ; 16024
-	DB 0CEh, 0D1h, 12h, 1Bh ; 16025
-	ASCII "1" ; 16029
-	DB 0E6h, 08h, 0E4h, 06h, 0C4h, 0A6h, 5Eh, 0F1h ; 1602a
-	DB 2Eh, 0CEh, 0BCh, 00h, 0E6h, 26h, 0CEh, 0C4h ; 16032
-	DB 01h, 0F2h, 9Dh, 0CBh ; 1603a
-	ASCII "H" ; 1603e
-	DB 0CEh, 0D0h ; 1603f
-	ASCII "A" ; 16041
-	DB 1Bh ; 16042
-	ASCII "2" ; 16043
-	DB 02h, 0E7h, 03h, 0B1h, 02h, 0CEh, 0D0h, 12h ; 16044
-	DB 1Bh, 11h, 0E5h, 02h ; 1604c
-	ASCII "8" ; 16050
-	DB 0CEh, 0D4h, 12h, 1Bh, 0CEh, 0D1h, 13h, 1Bh ; 16051
-	DB 0F2h, 27h, 99h, 0F8h, 0C4h, 0ACh, 5Fh, 0F2h ; 16059
-	DB 0EDh, 98h, 0F8h, 0B1h, 1Fh, 0CEh, 0D0h ; 16061
-	ASCII "A" ; 16068
-	DB 1Bh ; 16069
-	ASCII "2" ; 1606a
-	DB 02h, 0E7h, 03h, 0B1h, 27h, 0CEh, 0D0h, 10h ; 1606b
-	DB 1Bh, 01h, 0CEh, 0D1h, 12h, 1Bh ; 16073
-	ASCII "1" ; 16079
-	DB 0E5h, 06h, 0C4h ; 1607a
-	ASCII "n^" ; 1607d
-	DB 0F1h ; 1607f
-	ASCII "1" ; 16080
-	DB 0CEh, 0BCh ; 16081
-	ASCII "O" ; 16083
-	DB 0E5h, 29h, 0CEh, 0C4h, 01h, 0F2h ; 16084
-	ASCII "O" ; 1608a
-	DB 0CBh ; 1608b
-	ASCII "H" ; 1608c
-	DB 0CEh, 0D0h ; 1608d
-	ASCII "A" ; 1608f
-	DB 1Bh ; 16090
-	ASCII "2" ; 16091
-	DB 02h, 0E7h, 03h, 0B1h, 02h, 0CEh, 0D0h, 12h ; 16092
-	DB 1Bh, 01h ; 1609a
-	ASCII "2O" ; 1609c
-	DB 0E4h, 03h, 0B0h ; 1609e
-	ASCII "O" ; 160a1
-	DB 0CEh, 0D4h, 12h, 1Bh, 0CEh, 0D1h, 13h, 1Bh ; 160a2
-	DB 0F2h, 0D6h, 98h, 0F8h, 0C4h ; 160aa
-	ASCII "Q_" ; 160af
-	DB 0F2h, 9Ch, 98h, 0F8h, 0CEh, 0D0h ; 160b1
-	ASCII "A" ; 160b7
-	DB 1Bh, 28h, 0E6h, 11h ; 160b8
-	ASCII "2" ; 160bc
-	DB 02h, 0E6h, 06h, 0C4h ; 160bd
-	ASCII "b^" ; 160c1
-	DB 0F1h, 04h, 0C4h, 0Ah, 5Fh, 0F2h, 85h, 98h ; 160c3
-	DB 0F8h, 0CEh, 0D0h, 10h, 1Bh, 02h, 1Fh, 0CEh ; 160cb
-	DB 0D1h, 12h, 1Bh ; 160d3
-	ASCII "1" ; 160d6
-	DB 0E4h, 07h, 0C4h ; 160d7
-	ASCII "D_" ; 160da
-	DB 0F2h ; 160dc
-	ASCII "q" ; 160dd
-	DB 98h, 0F8h, 0CEh, 0D0h ; 160de
-	ASCII "A" ; 160e2
-	DB 1Bh, 28h, 0E6h, 11h ; 160e3
-	ASCII "2" ; 160e7
-	DB 02h, 0E6h, 06h, 0C4h ; 160e8
-	ASCII "z^" ; 160ec
-	DB 0F1h, 04h, 0C4h, 0CCh, 5Eh, 0F2h ; 160ee
-	ASCII "Z" ; 160f4
-	DB 98h, 0F8h, 0CEh, 0D0h, 10h, 1Bh, 12h, 1Fh ; 160f5
-	DB 0E5h, 02h ; 160fd
-	ASCII "8" ; 160ff
-	DB 0CEh, 0D1h, 12h, 1Bh ; 16100
-	ASCII "1" ; 16104
-	DB 0E6h, 03h, 0E5h, 07h, 0C4h ; 16105
-	ASCII "D_" ; 1610a
-	DB 0F2h ; 1610c
-	ASCII "A" ; 1610d
-	DB 98h, 0F8h ; 1610e
+	DB 0E4h, 04h, 0C3h, 02h, 00h, 0CFh, 0DBh, 0F8h
+; ---------------------- ; 16009
+loc_0x016011:
+	LD B,#1Fh ; 16011
+	LD A,[1B41h] ; 16013
+	CP A,#02h ; 16017
+	JRS NZ,loc_0x01601D ; 16019
+	LD B,#27h ; 1601b
+loc_0x01601D:
+	LD A,[1B10h] ; 1601d
+	SUB A,B ; 16021
+	JRS NC,loc_0x016025 ; 16022
+	XOR A,A ; 16024
+loc_0x016025:
+	LD B,[1B12h] ; 16025
+	CP A,B ; 16029
+	JRS Z,loc_0x016033 ; 1602a
+	JRS C,loc_0x016033 ; 1602c
+	LD BA,#5EA6h ; 1602e
+	JRS loc_0x016060
+; ---------------------- ; 16031
+loc_0x016033:
+	CP B,#00h ; 16033
+	JRS Z,loc_0x01605D ; 16036
+	LD NB,#01h ; 16038
+	CARL loc_0x00ABDA ; 1603b
+	LD B,A ; 1603e
+	LD A,[1B41h] ; 1603f
+	CP A,#02h ; 16043
+	JRS NZ,loc_0x016049 ; 16045
+	LD B,#02h ; 16047
+loc_0x016049:
+	LD A,[1B12h] ; 16049
+	SUB A,B ; 1604d
+	JRS NC,loc_0x016051 ; 1604e
+	XOR A,A ; 16050
+loc_0x016051:
+	LD [1B12h],A ; 16051
+	LD B,[1B13h] ; 16055
+	CARL loc_0x007982 ; 16059
+	RET
+; ---------------------- ; 1605c
+loc_0x01605D:
+	LD BA,#5FACh ; 1605d
+loc_0x016060:
+	CARL loc_0x00794F ; 16060
+	RET
+; ---------------------- ; 16063
+loc_0x016064:
+	LD B,#1Fh ; 16064
+	LD A,[1B41h] ; 16066
+	CP A,#02h ; 1606a
+	JRS NZ,loc_0x016070 ; 1606c
+	LD B,#27h ; 1606e
+loc_0x016070:
+	LD A,[1B10h] ; 16070
+	ADD A,B ; 16074
+	LD B,[1B12h] ; 16075
+	CP A,B ; 16079
+	JRS NC,loc_0x016081 ; 1607a
+	LD BA,#5E6Eh ; 1607c
+	JRS loc_0x0160B1
+; ---------------------- ; 1607f
+loc_0x016081:
+	CP B,#4Fh ; 16081
+	JRS NC,loc_0x0160AE ; 16084
+	LD NB,#01h ; 16086
+	CARL loc_0x00ABDA ; 16089
+	LD B,A ; 1608c
+	LD A,[1B41h] ; 1608d
+	CP A,#02h ; 16091
+	JRS NZ,loc_0x016097 ; 16093
+	LD B,#02h ; 16095
+loc_0x016097:
+	LD A,[1B12h] ; 16097
+	ADD A,B ; 1609b
+	CP A,#4Fh ; 1609c
+	JRS C,loc_0x0160A2 ; 1609e
+	LD A,#4Fh ; 160a0
+loc_0x0160A2:
+	LD [1B12h],A ; 160a2
+	LD B,[1B13h] ; 160a6
+	CARL loc_0x007982 ; 160aa
+	RET
+; ---------------------- ; 160ad
+loc_0x0160AE:
+	LD BA,#5F51h ; 160ae
+loc_0x0160B1:
+	CARL loc_0x00794F ; 160b1
+	RET
+; ---------------------- ; 160b4
+loc_0x0160B5:
+	LD A,[1B41h] ; 160b5
+	OR A,A ; 160b9
+	JRS Z,loc_0x0160CC ; 160ba
+	CP A,#02h ; 160bc
+	JRS Z,loc_0x0160C5 ; 160be
+	LD BA,#5E62h ; 160c0
+	JRS loc_0x0160C8
+; ---------------------- ; 160c3
+loc_0x0160C5:
+	LD BA,#5F0Ah ; 160c5
+loc_0x0160C8:
+	CARL loc_0x00794F ; 160c8
+	RET
+; ---------------------- ; 160cb
+loc_0x0160CC:
+	LD A,[1B10h] ; 160cc
+	ADD A,#1Fh ; 160d0
+	LD B,[1B12h] ; 160d2
+	CP A,B ; 160d6
+	JRS C,loc_0x0160DF ; 160d7
+	LD BA,#5F44h ; 160d9
+	CARL loc_0x00794F ; 160dc
+loc_0x0160DF:
+	RET
+; ---------------------- ; 160df
+loc_0x0160E0:
+	LD A,[1B41h] ; 160e0
+	OR A,A ; 160e4
+	JRS Z,loc_0x0160F7 ; 160e5
+	CP A,#02h ; 160e7
+	JRS Z,loc_0x0160F0 ; 160e9
+	LD BA,#5E7Ah ; 160eb
+	JRS loc_0x0160F3
+; ---------------------- ; 160ee
+loc_0x0160F0:
+	LD BA,#5ECCh ; 160f0
+loc_0x0160F3:
+	CARL loc_0x00794F ; 160f3
+	RET
+; ---------------------- ; 160f6
+loc_0x0160F7:
+	LD A,[1B10h] ; 160f7
+	SUB A,#1Fh ; 160fb
+	JRS NC,loc_0x016100 ; 160fd
+	XOR A,A ; 160ff
+loc_0x016100:
+	LD B,[1B12h] ; 16100
+	CP A,B ; 16104
+	JRS Z,loc_0x016109 ; 16105
+	JRS NC,loc_0x01610F ; 16107
+loc_0x016109:
+	LD BA,#5F44h ; 16109
+	CARL loc_0x00794F ; 1610c
+loc_0x01610F:
+	RET
+; ---------------------- ; 1610f
 	ASCII "8" ; 16110
 	DB 0CEh ; 16111
 	ASCII "D" ; 16112
@@ -8770,59 +9304,106 @@ loc_0x013641:
 	DB 04h, 00h, 18h, 0D7h, 04h, 00h, 20h, 0D7h ; 1635e
 	DB 04h, 00h, 28h, 0D7h, 0C1h, 99h, 0AAh ; 16366
 	ASCII "b" ; 1636d
-	DB 0C4h, 04h, 00h, 0CEh, 0C4h, 03h, 0F2h, 88h ; 1636e
-	DB 0ACh, 28h, 0E6h, 1Fh ; 16376
-	ASCII "2" ; 1637a
-	DB 01h, 0E6h, 11h ; 1637b
-	ASCII "2" ; 1637e
-	DB 03h, 0E6h, 0Dh, 0CEh, 0D1h, 12h, 1Bh, 0CEh ; 1637f
-	DB 0BCh ; 16387
-	ASCII "P" ; 16388
-	DB 0E7h, 0Eh, 80h, 0F1h, 0Bh, 0CEh, 0D1h, 12h ; 16389
-	DB 1Bh, 0CEh, 0BCh, 00h, 0E7h, 02h, 88h, 00h ; 16391
-	DB 0B1h, 00h, 0A6h, 0A2h, 0C6h, 0AAh ; 16399
-	ASCII "c" ; 1639f
-	DB 0CEh, 0C6h, 01h, 0CFh, 40h, 0CFh, 0D3h, 0AAh ; 163a0
-	DB 0AEh, 0F8h, 7Eh ; 163a8
-	ASCII "P" ; 163ab
-	DB 8Ch ; 163ac
+loc_0x01636E:
+	LD BA,#0004h ; 1636e
+	LD NB,#03h ; 16371
+	CARL loc_0x018FFE ; 16374
+	OR A,A ; 16377
+	JRS Z,loc_0x016398 ; 16378
+	CP A,#01h ; 1637a
+	JRS Z,loc_0x01638E ; 1637c
+	CP A,#03h ; 1637e
+	JRS Z,loc_0x01638E ; 16380
+	LD B,[1B12h] ; 16382
+	CP B,#50h ; 16386
+	JRS NZ,loc_0x016398 ; 16389
+	INC A ; 1638b
+	JRS loc_0x016398
+; ---------------------- ; 1638c
+loc_0x01638E:
+	LD B,[1B12h] ; 1638e
+	CP B,#00h ; 16392
+	JRS NZ,loc_0x016398 ; 16395
+	DEC A ; 16397
+loc_0x016398:
+	ADD A,A ; 16398
+	LD B,#00h ; 16399
+	PUSH IP ; 1639b
+	PUSH IX ; 1639c
+	LD IX,#63AAh ; 1639d
+	LD XP,#01h ; 163a0
+	ADD IX,BA ; 163a3
+	LD IY,[IX] ; 163a5
+	POP IX ; 163a7
+	POP IP ; 163a8
+	RET
+; ---------------------- ; 163a9
+	DB 7Eh ; 163aa
+	DB 50h, 8Ch ; 163ab
 	ASCII "P" ; 163ad
 	DB 0B4h ; 163ae
 	ASCII "P" ; 163af
 	DB 8Ch ; 163b0
 	ASCII "P" ; 163b1
 	DB 0B4h ; 163b2
-	ASCII "P~P" ; 163b3
-	DB 0CEh, 0D0h, 12h, 1Bh, 28h, 0E7h, 08h, 0C4h ; 163b6
-	DB 60h ; 163be
-	ASCII "b" ; 163bf
-	DB 0F2h, 8Dh, 95h, 0F8h, 88h, 0CEh, 0D4h, 12h ; 163c0
-	DB 1Bh, 0CEh, 0D1h, 13h, 1Bh, 0F2h, 0B3h, 95h ; 163c8
-	DB 0F8h, 0CEh, 0D0h, 12h, 1Bh ; 163d0
-	ASCII "2P" ; 163d5
-	DB 0E4h, 08h, 0C4h, 20h ; 163d7
-	ASCII "c" ; 163db
-	DB 0F2h ; 163dc
-	ASCII "q" ; 163dd
-	DB 95h, 0F8h, 80h, 0CEh, 0D4h, 12h, 1Bh, 0CEh ; 163de
-	DB 0D1h, 13h, 1Bh, 0F2h, 97h, 95h, 0F8h, 0CEh ; 163e6
-	DB 0D0h, 11h, 1Bh ; 163ee
-	ASCII "2*" ; 163f1
-	DB 0E4h, 07h, 0C4h, 0DDh ; 163f3
-	ASCII "a" ; 163f7
-	DB 0F2h ; 163f8
-	ASCII "U" ; 163f9
-	DB 95h, 0F8h, 0B9h ; 163fa
-	ASCII "9" ; 163fd
-	DB 1Bh, 0C1h, 04h, 00h, 0CFh, 0C1h, 0D5h, 90h ; 163fe
-	DB 0E5h, 0E7h, 14h, 0CEh, 0D0h, 11h, 1Bh ; 16406
-	ASCII "2" ; 1640d
-	DB 1Ch, 0E7h, 0Ch, 0F2h, 0A4h, 00h, 0E7h, 07h ; 1640e
-	DB 0C4h, 0D3h ; 16416
-	ASCII "a" ; 16418
-	DB 0F2h ; 16419
-	ASCII "4" ; 1641a
-	DB 95h, 0F8h, 0BEh ; 1641b
+	ASCII "P~P"
+; ---------------------- ; 163b3
+loc_0x0163B6:
+	LD A,[1B12h] ; 163b6
+	OR A,A ; 163ba
+	JRS NZ,loc_0x0163C4 ; 163bb
+	LD BA,#6260h ; 163bd
+	CARL loc_0x00794F ; 163c0
+	RET
+; ---------------------- ; 163c3
+loc_0x0163C4:
+	DEC A ; 163c4
+	LD [1B12h],A ; 163c5
+	LD B,[1B13h] ; 163c9
+	CARL loc_0x007982 ; 163cd
+	RET
+; ---------------------- ; 163d0
+loc_0x0163D1:
+	LD A,[1B12h] ; 163d1
+	CP A,#50h ; 163d5
+	JRS C,loc_0x0163E0 ; 163d7
+	LD BA,#6320h ; 163d9
+	CARL loc_0x00794F ; 163dc
+	RET
+; ---------------------- ; 163df
+loc_0x0163E0:
+	INC A ; 163e0
+	LD [1B12h],A ; 163e1
+	LD B,[1B13h] ; 163e5
+	CARL loc_0x007982 ; 163e9
+	RET
+; ---------------------- ; 163ec
+loc_0x0163ED:
+	LD A,[1B11h] ; 163ed
+	CP A,#2Ah ; 163f1
+	JRS C,loc_0x0163FB ; 163f3
+	LD BA,#61DDh ; 163f5
+	CARL loc_0x00794F ; 163f8
+loc_0x0163FB:
+	RET
+; ---------------------- ; 163fb
+loc_0x0163FC:
+	LD HL,[1B39h] ; 163fc
+	ADD HL,#0004h ; 163ff
+	LD HL,[HL] ; 16402
+	CP HL,#0E590h ; 16404
+	JRS NZ,loc_0x01641C ; 16407
+	LD A,[1B11h] ; 16409
+	CP A,#1Ch ; 1640d
+	JRS NZ,loc_0x01641C ; 1640f
+	CARL loc_0x0164B7 ; 16411
+	JRS NZ,loc_0x01641C ; 16414
+	LD BA,#61D3h ; 16416
+	CARL loc_0x00794F ; 16419
+loc_0x01641C:
+	RET
+; ---------------------- ; 1641c
+	DB 0BEh ; 1641d
 	ASCII "7" ; 1641e
 	DB 1Bh, 0F8h, 1Dh, 0E4h, 0FCh, 0E3h, 7Eh ; 1641f
 	ASCII "P" ; 16426
@@ -8853,95 +9434,200 @@ loc_0x013641:
 	DB 9Ah, 1Fh, 05h, 00h, 0Ch, 0D0h, 05h, 00h ; 16497
 	DB 0D4h, 0CFh, 03h, 00h, 08h, 0D0h, 03h, 00h ; 1649f
 	DB 0D4h, 0CFh, 03h, 00h, 04h, 0D0h, 9Dh, 99h ; 164a7
-	DB 0DBh, 0E5h, 01h, 00h, 0D4h, 0CFh, 8Eh, 99h ; 164af
-	DB 0CEh, 0D0h, 10h, 1Bh, 12h, 04h, 0E5h, 02h ; 164b7
-	ASCII "8H" ; 164bf
-	DB 0CEh, 0D0h, 12h, 1Bh ; 164c1
-	ASCII "1" ; 164c5
-	DB 0E4h, 12h, 0CEh, 0D0h, 10h, 1Bh, 02h, 05h ; 164c6
-	ASCII "H" ; 164ce
-	DB 0CEh, 0D0h, 12h, 1Bh ; 164cf
-	ASCII "1" ; 164d3
-	DB 0E5h, 04h, 9Dh, 01h, 0F8h, 9Ch, 0FEh, 0F8h ; 164d4
-	DB 0CEh, 0D0h, 10h, 1Bh, 28h, 0E6h, 10h, 0CEh ; 164dc
-	DB 0D0h, 11h, 1Bh ; 164e4
-	ASCII "2," ; 164e7
-	DB 0E7h, 08h, 0C4h, 92h ; 164e9
-	ASCII "d" ; 164ed
-	DB 0F2h, 5Fh, 94h, 0F8h, 0CEh, 0D0h, 10h, 1Bh ; 164ee
-	DB 80h, 80h, 0CEh, 0D4h, 10h, 1Bh ; 164f6
-	ASCII "2(" ; 164fc
-	DB 0E4h, 13h, 0CEh, 0D0h, 11h, 1Bh, 80h, 80h ; 164fe
-	ASCII "2," ; 16506
-	DB 0E4h, 03h, 0B0h, 2Ch, 0CEh, 0D4h, 11h, 1Bh ; 16508
-	DB 0F1h, 0Ah, 0CEh, 0D0h, 11h, 1Bh, 88h, 0CEh ; 16510
-	DB 0D4h, 11h, 1Bh, 0B8h, 10h, 1Bh, 0F2h ; 16518
-	ASCII "b" ; 1651f
-	DB 94h, 0F8h, 0CEh, 0D0h, 10h, 1Bh ; 16520
-	ASCII "2P" ; 16526
-	DB 0E6h, 10h, 0CEh, 0D0h, 11h, 1Bh ; 16528
-	ASCII "2," ; 1652e
-	DB 0E7h, 08h, 0C4h, 92h ; 16530
-	ASCII "d" ; 16534
-	DB 0F2h, 18h, 94h, 0F8h, 0CEh, 0D0h, 10h, 1Bh ; 16535
-	DB 88h, 88h, 0CEh, 0D4h, 10h, 1Bh ; 1653d
-	ASCII "2(" ; 16543
-	DB 0E5h, 13h, 0CEh, 0D0h, 11h, 1Bh, 80h, 80h ; 16545
-	ASCII "2," ; 1654d
-	DB 0E4h, 03h, 0B0h, 2Ch, 0CEh, 0D4h, 11h, 1Bh ; 1654f
-	DB 0F1h, 0Ah, 0CEh, 0D0h, 11h, 1Bh, 88h, 0CEh ; 16557
-	DB 0D4h, 11h, 1Bh, 0B8h, 10h, 1Bh, 0F2h, 1Bh ; 1655f
-	DB 94h, 0F8h, 0B9h ; 16567
-	ASCII "7" ; 1656a
-	DB 1Bh, 0C1h, 02h, 00h, 0CFh, 0C1h, 0D5h ; 1656b
-	ASCII "Fc" ; 16572
-	DB 0E6h, 0Bh, 0D5h, 86h ; 16574
-	ASCII "b" ; 16578
-	DB 0E7h, 15h, 0C4h ; 16579
-	ASCII "Bd" ; 1657c
-	DB 0F1h, 04h, 0C4h ; 1657e
-	ASCII "jd" ; 16581
-	DB 0F2h, 0CAh, 93h, 0B8h, 12h, 1Bh, 0BCh, 10h ; 16583
-	DB 1Bh, 0F2h, 0F4h, 93h, 0F8h, 0CEh, 0D0h ; 1658b
-	ASCII "B" ; 16592
-	DB 1Bh, 28h, 0E6h, 07h, 0C4h, 0E9h, 0E5h, 0F2h ; 16593
-	DB 0ACh, 93h, 0CEh, 0D0h, 11h, 1Bh ; 1659b
-	ASCII "2," ; 165a1
-	DB 0E4h, 08h, 0C4h, 27h ; 165a3
-	ASCII "d" ; 165a7
-	DB 0F2h, 0A5h, 93h, 0F8h, 80h, 0CEh, 0D4h, 11h ; 165a8
-	DB 1Bh, 0B8h, 10h, 1Bh, 0F2h, 0CCh, 93h, 0CEh ; 165b0
-	DB 0D0h, 11h, 1Bh ; 165b8
-	ASCII "2*" ; 165bb
-	DB 0E7h, 1Ch, 0B9h ; 165bd
-	ASCII "7" ; 165c0
-	DB 1Bh, 0C1h, 02h, 00h, 0CFh, 0C1h, 0D5h, 0D3h ; 165c1
-	ASCII "a" ; 165c9
-	DB 0E4h, 0Fh, 0D5h, 0DDh ; 165ca
-	ASCII "a" ; 165ce
-	DB 0E5h, 0Ah, 0C5h ; 165cf
-	ASCII "i" ; 165d2
-	DB 0E5h, 0C4h ; 165d3
-	ASCII "r" ; 165d5
-	DB 1Ah, 0F2h, 97h, 93h, 0F8h, 0CEh, 0D0h ; 165d6
-	ASCII "B" ; 165dd
-	DB 1Bh, 28h, 0E6h, 07h, 0C4h, 0E9h, 0E5h, 0F2h ; 165de
-	ASCII "a" ; 165e6
-	DB 93h, 0F8h, 0CEh, 0D0h ; 165e7
-	ASCII "B" ; 165eb
-	DB 1Bh, 28h, 0E7h, 2Bh, 0CEh, 0D0h, 11h, 1Bh ; 165ec
-	ASCII "2," ; 165f4
-	DB 0E5h, 1Ch, 0CEh, 0D0h, 11h, 1Bh, 0CEh ; 165f6
-	ASCII "D" ; 165fd
-	DB 18h, 0CEh, 0D0h, 0B6h, 1Ah, 20h, 0E6h, 07h ; 165fe
-	DB 0B0h, 11h, 0CEh, 0D4h, 0FAh, 14h, 0C4h, 90h ; 16606
-	DB 0E5h, 0F2h ; 1660e
-	ASCII "7" ; 16610
-	DB 93h, 0F8h, 0C4h, 0DBh, 0E5h, 0F2h ; 16611
-	ASCII "0" ; 16617
-	DB 93h, 0F8h, 0B8h, 10h, 1Bh, 0F2h ; 16618
-	ASCII "c" ; 1661e
-	DB 93h, 0F8h, 0BEh ; 1661f
+	DB 0DBh, 0E5h, 01h, 00h, 0D4h, 0CFh, 8Eh, 99h
+; ---------------------- ; 164af
+loc_0x0164B7:
+	LD A,[1B10h] ; 164b7
+	SUB A,#04h ; 164bb
+	JRS NC,loc_0x0164C0 ; 164bd
+	XOR A,A ; 164bf
+loc_0x0164C0:
+	LD B,A ; 164c0
+	LD A,[1B12h] ; 164c1
+	CP A,B ; 164c5
+	JRS C,loc_0x0164D9 ; 164c6
+	LD A,[1B10h] ; 164c8
+	ADD A,#05h ; 164cc
+	LD B,A ; 164ce
+	LD A,[1B12h] ; 164cf
+	CP A,B ; 164d3
+	JRS NC,loc_0x0164D9 ; 164d4
+	OR SC,#01h ; 164d6
+	RET
+; ---------------------- ; 164d8
+loc_0x0164D9:
+	AND SC,#0FEh ; 164d9
+	RET
+; ---------------------- ; 164db
+loc_0x0164DC:
+	LD A,[1B10h] ; 164dc
+	OR A,A ; 164e0
+	JRS Z,loc_0x0164F2 ; 164e1
+	LD A,[1B11h] ; 164e3
+	CP A,#2Ch ; 164e7
+	JRS NZ,loc_0x0164F2 ; 164e9
+	LD BA,#6492h ; 164eb
+	CARL loc_0x00794F ; 164ee
+	RET
+; ---------------------- ; 164f1
+loc_0x0164F2:
+	LD A,[1B10h] ; 164f2
+	INC A ; 164f6
+	INC A ; 164f7
+	LD [1B10h],A ; 164f8
+	CP A,#28h ; 164fc
+	JRS C,loc_0x016512 ; 164fe
+	LD A,[1B11h] ; 16500
+	INC A ; 16504
+	INC A ; 16505
+	CP A,#2Ch ; 16506
+	JRS C,loc_0x01650C ; 16508
+	LD A,#2Ch ; 1650a
+loc_0x01650C:
+	LD [1B11h],A ; 1650c
+	JRS loc_0x01651B
+; ---------------------- ; 16510
+loc_0x016512:
+	LD A,[1B11h] ; 16512
+	DEC A ; 16516
+	LD [1B11h],A ; 16517
+loc_0x01651B:
+	LD BA,[1B10h] ; 1651b
+	CARL loc_0x007982 ; 1651e
+	RET
+; ---------------------- ; 16521
+loc_0x016522:
+	LD A,[1B10h] ; 16522
+	CP A,#50h ; 16526
+	JRS Z,loc_0x016539 ; 16528
+	LD A,[1B11h] ; 1652a
+	CP A,#2Ch ; 1652e
+	JRS NZ,loc_0x016539 ; 16530
+	LD BA,#6492h ; 16532
+	CARL loc_0x00794F ; 16535
+	RET
+; ---------------------- ; 16538
+loc_0x016539:
+	LD A,[1B10h] ; 16539
+	DEC A ; 1653d
+	DEC A ; 1653e
+	LD [1B10h],A ; 1653f
+	CP A,#28h ; 16543
+	JRS NC,loc_0x016559 ; 16545
+	LD A,[1B11h] ; 16547
+	INC A ; 1654b
+	INC A ; 1654c
+	CP A,#2Ch ; 1654d
+	JRS C,loc_0x016553 ; 1654f
+	LD A,#2Ch ; 16551
+loc_0x016553:
+	LD [1B11h],A ; 16553
+	JRS loc_0x016562
+; ---------------------- ; 16557
+loc_0x016559:
+	LD A,[1B11h] ; 16559
+	DEC A ; 1655d
+	LD [1B11h],A ; 1655e
+loc_0x016562:
+	LD BA,[1B10h] ; 16562
+	CARL loc_0x007982 ; 16565
+	RET
+; ---------------------- ; 16568
+loc_0x016569:
+	LD HL,[1B37h] ; 16569
+	ADD HL,#0002h ; 1656c
+	LD HL,[HL] ; 1656f
+	CP HL,#6346h ; 16571
+	JRS Z,loc_0x016580 ; 16574
+	CP HL,#6286h ; 16576
+	JRS NZ,loc_0x01658F ; 16579
+	LD BA,#6442h ; 1657b
+	JRS loc_0x016583
+; ---------------------- ; 1657e
+loc_0x016580:
+	LD BA,#646Ah ; 16580
+loc_0x016583:
+	CARL loc_0x00794F ; 16583
+	LD BA,[1B12h] ; 16586
+	LD [1B10h],BA ; 16589
+	CARL loc_0x007982 ; 1658c
+loc_0x01658F:
+	RET
+; ---------------------- ; 1658f
+loc_0x016590:
+	LD A,[1B42h] ; 16590
+	OR A,A ; 16594
+	JRS Z,loc_0x01659D ; 16595
+	LD BA,#0E5E9h ; 16597
+	CARL loc_0x007948 ; 1659a
+loc_0x01659D:
+	LD A,[1B11h] ; 1659d
+	CP A,#2Ch ; 165a1
+	JRS C,loc_0x0165AC ; 165a3
+	LD BA,#6427h ; 165a5
+	CARL loc_0x00794F ; 165a8
+	RET
+; ---------------------- ; 165ab
+loc_0x0165AC:
+	INC A ; 165ac
+	LD [1B11h],A ; 165ad
+	LD BA,[1B10h] ; 165b1
+	CARL loc_0x007982 ; 165b4
+	LD A,[1B11h] ; 165b7
+	CP A,#2Ah ; 165bb
+	JRS NZ,loc_0x0165DA ; 165bd
+	LD HL,[1B37h] ; 165bf
+	ADD HL,#0002h ; 165c2
+	LD HL,[HL] ; 165c5
+	CP HL,#61D3h ; 165c7
+	JRS C,loc_0x0165DA ; 165ca
+	CP HL,#61DDh ; 165cc
+	JRS NC,loc_0x0165DA ; 165cf
+	LD HL,#0E569h ; 165d1
+	LD BA,#1A72h ; 165d4
+	CARL loc_0x007970 ; 165d7
+loc_0x0165DA:
+	RET
+; ---------------------- ; 165da
+loc_0x0165DB:
+	LD A,[1B42h] ; 165db
+	OR A,A ; 165df
+	JRS Z,loc_0x0165E8 ; 165e0
+	LD BA,#0E5E9h ; 165e2
+	CARL loc_0x007948 ; 165e5
+loc_0x0165E8:
+	RET
+; ---------------------- ; 165e8
+loc_0x0165E9:
+	LD A,[1B42h] ; 165e9
+	OR A,A ; 165ed
+	JRS NZ,loc_0x01661A ; 165ee
+	LD A,[1B11h] ; 165f0
+	CP A,#2Ch ; 165f4
+	JRS NC,loc_0x016613 ; 165f6
+	LD A,[1B11h] ; 165f8
+	LD [IX+18h],A ; 165fc
+	LD A,[1AB6h] ; 165ff
+	AND A,A ; 16603
+	JRS Z,loc_0x01660C ; 16604
+	LD A,#11h ; 16606
+	LD [14FAh],A ; 16608
+loc_0x01660C:
+	LD BA,#0E590h ; 1660c
+	CARL loc_0x007948 ; 1660f
+	RET
+; ---------------------- ; 16612
+loc_0x016613:
+	LD BA,#0E5DBh ; 16613
+	CARL loc_0x007948 ; 16616
+	RET
+; ---------------------- ; 16619
+loc_0x01661A:
+	LD BA,[1B10h] ; 1661a
+	CARL loc_0x007982 ; 1661d
+	RET
+; ---------------------- ; 16620
+	DB 0BEh ; 16621
 	ASCII "9" ; 16622
 	DB 1Bh, 0F8h, 21h, 0E6h ; 16623
 	ASCII "q" ; 16627
@@ -9062,15 +9748,30 @@ loc_0x013641:
 	ASCII "l" ; 167ce
 	DB 0F2h, 0B3h, 0B3h, 0ABh, 0C4h, 9Ch, 0E7h, 0F2h ; 167cf
 	ASCII "p" ; 167d7
-	DB 91h, 0CEh, 0D0h ; 167d8
-	ASCII "B" ; 167db
-	DB 16h, 96h, 08h, 0E7h, 0Fh, 96h, 10h, 0E6h ; 167dc
-	DB 15h, 0CEh, 40h, 0Eh ; 167e4
-	ASCII "2" ; 167e8
-	DB 1Ah, 0E5h, 0Eh, 80h, 0F1h, 08h, 0CEh, 40h ; 167e9
-	DB 0Eh, 28h, 0E6h, 05h, 88h, 0CEh ; 167f1
-	ASCII "D" ; 167f7
-	DB 0Eh, 0F8h ; 167f8
+	DB 91h
+; ---------------------- ; 167d8
+loc_0x0167D9:
+	LD A,[1642h] ; 167d9
+	BIT A,#08h ; 167dd
+	JRS NZ,loc_0x0167EF ; 167df
+	BIT A,#10h ; 167e1
+	JRS Z,loc_0x0167F9 ; 167e3
+	LD A,[IX+0Eh] ; 167e5
+	CP A,#1Ah ; 167e8
+	JRS NC,loc_0x0167F9 ; 167ea
+	INC A ; 167ec
+	JRS loc_0x0167F6
+; ---------------------- ; 167ed
+loc_0x0167EF:
+	LD A,[IX+0Eh] ; 167ef
+	OR A,A ; 167f2
+	JRS Z,loc_0x0167F9 ; 167f3
+	DEC A ; 167f5
+loc_0x0167F6:
+	LD [IX+0Eh],A ; 167f6
+loc_0x0167F9:
+	RET
+; ---------------------- ; 167f9
 	ASCII "8" ; 167fa
 	DB 0CEh, 0D4h ; 167fb
 	ASCII "C" ; 167fd
@@ -9223,41 +9924,67 @@ loc_0x013641:
 	ASCII "j" ; 16b44
 	DB 9Eh ; 16b45
 	ASCII "j" ; 16b46
-	DB 0CEh, 0D0h ; 16b47
-	ASCII "B" ; 16b49
-	DB 16h, 96h, 01h, 0E7h ; 16b4a
-	ASCII "e" ; 16b4e
-	DB 0F2h, 0ECh, 0E1h, 0F2h, 28h, 0C4h, 0CEh, 40h ; 16b4f
-	DB 18h, 28h, 0E6h, 26h, 0CEh, 0D0h, 0B6h, 1Ah ; 16b57
-	DB 20h, 0E6h, 07h, 0B0h, 1Dh, 0CEh, 0D4h, 0FAh ; 16b5f
-	DB 14h, 0BEh ; 16b67
-	ASCII "9" ; 16b69
-	DB 1Bh, 0C5h ; 16b6a
-	ASCII "C" ; 16b6c
-	DB 1Bh, 86h, 0CEh, 0C4h, 01h, 0F2h ; 16b6d
-	ASCII "J" ; 16b73
-	DB 0AFh, 0E7h, 0Ah, 0F2h, 7Dh, 0C4h, 0CEh, 0C4h ; 16b74
-	DB 01h, 0F2h ; 16b7c
-	ASCII "j" ; 16b7e
-	DB 0D5h, 0A6h, 0A3h, 0CEh, 40h, 18h, 00h, 0B1h ; 16b7f
-	DB 00h, 0C7h, 0C4h ; 16b87
-	ASCII "k" ; 16b8a
-	DB 0CEh, 0C7h, 01h, 0CFh ; 16b8b
-	ASCII "B" ; 16b8f
-	DB 0CFh, 0D8h, 0ABh, 0AEh, 0C5h, 05h, 0EBh, 0F2h ; 16b90
-	DB 0D7h, 8Dh, 0CEh, 40h, 18h, 0F2h ; 16b98
-	ASCIZ "1" ; 16b9e
-	DB 0CEh ; 16ba0
-	ASCII "D" ; 16ba1
-	DB 19h ; 16ba2
-	ASCII "H" ; 16ba3
-	DB 0CEh, 40h, 18h, 0F2h, 3Dh, 00h ; 16ba4
-	ASCII "H" ; 16baa
-	DB 0CEh, 40h, 0Ah, 11h, 0CEh ; 16bab
-	ASCII "D" ; 16bb0
-	DB 0Ah, 0F8h, 0CEh, 0D0h, 0B6h, 1Ah, 20h, 0E6h ; 16bb1
-	DB 07h, 0B0h, 1Ch, 0CEh, 0D4h, 0FAh, 14h, 0F2h ; 16bb9
-	DB 17h, 0FCh, 0F8h, 0DEh ; 16bc1
+loc_0x016B47:
+	LD A,[1642h] ; 16b47
+	BIT A,#01h ; 16b4b
+	JRS NZ,loc_0x016BB3 ; 16b4d
+	CARL loc_0x014D3D ; 16b4f
+	CARL loc_0x012F7C ; 16b52
+	LD A,[IX+18h] ; 16b55
+	OR A,A ; 16b58
+	JRS Z,loc_0x016B80 ; 16b59
+	LD A,[1AB6h] ; 16b5b
+	AND A,A ; 16b5f
+	JRS Z,loc_0x016B68 ; 16b60
+	LD A,#1Dh ; 16b62
+	LD [14FAh],A ; 16b64
+loc_0x016B68:
+	LD [1B39h],IX ; 16b68
+	LD HL,#1B43h ; 16b6b
+	INC [HL] ; 16b6e
+	LD NB,#01h ; 16b6f
+	CARL loc_0x009ABE ; 16b72
+	JRS NZ,loc_0x016B80 ; 16b75
+	CARL loc_0x012FF6 ; 16b77
+	LD NB,#01h ; 16b7a
+	CARL loc_0x00C0E9 ; 16b7d
+loc_0x016B80:
+	PUSH IP ; 16b80
+	PUSH IY ; 16b81
+	LD A,[IX+18h] ; 16b82
+	ADD A,A ; 16b85
+	LD B,#00h ; 16b86
+	LD IY,#6BC4h ; 16b88
+	LD YP,#01h ; 16b8b
+	ADD IY,BA ; 16b8e
+	LD BA,[IY] ; 16b90
+	POP IY ; 16b92
+	POP IP ; 16b93
+	LD HL,#0EB05h ; 16b94
+	CARL loc_0x007970 ; 16b97
+	LD A,[IX+18h] ; 16b9a
+	CARL loc_0x016BD0 ; 16b9d
+	LD [IX+19h],A ; 16ba0
+	LD B,A ; 16ba3
+	LD A,[IX+18h] ; 16ba4
+	CARL loc_0x016BE6 ; 16ba7
+	LD B,A ; 16baa
+	LD A,[IX+0Ah] ; 16bab
+	SUB A,B ; 16bae
+	LD [IX+0Ah],A ; 16baf
+	RET
+; ---------------------- ; 16bb2
+loc_0x016BB3:
+	LD A,[1AB6h] ; 16bb3
+	AND A,A ; 16bb7
+	JRS Z,loc_0x016BC0 ; 16bb8
+	LD A,#1Ch ; 16bba
+	LD [14FAh],A ; 16bbc
+loc_0x016BC0:
+	CARL loc_0x0167D9 ; 16bc0
+	RET
+; ---------------------- ; 16bc3
+	DB 0DEh ; 16bc4
 	ASCII "j" ; 16bc5
 	DB 06h ; 16bc6
 	ASCII "h" ; 16bc7
@@ -9267,17 +9994,33 @@ loc_0x013641:
 	ASCII "hzi" ; 16bcb
 	DB 0F6h ; 16bce
 	ASCII "i" ; 16bcf
-	DB 0A6h, 0A3h, 0B1h, 00h, 0C7h, 0E0h ; 16bd0
-	ASCII "k" ; 16bd6
-	DB 0CEh, 0C7h, 01h, 0CFh ; 16bd7
-	ASCII "BG" ; 16bdb
-	DB 0ABh, 0AEh, 0F8h, 00h, 05h, 07h, 09h, 0Bh ; 16bdd
-	DB 0Dh, 0A6h, 0A3h, 0B1h, 00h, 0C7h, 0F6h ; 16be5
-	ASCII "k" ; 16bec
-	DB 0CEh, 0C7h, 01h, 0CFh ; 16bed
-	ASCII "BG" ; 16bf1
-	DB 0ABh, 0AEh, 0F8h, 00h, 07h, 09h, 0Bh, 0Dh ; 16bf3
-	DB 0Fh ; 16bfb
+loc_0x016BD0:
+	PUSH IP ; 16bd0
+	PUSH IY ; 16bd1
+	LD B,#00h ; 16bd2
+	LD IY,#6BE0h ; 16bd4
+	LD YP,#01h ; 16bd7
+	ADD IY,BA ; 16bda
+	LD A,[IY] ; 16bdc
+	POP IY ; 16bdd
+	POP IP ; 16bde
+	RET
+; ---------------------- ; 16bdf
+	DB 00h, 05h, 07h, 09h, 0Bh, 0Dh
+; ---------------------- ; 16be0
+loc_0x016BE6:
+	PUSH IP ; 16be6
+	PUSH IY ; 16be7
+	LD B,#00h ; 16be8
+	LD IY,#6BF6h ; 16bea
+	LD YP,#01h ; 16bed
+	ADD IY,BA ; 16bf0
+	LD A,[IY] ; 16bf2
+	POP IY ; 16bf3
+	POP IP ; 16bf4
+	RET
+; ---------------------- ; 16bf5
+	DB 00h, 07h, 09h, 0Bh, 0Dh, 0Fh ; 16bf6
 	ASCII "8" ; 16bfc
 	DB 0CEh ; 16bfd
 	ASCII "D" ; 16bfe
@@ -9820,7 +10563,6 @@ loc_0x017242:
 	LD BA,#71BEh ; 17242
 	CARL loc_0x00794F ; 17245
 	LD A,[1AD4h] ; 17248
-
 global loc_0x01724C
 loc_0x01724C:
 	LD L,A ; 1724c
