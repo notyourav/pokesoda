@@ -147,3 +147,4 @@ bgm9:
 	LENGTH 8
 	NOTE_E6
 	LOOP_END
+  

@@ -114,3 +114,4 @@ bgm4:
 	NOTE_CSHARP4
 	DUTY 0
 	LOOP_END
+  
