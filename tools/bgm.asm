@@ -1,4 +1,3 @@
-bgm10:
 	TEMPO 3
 	LOOP_START
 	UNK_EFFECT 4

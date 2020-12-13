@@ -1,3 +1,5 @@
+    include "src/audio/bgm.inc"
+
 bgm0:
 	DB 0F0h
 
