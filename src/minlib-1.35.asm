@@ -5771,8 +5771,8 @@ loc_0x005B4E:
 	ADD BA,#1539h ; 5b66
 	LD [1E78h],BA ; 5b69
 
-	LD IY,#5EBDh ; 5b6c
-	LD HL,#6123h ; 5b6f
+	LD IY,#minlib_startup_logo_data ; 5b6c
+	LD HL,#minlib_startup_logo_data_end ; 5b6f
 	CARL loc_0x005E21 ; 5b72
 
 	LD A,[21AFh] ; 5b75
@@ -5994,7 +5994,7 @@ loc_0x005C7C:
 	LD A,YP ; 5ca5
 	LD [1503h],A ; 5ca7
 
-	LD BA,#6123h ; 5cab
+	LD BA,#minlib_startup_audio_data ; 5cab
 	LD [14FDh],BA ; 5cae
 
 	LD A,#0FFh ; 5cb1
@@ -6434,119 +6434,10 @@ loc_0x005EB2:
 	DB 80h, 0B0h, 10h ; 5eb7
 	ASCII "0Pp" ; 5eba
 
-minlib_startup_logo_data:
-	DB 0F6h, 0FFh, 23h, 0FBh, 0FBh, 83h, 83h, 0F6h ; 5ebd
-	DB 0FFh, 17h, 0FBh, 0FBh, 0FFh, 83h, 83h, 0F7h ; 5ec5
-	DB 0EFh, 0F7h, 0F6h, 0FFh, 17h, 83h, 83h, 0FFh ; 5ecd
-	DB 0CBh, 0B5h, 0ABh, 0DFh, 0AFh, 0F6h, 0FFh, 18h ; 5ed5
-	DB 0C3h, 0BDh ; 5edd
-	ASCII "BjjV" ; 5edf
-	DB 0BDh, 0F6h, 0FFh, 17h, 0C3h, 0FFh, 83h, 83h ; 5ee3
-	DB 0F7h, 0CFh, 83h, 83h, 0F6h, 0FFh, 18h, 8Bh ; 5eeb
-	DB 8Bh, 0FFh, 87h, 87h, 0F7h, 87h, 0F6h, 0FFh ; 5ef3
-	DB 17h, 8Fh, 0F7h, 83h, 83h, 0F7h, 0CFh, 87h ; 5efb
-	DB 97h, 0F6h, 0FFh, 17h, 0A7h, 0FFh, 87h, 87h ; 5f03
-	DB 0F7h, 87h, 8Fh, 0F6h, 0FFh, 18h, 0CFh, 87h ; 5f0b
-	DB 0B7h, 83h, 83h, 0FFh, 0CFh, 87h, 0F6h, 0FFh ; 5f13
-	DB 17h, 0B7h, 87h, 0CFh, 0F6h, 0FFh, 5Eh, 0E0h ; 5f1b
-	DB 0E0h, 0FDh, 0F3h, 0E0h, 0E0h, 0F6h, 0FFh, 18h ; 5f23
-	DB 0E2h, 0E2h, 0FFh, 0E1h, 0E1h, 0FDh, 0E1h, 0F6h ; 5f2b
-	DB 0FFh, 17h, 0E3h, 0FDh, 0E0h, 0E0h, 0FDh, 0F3h ; 5f33
-	DB 0E1h, 0E5h, 0F6h, 0FFh, 17h, 0E9h, 0FFh, 0E1h ; 5f3b
-	DB 0E1h, 0FDh, 0E1h, 0E3h, 0F6h, 0FFh, 18h, 0F3h ; 5f43
-	DB 0E1h, 0EDh, 0E0h, 0E0h, 0FFh, 0F3h, 0E1h, 0F6h ; 5f4b
-	DB 0FFh, 17h, 0EDh, 0E1h, 0F3h, 0EFh, 0E7h, 0F3h ; 5f53
-	DB 0F9h, 0FCh, 0F6h, 0FFh, 17h, 0FEh, 0FFh, 0F1h ; 5f5b
-	DB 0E0h, 0EEh, 0EEh, 0EEh, 0F6h, 0FFh, 18h, 0E0h ; 5f63
-	DB 0E0h, 0FAh, 0E0h, 0E5h, 0EFh, 0E7h, 0F3h, 0F6h ; 5f6b
-	DB 0FFh, 17h, 0F9h, 0FCh, 0FEh, 0FFh, 0F1h, 0E0h ; 5f73
-	DB 0EEh, 0E2h, 0F6h, 0FFh, 17h, 0E2h, 0FFh, 0E0h ; 5f7b
-	DB 0E0h, 0FAh, 0FAh, 0F6h, 0FFh, 9Eh, 9Fh, 07h ; 5f83
-	DB 07h, 0F6h, 0FFh, 05h, 0FEh, 0FEh, 0F6h, 0FFh ; 5f8b
-	DB 0Fh, 03h, 03h, 03h, 0F6h, 01h, 04h, 0FCh ; 5f93
-	DB 0FCh, 0FCh, 0F6h, 0F8h, 04h, 0F6h, 0FFh, 04h ; 5f9b
-	DB 07h, 07h, 0E7h, 0F6h, 0FFh, 04h, 0FEh, 0FEh ; 5fa3
-	DB 0FFh, 0F5h, 07h, 0F6h, 0F0h, 07h, 07h, 07h ; 5fab
-	DB 0E7h, 07h, 07h, 0FFh, 0FFh, 27h, 0FEh, 0FEh ; 5fb3
-	DB 0FFh, 0FEh, 0FEh, 0FFh, 0FFh, 0FEh, 0F5h, 07h ; 5fbb
-	DB 0F6h, 0F0h, 07h, 27h, 0FFh, 0FFh, 07h, 07h ; 5fc3
-	DB 0E7h, 07h, 07h, 0FEh, 0FFh, 0FFh, 0FEh, 0FEh ; 5fcb
-	DB 0FFh, 0FEh, 0FEh, 00h, 0F6h, 01h, 04h, 03h ; 5fd3
-	DB 03h, 0F0h, 0F6h, 0F8h, 04h, 0FCh, 0FCh, 0FFh ; 5fdb
-	DB 0FFh, 27h, 27h, 0F6h, 0FFh, 05h, 0FEh, 0FEh ; 5fe3
-	DB 0F6h, 0FFh, 03h, 03h, 07h, 07h, 9Fh, 0F6h ; 5feb
-	DB 0FFh, 03h, 0FCh, 0FEh, 0FEh, 0F6h, 0FFh ; 5ff3
-	ASCII "t" ; 5ffa
-	DB 0F5h, 3Eh, 03h, 0F5h, 0Fh, 80h, 80h, 0C0h ; 5ffb
-	DB 40h, 40h, 20h, 20h, 20h, 0Fh, 3Fh, 3Ch ; 6003
-	ASCII "p" ; 600b
-	DB 0F8h, 0E0h, 80h, 0F5h, 10h, 20h, 20h, 20h ; 600c
-	DB 60h, 40h, 0C0h, 00h, 00h, 06h, 3Eh ; 6014
-	ASCII "2" ; 601b
-	DB 9Ch, 0E0h, 19h, 0Fh ; 601c
-	ASCII "d" ; 6020
-	DB 0F5h, 10h, 0C0h, 0C0h, 60h, 20h ; 6021
-	ASCII "00" ; 6027
-	DB 0F0h, 0F4h, 0D5h, 0C7h ; 6029
-	ASCII "g" ; 602d
-	DB 08h, 0F0h, 00h, 01h, 0F5h, 0Fh, 0E0h, 60h ; 602e
-	ASCII "0`" ; 6036
-	DB 0C0h, 0F0h ; 6038
-	ASCII "xl" ; 603a
-	DB 80h, 08h, 1Ch, 3Fh ; 603c
-	ASCII "a" ; 6040
-	DB 0C0h, 8Eh, 8Dh, 0F5h, 0Fh ; 6041
-	ASCII "fsV" ; 6046
-	DB 0DCh, 0E0h, 20h, 20h, 20h, 87h, 93h, 98h ; 6049
-	DB 0CCh, 7Fh ; 6051
-	ASCIZ "0" ; 6053
-	DB 0E0h, 0F5h, 0Fh, 0F0h, 0F0h, 10h, 10h ; 6055
-	ASCII "p" ; 605c
-	DB 80h, 00h, 00h, 81h, 0C3h, 00h, 0F0h, 8Ch ; 605d
-	DB 07h ; 6065
-	ASCII "2z" ; 6066
-	DB 0F5h, 0Fh, 0C0h, 0E0h, 0A0h, 20h, 20h, 60h ; 6068
-	DB 0C0h, 80h ; 6070
-	ASCII "kc3" ; 6072
-	DB 84h ; 6075
-	ASCIZ "x" ; 6076
-	DB 03h, 0Fh, 0F5h, 0Fh, 0F6h, 80h, 03h, 0F5h ; 6078
-	DB 03h, 01h, 00h, 0E0h, 1Dh, 03h, 0F5h, 96h ; 6080
-	DB 01h, 07h, 1Fh, 3Ch, 0F5h, 17h, 0F0h, 0C0h ; 6088
-	ASCII "ag?" ; 6090
-	DB 07h, 0Eh, 0Ch, 0F5h, 17h, 0Ch, 0Ch, 04h ; 6093
-	DB 1Eh, 1Fh, 18h, 18h, 18h, 0F5h, 17h, 0Fh ; 609b
-	DB 03h, 07h, 06h, 0Eh, 0Ch, 0Ch, 0Fh, 0F5h ; 60a3
-	DB 17h, 01h, 01h, 03h, 03h, 03h, 07h, 06h ; 60ab
-	DB 07h, 0F5h, 17h, 0Fh, 07h, 0Fh, 18h, 19h ; 60b3
-	DB 1Bh, 1Eh, 06h, 0F5h, 17h, 1Eh, 1Eh, 1Bh ; 60bb
-	DB 19h ; 60c3
-	ASCII "x``" ; 60c4
-	DB 0F5h, 17h ; 60c8
-	ASCII "8" ; 60ca
-	DB 07h ; 60cb
-	ASCII "p" ; 60cc
-	DB 88h, 0F4h ; 60cd
-	ASCII "T" ; 60cf
-	DB 0A4h, 88h, 0F5h, 03h, 01h, 01h, 01h, 0F5h ; 60d0
-	DB 10h ; 60d8
-	ASCII "p" ; 60d9
-	DB 0F5h, 82h, 0FFh, 0FFh, 06h, 18h, 0F5h, 17h ; 60da
-	DB 60h, 0FFh, 0FFh, 00h, 0FBh, 0FBh, 00h, 0F8h ; 60e2
-	DB 0F5h, 17h, 0F8h, 10h, 08h, 0F8h, 0F0h, 04h ; 60ea
-	DB 0FEh, 0FEh, 0F5h, 17h, 04h ; 60f2
-	ASCII "p" ; 60f7
-	DB 0F8h, 0A8h, 0A8h, 0B8h, 0B0h, 0F5h, 18h, 0F8h ; 60f8
-	DB 0F8h, 10h, 08h, 0F8h, 0F0h, 00h ; 6100
-	ASCII "p" ; 6106
-	DB 0F5h, 17h, 0F8h, 88h, 88h, 0FFh, 0FFh, 00h ; 6107
-	ASCII "p" ; 610f
-	DB 0F8h, 0F5h, 17h, 88h, 88h, 0F8h ; 6110
-	ASCII "p<B" ; 6116
-	DB 0BDh, 95h, 0F5h, 17h, 95h, 0A9h ; 6119
-	ASCII "B<" ; 611f
-	DB 0F5h ; 6121
-	ASCIZ "K" ; 6122
+    include "src/splash.asm"
+
+minlib_startup_audio_data:
+    DB 00h
 	DB 10h, 80h, 07h, 0C0h, 03h, 03h, 04h, 0E8h ; 6124
 	DB 0Bh, 0F4h, 05h, 01h, 04h, 0E8h, 0Bh, 0F4h ; 612c
 	DB 05h, 03h, 04h, 0ECh, 08h ; 6134
