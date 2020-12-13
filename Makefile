@@ -24,6 +24,11 @@ else
         SREC_CAT := srec_cat
         POKEMINID := PokeMiniD
         POKEFLASH := pokeflash
+    else
+        WINE :=
+        POKEMINID := $(TOOLCHAIN_DIR)/bin-windows/PokeMiniD
+        SREC_CAT := $(TOOLCHAIN_DIR)/bin-windows/srec_cat
+        POKEFLASH := $(TOOLCHAIN_DIR)/bin-windows/pokeflash
     endif
 endif
 
