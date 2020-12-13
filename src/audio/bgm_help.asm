@@ -1,3 +1,4 @@
+bgm6:
 	; HEADER
 	DB 0B3h, 0F1h, 0A4h, 0C2h, 98h, 81h, 2Ah ; 664c
 

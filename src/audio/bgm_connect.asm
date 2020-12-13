@@ -1,3 +1,4 @@
+bgm7:
 	; HEADER
 	DB 0B2h, 0F1h, 0A4h, 0C1h ; 6789
 	DB 81h, 98h, 2Ah ; 6791

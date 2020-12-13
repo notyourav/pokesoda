@@ -252,7 +252,7 @@ loc_0x003CAE:
 
 	LD A,[1504h] ; 3cb6
 	LD YP,A ; 3cba
-	LD IY,#minlib_song_table ; 3cbc
+	LD IY,#minlib_bgm_table ; 3cbc
 	ADD IY,HL ; 3cbf
 	LD BA,[IY] ; 3cc1
 	LD [14E0h],BA ; 3cc3
