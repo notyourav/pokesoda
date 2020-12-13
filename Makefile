@@ -82,11 +82,14 @@ flash: $(TARGET).min
 %.abs %.map: %.out
 	$(LC88) $(LCFLAGS) -o $@ $<
 
-$(TARGET).out: $(OBJS)
+$(TARGET).out: src/splash.asm $(OBJS)
 	$(LK88) $(LKFLAGS) -o $@
 
 %.obj: %.asm
 	$(CC88) $(CFLAGS) -Tc-v -c -v -o $@ $<
+
+src/splash.asm: src/splash.png
+	py -3 tools/splash.py
 
 .PHONY: clean
 clean:
@@ -94,3 +97,4 @@ clean:
 	rm -f $(TARGET).out $(TARGET).abs $(TARGET).map $(TARGET).hex
 	rm -f $(TARGET).min
 	rm -f $(COMPILED_ASM)
+	rm -f src/splash.asm
