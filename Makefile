@@ -34,7 +34,7 @@ SRCS :=	src/ram.asm					\
 		src/rom1.asm				\
 		src/rom2.asm				\
 		src/rom3.asm				\
-		graphics/graphics1.asm	\
+		graphics/graphics1.asm		\
 		src/rom7.asm				\
 		graphics/graphics2.asm
 

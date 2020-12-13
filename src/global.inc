@@ -6,6 +6,26 @@ SYS_CTRL1 equ 00h
 SYS_CTRL2 equ 01h
 SYS_CTRL3 equ 02h
 
+TMR1_SCALE equ 18h
+TMR1_OSC equ 19h
+
+IRQ_PRI1 equ 20h
+IRQ_PRI2 equ 21h
+IRQ_PRI3 equ 22h
+
+IRQ_ENA1 equ 23h
+IRQ_ENA2 equ 24h
+IRQ_ENA3 equ 25h
+IRQ_ENA4 equ 26h
+
+IRQ_ACT1 equ 27h
+IRQ_ACT2 equ 28h
+IRQ_ACT3 equ 29h
+IRQ_ACT4 equ 2Ah
+
+TMR1_CTRL_L equ 30h
+TMR1_CTRL_H equ 31h
+
 KEY_PAD equ 52h
 
 IO_DIR equ 60h
@@ -27,6 +47,8 @@ PRC_SPR_HI equ 89h
 
 PRC_CNT equ 8Ah
 
+; System status flags
+
 SC_Z EQU 1
 SC_C EQU 2
 SC_V EQU 4
@@ -44,3 +66,11 @@ OFF_D EQU 0FFh^16
 OFF_U EQU 0FFh^32
 OFF_I0 EQU 0FFh^64
 OFF_I1 EQU 0FFh^128
+
+; Hardware Register Flags
+
+PRC_MODE_INVERT equ 0h
+PRC_MODE_COPY equ 8h
+
+
+
