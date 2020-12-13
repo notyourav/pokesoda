@@ -3,34 +3,28 @@ TARGET = soda
 
 SHA1 := $(shell { command -v sha1sum || command -v shasum; } 2>/dev/null) -c
 
-ASM_SOURCES = src/soda.asm
-ASM_BUILDDIR = build/src
+HAS_WINE := $(shell wine --version 2>/dev/null)
+HAS_WINE64 := $(shell wine64 --version 2>/dev/null)
 
-ifeq ($(OS), Windows_NT)
+ifdef HAS_WINE
+	WINE := wine
+	SREC_CAT := srec_cat
+	POKEMINID := PokeMiniD
+	POKEFLASH := pokeflash
+else ifdef HAS_WINE64
+	WINE := wine64
+	SREC_CAT := srec_cat
+	POKEMINID := PokeMiniD
+	POKEFLASH := pokeflash
+else
 	WINE :=
 	POKEMINID := $(TOOLCHAIN_DIR)/bin-windows/PokeMiniD
 	SREC_CAT := $(TOOLCHAIN_DIR)/bin-windows/srec_cat
 	POKEFLASH := $(TOOLCHAIN_DIR)/bin-windows/pokeflash
-else
-    HAS_WINE := $(shell which wine ; echo $$?)
-    HAS_WINE64 := $(shell which wine64 ; echo $$?)
-    ifneq ($(HAS_WINE), 0)
-        WINE := wine
-        SREC_CAT := srec_cat
-        POKEMINID := PokeMiniD
-        POKEFLASH := pokeflash
-    else ifneq ($(HAS_WINE64), 0)
-        WINE := wine64
-        SREC_CAT := srec_cat
-        POKEMINID := PokeMiniD
-        POKEFLASH := pokeflash
-    else
-        WINE :=
-        POKEMINID := $(TOOLCHAIN_DIR)/bin-windows/PokeMiniD
-        SREC_CAT := $(TOOLCHAIN_DIR)/bin-windows/srec_cat
-        POKEFLASH := $(TOOLCHAIN_DIR)/bin-windows/pokeflash
-    endif
 endif
+
+ASM_SOURCES = src/soda.asm
+ASM_BUILDDIR = build/src
 
 C88_DIR := $(TOOLCHAIN_DIR)/c88tools/bin
 C88 := $(WINE) $(C88_DIR)/c88.exe
