@@ -9,3 +9,4 @@ stdout.txt
 *.sta
 tools/bgm.bin
 tools/bgm.asm
+tools/bgm.bin.bak
