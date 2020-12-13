@@ -749,6 +749,9 @@ loc_0x0387A5:
 	DB 0F0h, 0F1h, 0F2h, 0F3h, 0F4h, 0F5h, 0F6h, 0F7h ; 387bc
 	DB 20h, 20h, 20h, 20h, 0F8h, 0F9h, 0FAh, 0FBh ; 387c4
 	DB 0FCh, 0FDh, 0FEh, 0FFh, 20h, 20h, 20h, 20h ; 387cc
+
+global data_387d4
+data_387d4:
 	ASCII "k" ; 387d4
 	DB 87h ; 387d5
 	ASCII "k" ; 387d6

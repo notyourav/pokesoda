@@ -2743,7 +2743,11 @@
 	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 249e7
 	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 249ef
 	DB 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh, 0FFh ; 249f7
-	DB 0FFh, 00h, 0FFh, 00h, 0FFh, 00h, 0FFh, 01h ; 249ff
+	DB 0FFh ; 249ff
+
+global unk_graphics_024a00
+unk_graphics_024a00:
+    DB 00h, 0FFh, 00h, 0FFh, 00h, 0FFh, 01h
 	DB 0FFh, 01h, 0FFh, 02h, 0FFh, 03h, 0FFh, 04h ; 24a07
 	DB 0FFh, 05h, 0FFh, 06h, 0FFh, 08h, 0FFh, 09h ; 24a0f
 	DB 0FFh, 0Bh, 0FFh, 0Dh, 0FFh, 0Fh, 0FFh, 11h ; 24a17
@@ -2780,7 +2784,11 @@
 	DB 0FFh, 0AAh, 0FFh, 0B0h, 0FFh, 0B6h, 0FFh, 0BCh ; 24a63
 	DB 0FFh, 0C2h, 0FFh, 0C8h, 0FFh, 0CEh, 0FFh, 0D4h ; 24a6b
 	DB 0FFh, 0DAh, 0FFh, 0E1h, 0FFh, 0E7h, 0FFh, 0EDh ; 24a73
-	DB 0FFh, 0F3h, 0FFh, 0FAh, 0FFh, 00h, 00h, 06h ; 24a7b
+	DB 0FFh, 0F3h, 0FFh, 0FAh, 0FFh ; 24a7b
+
+global unk_graphics_024a80
+unk_graphics_024a80:
+    DB 00h, 00h, 06h
 	DB 00h, 0Dh, 00h, 13h, 00h, 19h, 00h, 1Fh ; 24a83
 	DB 00h, 26h, 00h, 2Ch, 00h ; 24a8b
 	ASCIZ "2" ; 24a90
@@ -2907,7 +2915,11 @@
 	DB 0FFh, 0AAh, 0FFh, 0B0h, 0FFh, 0B6h, 0FFh, 0BCh ; 24c63
 	DB 0FFh, 0C2h, 0FFh, 0C8h, 0FFh, 0CEh, 0FFh, 0D4h ; 24c6b
 	DB 0FFh, 0DAh, 0FFh, 0E1h, 0FFh, 0E7h, 0FFh, 0EDh ; 24c73
-	DB 0FFh, 0F3h, 0FFh, 0FAh, 0FFh, 00h, 00h, 01h ; 24c7b
+	DB 0FFh, 0F3h, 0FFh, 0FAh, 0FFh ; 24c7b
+
+global unk_graphics_024c80
+unk_graphics_024c80:
+    DB 00h, 00h, 01h
 	DB 01h, 02h, 02h, 02h, 03h, 03h, 04h, 04h ; 24c83
 	DB 04h, 05h, 05h, 06h, 06h, 06h, 07h, 07h ; 24c8b
 	DB 07h, 08h, 08h, 09h, 09h, 09h, 0Ah, 0Ah ; 24c93
@@ -2924,7 +2936,11 @@
 	DB 2Ch, 2Ch, 2Ch, 2Dh, 2Dh, 2Eh, 2Eh, 2Fh ; 24ceb
 	DB 2Fh ; 24cf3
 	ASCII "0001122334455566778899::;;<<==>>>??@@AABBCCDDEEFFGGHIIJJKKLLMMNNOOPQQRRSSTTUVVWWXXYZZ[[\]]^^_``aabccdeeffghhijjkllmnnoppqrsstuuvwxxyz{{|}~~" ; 24cf4
-	DB 80h, 80h, 80h, 00h, 00h, 0FFh, 14h, 00h ; 24d80
+	DB 80h, 80h, 80h ; 24d80
+
+global unk_graphics_024d83
+unk_graphics_024d83:
+    DB 00h, 00h, 0FFh, 14h, 00h
 	DB 0FFh ; 24d88
 	ASCIZ "O" ; 24d89
 	DB 0FFh, 0B2h, 00h, 0FFh, 3Ch, 01h, 0FFh, 0EDh ; 24d8b
@@ -2982,7 +2998,11 @@
 	DB 0DAh, 0FFh, 0AAh, 0E0h, 0FFh, 0E8h, 0E6h, 0FFh ; 24e32
 	DB 2Bh, 0EDh, 0FFh ; 24e3a
 	ASCII "p" ; 24e3d
-	DB 0F3h, 0FFh, 0B8h, 0F9h, 0FFh, 00h, 00h, 00h ; 24e3e
+	DB 0F3h, 0FFh, 0B8h, 0F9h, 0FFh ; 24e3e
+
+global unk_graphics_024e43
+unk_graphics_024e43:
+    DB 00h, 00h, 00h
 	ASCII "H" ; 24e46
 	DB 06h, 00h, 90h, 0Ch, 00h, 0D5h, 12h, 00h ; 24e47
 	DB 18h, 19h, 00h ; 24e4f

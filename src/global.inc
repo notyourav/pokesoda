@@ -2,6 +2,10 @@
 
 REG_BASE equ 2000h
 
+SYS_CTRL1 equ 00h
+SYS_CTRL2 equ 01h
+SYS_CTRL3 equ 02h
+
 KEY_PAD equ 52h
 
 IO_DIR equ 60h

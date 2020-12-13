@@ -316,7 +316,7 @@ loc_0x003D45:
 	LD L,#02h ; 3d51
 	MLT ; 3d53
 
-	LD IY,#622Ch ; 3d55
+	LD IY,#minlib_frequency_table ; 3d55
 	ADD IY,HL ; 3d58
 	LD BA,[IY] ; 3d5a
 	CP BA,#0000h ; 3d5c
@@ -337,7 +337,7 @@ loc_0x003D70:
 	LD [14F0h],H ; 3d74
 	LD H,#00h ; 3d78
 	LD L,[14E6h] ; 3d7a
-	LD IY,#61F8h ; 3d7e
+	LD IY,#minlib_waveform_lookup ; 3d7e
 	LD A,[1507h] ; 3d81
 	BIT A,#80h ; 3d85
 	JRL NZ,loc_0x003E1E ; 3d87
@@ -367,7 +367,7 @@ loc_0x003DA6:
 	LD [14F2h],H ; 3daa
 	LD L,[14E5h] ; 3dae
 	LD B,[14E2h] ; 3db2
-	LD IY,#61C2h ; 3db6
+	LD IY,#minlib_notelen_lookup ; 3db6
 	LD A,#09h ; 3db9
 
 	MLT ; 3dbb
@@ -423,7 +423,7 @@ loc_0x003E03:
 
 	LD L,[14E5h] ; 3e03
 	LD B,[14E2h] ; 3e07
-	LD IY,#61C2h ; 3e0b
+	LD IY,#minlib_notelen_lookup ; 3e0b
 	LD A,#09h ; 3e0e
 
 	MLT ; 3e10
@@ -528,7 +528,7 @@ loc_0x003E93:
 	LD [14E4h],A ; 3e96
 
 	LD L,[14E4h] ; 3e9a
-	LD IY,#61FCh ; 3e9e
+	LD IY,#minlib_unknown_lookup_3 ; 3e9e
 	LD B,[IY+L] ; 3ea1
 	LD [14E9h],B ; 3ea3
 
@@ -2931,7 +2931,7 @@ loc_0x004B9B:
 	DEC A ; 4b9e
 	JRS NZ,loc_0x004B9B ; 4b9f
 loc_0x004BA1:
-	LD IY,#2061h ; 4ba1
+	LD IY,#REG_BASE + IO_DATA ; 4ba1
 	LD IX,[150Dh] ; 4ba4
 	LD A,[150Bh] ; 4ba7
 	CP A,#00h ; 4bab
@@ -3483,7 +3483,7 @@ loc_0x004E0F:
 loc_0x004E10:
 	PUSH IY ; 4e10
 	PUSH B ; 4e11
-	LD IY,#2061h ; 4e13
+	LD IY,#REG_BASE + IO_DATA ; 4e13
 	LD B,#04h ; 4e16
 	INT [98h] ; 4e18
 	POP B ; 4e1a
@@ -5098,7 +5098,7 @@ loc_0x0056AF:
 	LD H,[BR:24h] ; 56c1
 	PUSH HL ; 56c3
 	LD L,[BR:26h] ; 56c4
-	LD H,[BR:80h] ; 56c6
+	LD H,[BR:PRC_MODE] ; 56c6
 	PUSH HL ; 56c8
 	LD [BR:23h],#00h ; 56c9
 	AND [BR:24h],#03h ; 56cc
@@ -5107,11 +5107,11 @@ loc_0x0056D2:
 	CARL loc_0x005A1D ; 56d2
 	CP A,#00h ; 56d5
 	JRS NZ,loc_0x0056D2 ; 56d7
-	LD [BR:80h],#00h ; 56d9
+	LD [BR:PRC_MODE],#00h ; 56d9
 	PUSH IP ; 56dc
 	PUSH IX ; 56dd
 	LD YP,#00h ; 56de
-	LD IY,#2061h ; 56e1
+	LD IY,#REG_BASE + IO_DATA ; 56e1
 	CARL loc_0x004E10 ; 56e4
 	POP IX ; 56e7
 	POP IP ; 56e8
@@ -5147,7 +5147,7 @@ loc_0x00571D:
 	LD [BR:2Ah],#0FFh ; 572e
 	POP HL ; 5731
 	LD [BR:26h],L ; 5732
-	LD [BR:80h],H ; 5734
+	LD [BR:PRC_MODE],H ; 5734
 	POP HL ; 5736
 	LD [BR:23h],L ; 5737
 	LD [BR:24h],H ; 5739
@@ -5204,7 +5204,7 @@ loc_0x005786:
 	LD H,[BR:24h] ; 5798
 	PUSH HL ; 579a
 	LD L,[BR:26h] ; 579b
-	LD H,[BR:80h] ; 579d
+	LD H,[BR:PRC_MODE] ; 579d
 	PUSH HL ; 579f
 	LD L,[BR:25h] ; 57a0
 	PUSH L ; 57a2
@@ -5216,7 +5216,7 @@ loc_0x0057B0:
 	CARL loc_0x005A1D ; 57b0
 	CP A,#00h ; 57b3
 	JRS NZ,loc_0x0057B0 ; 57b5
-	LD [BR:80h],#00h ; 57b7
+	LD [BR:PRC_MODE],#00h ; 57b7
 	LD A,#03h ; 57ba
 	LD [1529h],A ; 57bc
 loc_0x0057C0:
@@ -5272,7 +5272,7 @@ loc_0x005816:
 	LD [BR:25h],L ; 582c
 	POP HL ; 582e
 	LD [BR:26h],L ; 582f
-	LD [BR:80h],H ; 5831
+	LD [BR:PRC_MODE],H ; 5831
 	POP HL ; 5833
 	LD [BR:23h],L ; 5834
 	LD [BR:24h],H ; 5836
@@ -5294,7 +5294,7 @@ loc_0x005842:
 	LD H,[BR:24h] ; 5850
 	PUSH HL ; 5852
 	LD L,[BR:26h] ; 5853
-	LD H,[BR:80h] ; 5855
+	LD H,[BR:PRC_MODE] ; 5855
 	PUSH HL ; 5857
 	LD [BR:23h],#00h ; 5858
 	AND [BR:24h],#03h ; 585b
@@ -5303,7 +5303,7 @@ loc_0x005861:
 	CARL loc_0x005A1D ; 5861
 	CP A,#00h ; 5864
 	JRS NZ,loc_0x005861 ; 5866
-	LD [BR:80h],#00h ; 5868
+	LD [BR:PRC_MODE],#00h ; 5868
 	LD A,[152Fh] ; 586b
 	CP A,#00h ; 586f
 	JRS NZ,loc_0x005879 ; 5871
@@ -5382,7 +5382,7 @@ loc_0x0058FC:
 	LD [BR:2Ah],#0FFh ; 5915
 	POP HL ; 5918
 	LD [BR:26h],L ; 5919
-	LD [BR:80h],H ; 591b
+	LD [BR:PRC_MODE],H ; 591b
 	POP HL ; 591d
 	LD [BR:23h],L ; 591e
 	LD [BR:24h],H ; 5920
@@ -5411,7 +5411,7 @@ loc_0x00593B:
 	LD [BR:2Ah],#0FFh ; 594b
 	POP HL ; 594e
 	LD [BR:26h],L ; 594f
-	LD [BR:80h],H ; 5951
+	LD [BR:PRC_MODE],H ; 5951
 	POP HL ; 5953
 	LD [BR:23h],L ; 5954
 	LD [BR:24h],H ; 5956
@@ -5425,7 +5425,7 @@ loc_0x005959:
 	LD H,[BR:24h] ; 5963
 	PUSH HL ; 5965
 	LD L,[BR:26h] ; 5966
-	LD H,[BR:80h] ; 5968
+	LD H,[BR:PRC_MODE] ; 5968
 	PUSH HL ; 596a
 	LD [BR:23h],#00h ; 596b
 	AND [BR:24h],#03h ; 596e
@@ -5433,7 +5433,7 @@ loc_0x005959:
 	CARL loc_0x005A1D ; 5974
 	CP A,#00h ; 5977
 	JRL NZ,loc_0x0059E6 ; 5979
-	LD [BR:80h],#00h ; 597c
+	LD [BR:PRC_MODE],#00h ; 597c
 	LD A,#00h ; 597f
 	LD [152Ch],A ; 5981
 	LD A,[152Fh] ; 5985
@@ -5471,7 +5471,7 @@ loc_0x0059C6:
 	LD [BR:2Ah],#0FFh ; 59d4
 	POP HL ; 59d7
 	LD [BR:26h],L ; 59d8
-	LD [BR:80h],H ; 59da
+	LD [BR:PRC_MODE],H ; 59da
 	POP HL ; 59dc
 	LD [BR:23h],L ; 59dd
 	LD [BR:24h],H ; 59df
@@ -5499,7 +5499,7 @@ loc_0x0059F6:
 	LD EP,#00h ; 59f6
 	LD BR,#20h ; 59f9
 
-	OR [BR:61h],#20h ; 59fb
+	OR [BR:IO_DATA],#20h ; 59fb
 	AND [BR:26h],#7Fh ; 59fe
 	LD [BR:2Ah],#80h ; 5a01
 
@@ -5531,7 +5531,7 @@ loc_0x005A1B:
 ; ---------------------- ; 5a1c
 loc_0x005A1D:
 	LD BR,#20h ; 5a1d
-	LD A,[BR:81h] ; 5a1f
+	LD A,[BR:PRC_RATE] ; 5a1f
 	RR A ; 5a21
 	AND A,#07h ; 5a23
 	LD H,#00h ; 5a25
@@ -5541,20 +5541,20 @@ loc_0x005A1D:
 	LD EP,#00h ; 5a2c
 	LD B,[HL] ; 5a2f
 	POP EP ; 5a30
-	LD A,[BR:81h] ; 5a31
+	LD A,[BR:PRC_RATE] ; 5a31
 	AND A,#0F0h ; 5a33
 	CP A,B ; 5a35
 	JRS NZ,loc_0x005A53 ; 5a36
-	BIT [BR:80h],#08h ; 5a38
+	BIT [BR:PRC_MODE],#08h ; 5a38
 	JRS Z,loc_0x005A53 ; 5a3b
-	BIT [BR:80h],#06h ; 5a3d
+	BIT [BR:PRC_MODE],#06h ; 5a3d
 	JRS Z,loc_0x005A49 ; 5a40
-	CP [BR:8Ah],#16h ; 5a42
+	CP [BR:PRC_CNT],#16h ; 5a42
 	JRS NC,loc_0x005A50 ; 5a45
 	JRS loc_0x005A53
 ; ---------------------- ; 5a47
 loc_0x005A49:
-	CP [BR:8Ah],#37h ; 5a49
+	CP [BR:PRC_CNT],#37h ; 5a49
 	JRS NC,loc_0x005A50 ; 5a4c
 	JRS loc_0x005A53
 ; ---------------------- ; 5a4e
@@ -5575,7 +5575,7 @@ loc_0x005A56:
 	LD L,A ; 5a5c
 	LD [IY],A ; 5a5d
 	LD BR,#20h ; 5a5e
-	LD HL,#5A7Fh ; 5a60
+	LD HL,#lookup_5a7f ; 5a60
 loc_0x005A63:
 	LD [BR:10h],[HL] ; 5a63
 	OR [BR:10h],#10h ; 5a65
@@ -5593,14 +5593,10 @@ loc_0x005A7A:
 	LD A,[HL] ; 5a7d
 	RET
 ; ---------------------- ; 5a7e
-loc_0x005A7F:
-	ADC A,[HL] ; 5a7f
-	ADC A,B ; 5a80
-	ADC A,A ; 5a81
-	NOP ; 5a82
-	ADD A,[HL] ; 5a83
-	ADD A,#01h ; 5a84
-	ADD A,A ; 5a86
+lookup_5a7f:
+	DB 0Bh, 09h, 08h, 0FFh, 03h, 02h, 01h, 00h
+; ---------------------- ; 5a7f
+loc_0x005A87:
 	CP A,#12h ; 5a87
 	JRS C,loc_0x005AAD ; 5a89
 	CP A,#2Eh ; 5a8b
@@ -5755,7 +5751,7 @@ minlib_splash_screen:
 
 loc_0x005B4E:
 
-	LD A,[BR:52h] ; 5b4e
+	LD A,[BR:KEY_PAD] ; 5b4e
 	CPL A ; 5b50
 	LD [1E7Ch],A ; 5b52
 
@@ -5775,8 +5771,8 @@ loc_0x005B4E:
 	LD HL,#minlib_startup_logo_data_end ; 5b6f
 	CARL loc_0x005E21 ; 5b72
 
-	LD A,[21AFh] ; 5b75
-	CP A,#4Ah ; 5b79
+	LD A,[game_id + 3] ; 5b75
+	CP A,#'J' ; 5b79
 	JRS Z,loc_0x005B95 ; 5b7b
 
 	PUSH IP ; 5b7d
@@ -5809,27 +5805,27 @@ loc_0x005B95:
 	CARL minlib_reset_audio_registers ; 5b99
 	POP ALE ; 5b9c
 
-	LD [BR:80h],#06h ; 5b9e
+	LD [BR:PRC_MODE],#06h ; 5b9e
 
 	LD A,#00h ; 5ba1
 	INT [7Eh] ; 5ba3
 
-	LD [BR:82h],#60h ; 5ba5
-	LD [BR:83h],#13h ; 5ba8
-	LD [BR:84h],#00h ; 5bab
+	LD [BR:PRC_MAP_LO],#@LOW(tilemap) ; 5ba5
+	LD [BR:PRC_MAP_MID],#@HIGH(tilemap) ; 5ba8
+	LD [BR:PRC_MAP_HI],#00h ; 5bab
 
 	XOR A,A ; 5bae
-	LD [BR:85h],A ; 5baf
-	LD [BR:86h],A ; 5bb1
+	LD [BR:PRC_SCROLL_Y],A ; 5baf
+	LD [BR:PRC_SCROLL_X],A ; 5bb1
 
 	LD BA,[1E78h] ; 5bb3
 	ADD BA,#0180h ; 5bb6
 
-	LD [BR:87h],A ; 5bb9
-	LD [BR:88h],B ; 5bbb
-	LD [BR:89h],#00h ; 5bbd
+	LD [BR:PRC_SPR_LO],A ; 5bb9
+	LD [BR:PRC_SPR_MID],B ; 5bbb
+	LD [BR:PRC_SPR_HI],#00h ; 5bbd
 
-	LD IX,#1360h ; 5bc0
+	LD IX,#tilemap ; 5bc0
 
 	XOR A,A ; 5bc3
 
@@ -5839,7 +5835,7 @@ loc_0x005BC4:
 
 	INC IX ; 5bc5
 
-	CP IX,#13C0h ; 5bc6
+	CP IX,#tilemap + 60h ; 5bc6
 	JRS NZ,loc_0x005BC4 ; 5bc9
 
 	PUSH ALE ; 5bcb
@@ -5896,7 +5892,7 @@ loc_0x005C03:
 
 	LD [1E7Ah],A ; 5c09
 
-	LD HL,#2000h ; 5c0d
+	LD HL,#REG_BASE + SYS_CTRL1 ; 5c0d
 	LD B,[0096h] ; 5c10
 	CP B,#0CEh ; 5c14
 	JRS NZ,loc_0x005C22 ; 5c17
@@ -5979,7 +5975,7 @@ loc_0x005C7C:
 	ADD SP,#0003h ; 5c8b
 	POP ALE ; 5c8f
 
-	OR [BR:80h],#08h ; 5c91
+	OR [BR:PRC_MODE],#08h ; 5c91
 
 	CARL loc_0x005DAB ; 5c94
 
@@ -6100,21 +6096,21 @@ loc_0x005D1E:
 	CARL loc_0x005DF0 ; 5d32
 	CARL loc_0x005E4A ; 5d35
 
-	AND [BR:80h],#0F7h ; 5d38
+	AND [BR:PRC_MODE],#0F7h ; 5d38
 
 	LD A,#03h ; 5d3b
 	INT [7Eh] ; 5d3d
 	XOR A,A ; 5d3f
 
-	LD [BR:80h],A ; 5d40
-	LD [BR:82h],A ; 5d42
-	LD [BR:83h],A ; 5d44
-	LD [BR:84h],A ; 5d46
-	LD [BR:85h],A ; 5d48
-	LD [BR:86h],A ; 5d4a
-	LD [BR:87h],A ; 5d4c
-	LD [BR:88h],A ; 5d4e
-	LD [BR:89h],A ; 5d50
+	LD [BR:PRC_MODE],A ; 5d40
+	LD [BR:PRC_MAP_LO],A ; 5d42
+	LD [BR:PRC_MAP_MID],A ; 5d44
+	LD [BR:PRC_MAP_HI],A ; 5d46
+	LD [BR:PRC_SCROLL_Y],A ; 5d48
+	LD [BR:PRC_SCROLL_X],A ; 5d4a
+	LD [BR:PRC_SPR_LO],A ; 5d4c
+	LD [BR:PRC_SPR_MID],A ; 5d4e
+	LD [BR:PRC_SPR_HI],A ; 5d50
 
 	PUSH ALE ; 5d52
 	CARL loc_0x0046A4 ; 5d54
@@ -6124,14 +6120,14 @@ loc_0x005D1E:
 	LD L,[1E7Eh] ; 5d5d
 	LD IY,HL ; 5d61
 	LD H,[1E7Fh] ; 5d63
-	LD IX,#1300h ; 5d67
+	LD IX,#sprite_oam ; 5d67
 	XOR A,A ; 5d6a
 
 loc_0x005D6B:
 
 	LD [IX],A ; 5d6b
 	INC IX ; 5d6c
-	CP IX,#1360h ; 5d6d
+	CP IX,#sprite_oam + 60h ; 5d6d
 	JRS NZ,loc_0x005D6B ; 5d70
 
 	LD IX,#1539h ; 5d72
@@ -6191,7 +6187,7 @@ loc_0x005DAB:
 
 	LD B,#00h ; 5dab
 	LD A,#10h ; 5dad
-	LD IX,#1300h ; 5daf
+	LD IX,#sprite_oam ; 5daf
 
 loc_0x005DB2:
 
@@ -6207,14 +6203,14 @@ loc_0x005DB2:
 
 loc_0x005DC1:
 
-	CP IX,#1360h ; 5dc1
+	CP IX,#sprite_oam + 60h ; 5dc1
 	JRS NZ,loc_0x005DB2 ; 5dc4
 
 	RET
 
 ; ---------------------- ; 5dc6
 loc_0x005DC7:
-	LD IX,#1302h ; 5dc7
+	LD IX,#sprite_oam + 2 ; 5dc7
 
 loc_0x005DCA:
 
@@ -6234,7 +6230,7 @@ loc_0x005DD3:
 	CP B,#50h ; 5dd7
 	JRS NC,loc_0x005DEF ; 5dda
 
-	LD IX,#1301h ; 5ddc
+	LD IX,#sprite_oam + 1 ; 5ddc
 	ADD IX,HL ; 5ddf
 	LD A,B ; 5de1
 	LD B,#06h ; 5de2
@@ -6264,7 +6260,7 @@ loc_0x005DF4:
 	BIT [BR:27h],#80h ; 5df4
 	JRS Z,loc_0x005DF4 ; 5df7
 
-	LD B,[BR:52h] ; 5df9
+	LD B,[BR:KEY_PAD] ; 5df9
 	CPL B ; 5dfb
 	LD A,[1E7Ch] ; 5dfd
 	LD [1E7Ch],B ; 5e01
@@ -6287,7 +6283,7 @@ loc_0x005E0F:
 
 	ADD A,B ; 5e0f
 	LD B,#00h ; 5e10
-	LD IY,#61A2h ; 5e12
+	LD IY,#minlib_startup_anim_data ; 5e12
 	ADD IY,BA ; 5e15
 	LD A,[IY] ; 5e17
 
@@ -6363,7 +6359,7 @@ loc_0x005E4A:
 
 	LD B,#00h ; 5e4a
 
-	AND [BR:02h],#0DFh ; 5e4c
+	AND [BR:SYS_CTRL3],#0DFh ; 5e4c
 
 	AND [BR:19h],#0CFh ; 5e4f
 
@@ -6372,12 +6368,12 @@ loc_0x005E4A:
 	LD [BR:25h],B ; 5e57
 	LD [BR:26h],B ; 5e59
 
-	OR [BR:60h],#0Ch ; 5e5b
-	AND [BR:61h],#0FBh ; 5e5e
-	OR [BR:61h],#08h ; 5e61
-	OR [BR:61h],#04h ; 5e64
-	LD [BR:61h],#20h ; 5e67
-	LD [BR:60h],#32h ; 5e6a
+	OR [BR:IO_DIR],#0Ch ; 5e5b
+	AND [BR:IO_DATA],#0FBh ; 5e5e
+	OR [BR:IO_DATA],#08h ; 5e61
+	OR [BR:IO_DATA],#04h ; 5e64
+	LD [BR:IO_DATA],#20h ; 5e67
+	LD [BR:IO_DIR],#32h ; 5e6a
 
 	AND [BR:71h],#0FCh ; 5e6d
 
@@ -6388,35 +6384,35 @@ loc_0x005E71:
 	CARL loc_0x005E7C ; 5e71
 	CP A,#00h ; 5e74
 	JRS NZ,loc_0x005E71 ; 5e76
-	AND [BR:80h],#0F7h ; 5e78
+	AND [BR:PRC_MODE],#0F7h ; 5e78
 	RET
 ; ---------------------- ; 5e7b
 loc_0x005E7C:
 	LD BR,#20h ; 5e7c
-	LD A,[BR:81h] ; 5e7e
+	LD A,[BR:PRC_RATE] ; 5e7e
 	RR A ; 5e80
 	AND A,#07h ; 5e82
 	LD H,#00h ; 5e84
 	LD L,A ; 5e86
-	ADD HL,#5EB5h ; 5e87
+	ADD HL,#minlib_prc_rate_lookup_unknown ; 5e87
 	PUSH EP ; 5e8a
 	LD EP,#00h ; 5e8b
 	LD B,[HL] ; 5e8e
 	POP EP ; 5e8f
-	LD A,[BR:81h] ; 5e90
+	LD A,[BR:PRC_RATE] ; 5e90
 	AND A,#0F0h ; 5e92
 	CP A,B ; 5e94
 	JRS NZ,loc_0x005EB2 ; 5e95
-	BIT [BR:80h],#08h ; 5e97
+	BIT [BR:PRC_MODE],#08h ; 5e97
 	JRS Z,loc_0x005EB2 ; 5e9a
-	BIT [BR:80h],#06h ; 5e9c
+	BIT [BR:PRC_MODE],#06h ; 5e9c
 	JRS Z,loc_0x005EA8 ; 5e9f
-	CP [BR:8Ah],#16h ; 5ea1
+	CP [BR:PRC_CNT],#16h ; 5ea1
 	JRS NC,loc_0x005EAF ; 5ea4
 	JRS loc_0x005EB2
 ; ---------------------- ; 5ea6
 loc_0x005EA8:
-	CP [BR:8Ah],#37h ; 5ea8
+	CP [BR:PRC_CNT],#37h ; 5ea8
 	JRS NC,loc_0x005EAF ; 5eab
 	JRS loc_0x005EB2
 ; ---------------------- ; 5ead
@@ -6429,6 +6425,7 @@ loc_0x005EB2:
 	RET
 ; ---------------------- ; 5eb4
 
+minlib_prc_rate_lookup_unknown:
 	DB 20h ; 5eb5
 	ASCII "P" ; 5eb6
 	DB 80h, 0B0h, 10h ; 5eb7
@@ -6466,6 +6463,8 @@ minlib_startup_audio_data:
 	DB 01h, 03h, 03h, 0F6h, 01h, 0FBh, 00h, 01h ; 618e
 	DB 03h, 0FAh, 02h, 7Dh, 01h, 01h, 03h, 0F6h ; 6196
 	DB 01h, 0FBh, 00h, 0FFh ; 619e
+    
+minlib_startup_anim_data:
 	ASCII "ax" ; 61a2
 	DB 8Eh, 0A2h, 0B5h, 0C5h, 0D4h, 0E1h, 0ECh, 0F4h ; 61a4
 	DB 0FBh, 0FEh ; 61ac
