@@ -186,6 +186,7 @@ cartridge_irq:
 
 ; ---------------------- ; 21a3
 	ASCII "NINTENDO" ; 21a4
+game_id:
 	ASCII "MSDJ"
 
 	; SJIS name
@@ -193,11 +194,11 @@ cartridge_irq:
 
 	DB 00h, 00h, 00h, 00h
 
-	ASCIZ "2P" ; 21bc
+	ASCII "2P" ; 21bc
 
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21bf
-	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 21c7
-	DB 00h ; 21cf
+	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h
+	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h
+	DB 00h, 00h
 
 ; ---------------------- ; 21cf
 loc_0x0021D0:
@@ -540,7 +541,7 @@ loc_0x002338:
 
 	CARL WaitNextFrame ; 2338
 
-	LD [BR:80h],#00h ; 233b
+	LD [BR:PRC_MODE],#00h ; 233b
 
 	RET
 
@@ -550,7 +551,7 @@ loc_0x00233F:
 
 	CARL WaitNextFrame ; 233f
 
-	LD [BR:80h],#08h ; 2342
+	LD [BR:PRC_MODE],#08h ; 2342
 
 	RET
 
@@ -568,14 +569,19 @@ vblank_loop:
 
 	RET
 
-; ---------------------- ; 234f
-loc_0x002350:
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+;   Args:
+;     IY: start addr
+;     BA: length
+;      L: fill byte
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+memset:
 
 	LD [IY], L
 	INC IY
 
 	DEC BA
-	JRS NZ, loc_0x002350
+	JRS NZ, memset
 
 	RET
 
@@ -715,11 +721,11 @@ loc_0x002409:
 
 	PUSH EP ; 2409
 
-	LD EP,#02h ; 240a
+	LD EP,#@DPAG(unk_graphics_024a80) ; 240a
 	LD H,#00h ; 240d
 
 	ADD HL,HL ; 240f
-	ADD HL,#4A80h ; 2411
+	ADD HL,#@DOFF(unk_graphics_024a80) ; 2411
 
 	LD BA,[HL] ; 2414
 
@@ -732,11 +738,11 @@ loc_0x002418:
 
 	PUSH EP ; 2418
 
-	LD EP,#02h ; 2419
+	LD EP,#@DPAG(unk_graphics_024a00) ; 2419
 	LD H,#00h ; 241c
 
 	ADD HL,HL ; 241e
-	ADD HL,#4A00h ; 2420
+	ADD HL,#@DOFF(unk_graphics_024a00) ; 2420
 
 	LD BA,[HL] ; 2423
 
@@ -749,13 +755,13 @@ loc_0x002427:
 
 	PUSH EP ; 2427
 
-	LD EP,#02h ; 2428
+	LD EP,#@DPAG(unk_graphics_024e43) ; 2428
 	LD H,#00h ; 242b
 
 	LD BA,HL ; 242d
 	ADD HL,BA ; 242f
 	ADD HL,BA ; 2431
-	ADD HL,#4E43h ; 2433
+	ADD HL,#@DOFF(unk_graphics_024e43) ; 2433
 
 	LD BA,[HL] ; 2436
 
@@ -774,13 +780,13 @@ loc_0x00243F:
 
 	PUSH EP ; 243f
 
-	LD EP,#02h ; 2440
+	LD EP,#@DPAG(unk_graphics_024d83) ; 2440
 	LD H,#00h ; 2443
 
 	LD BA,HL ; 2445
 	ADD HL,BA ; 2447
 	ADD HL,BA ; 2449
-	ADD HL,#4D83h ; 244b
+	ADD HL,#@DOFF(unk_graphics_024d83) ; 244b
 
 	LD BA,[HL] ; 244e
 
@@ -799,9 +805,9 @@ loc_0x002457:
 
 	PUSH EP ; 2457
 
-	LD EP,#02h ; 2458
+	LD EP,#@DPAG(unk_graphics_024c80) ; 2458
 	LD H,#00h ; 245b
-	ADD HL,#4C80h ; 245d
+	ADD HL,#@DOFF(unk_graphics_024c80) ; 245d
 
 	LD A,[HL] ; 2460
 
@@ -1182,7 +1188,7 @@ loc_0x00259F:
 	LD YP, #00h
 	LD L, #00h
 	LD BA, #0300h
-	CARL loc_0x002350
+	CARL memset
 
 	RET
 
@@ -1193,12 +1199,12 @@ loc_0x0025AE:
 	LD YP, #00h
 	LD L, #00h
 	LD BA, #0180h
-	CARL loc_0x002350
+	CARL memset
 
 	RET
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-; Zero memory until reaching end address
+; Set incrementing memory values until end address
 ;   Args:
 ;     IY: end address
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -1425,13 +1431,18 @@ loc_0x00267F:
 ; ---------------------- ; 268c
 global loc_0x00268D
 loc_0x00268D:
-	DB 0CFh, 0B9h, 0F2h, 0F6h ; 268d
-	ASCII "3" ; 2691
-	DB 0BCh ; 2692
-	ASCII "J" ; 2693
-	DB 16h, 0CFh, 0BDh, 0B8h ; 2694
-	ASCII "J" ; 2698
-	DB 16h, 0F8h
+
+	PUSH ALE ; 268d
+    
+	CARL loc_0x005A87 ; 268f
+    
+	LD [164Ah],BA ; 2692
+    
+	POP ALE ; 2695
+    
+	LD BA,[164Ah] ; 2697
+    
+	RET
 ; ---------------------- ; 2699
 loc_0x00269B:
 
@@ -1493,7 +1504,7 @@ loc_0x0026C6:
 	LD A,[1AB6h] ; 26d2
 	LD B,#00h ; 26d6
 
-	LD IY,#2705h ; 26d8
+	LD IY,#lookup_2705 ; 26d8
 	LD YP,#00h ; 26db
 	ADD IY,BA ; 26de
 	LD A,[IY] ; 26e0
@@ -1502,7 +1513,7 @@ loc_0x0026C6:
 	LD A,[1AB7h] ; 26e5
 	LD B,#00h ; 26e9
 
-	LD IY,#2708h ; 26eb
+	LD IY,#lookup_2708 ; 26eb
 	LD YP,#00h ; 26ee
 	ADD IY,BA ; 26f1
 	LD A,[IY] ; 26f3
@@ -1523,7 +1534,11 @@ loc_0x0026FB:
 	RET
 
 ; ---------------------- ; 2704
-	DB 00h, 01h, 03h, 00h, 81h, 83h, 01h, 03h
+lookup_2705:
+	DB 00h, 01h, 03h
+
+lookup_2708:
+    DB 00h, 81h, 83h, 01h, 03h
 ; ---------------------- ; 2705
 loc_0x00270D:
 
@@ -1666,7 +1681,7 @@ loc_0x002798:
 	PUSH A ; 2798
 	PUSH HL ; 279a
 
-	LD IX,#21ACh ; 279b
+	LD IX,#game_id ; 279b
 	LD XP,#00h ; 279e
 
 	LD B,#10h ; 27a1
@@ -1789,7 +1804,7 @@ loc_0x0027F8:
 ; ---------------------- ; 2807
 loc_0x002808:
 
-	LD IX,#21ACh ; 2808
+	LD IX,#game_id ; 2808
 	LD XP,#00h ; 280b
 
 	LD BA,[IX] ; 280e
@@ -1892,7 +1907,7 @@ loc_0x00287D:
 
 	CARL loc_0x002847 ; 287d
 
-	LD IX,#21ACh ; 2880
+	LD IX,#game_id ; 2880
 	LD XP,#00h ; 2883
 	LD BA,[IX] ; 2886
 	LD [159Fh],BA ; 2888
@@ -1940,7 +1955,7 @@ loc_0x0028BF:
 
 	CARL loc_0x002847 ; 28c0
 
-	LD IX,#21ACh ; 28c3
+	LD IX,#game_id ; 28c3
 
 	LD XP,#00h ; 28c6
 	LD BA,[IX] ; 28c9
@@ -1970,7 +1985,7 @@ loc_0x0028BF:
 	LD XP,#00h ; 28f7
 	CARL loc_0x002745 ; 28fa
 
-	LD IX,#21ACh ; 28fd
+	LD IX,#game_id ; 28fd
 
 	LD XP,#00h ; 2900
 	LD BA,[IX] ; 2903
@@ -2258,7 +2273,7 @@ loc_0x002A70:
 	INT [42h] ; 2a87
 	LD EP,#00h ; 2a89
 
-	LD A,[BR:52h] ; 2a8c
+	LD A,[BR:KEY_PAD] ; 2a8c
 	XOR A,#0FFh ; 2a8e
 	LD [1665h],A ; 2a90
 
@@ -2350,7 +2365,7 @@ loc_0x002B0F:
 	LD BR,#20h ; 2b20
 
 loc_0x002B22:
-	BIT [BR:52h],#80h ; 2b22
+	BIT [BR:KEY_PAD],#80h ; 2b22
 	JRS Z,loc_0x002B22 ; 2b25
 
 	AND [BR:23h],#00h ; 2b27
@@ -2363,7 +2378,7 @@ loc_0x002B22:
 	XOR A,A ; 2b3c
 	LD [161Dh],A ; 2b3d
 
-	LD HL,#2BF2h ; 2b41
+	LD HL,#loc_0x002BF2 ; 2b41
 	LD B,#00h ; 2b44
 	CARL loc_0x002269 ; 2b46
 
@@ -2378,7 +2393,7 @@ loc_0x002B22:
 	OR [BR:23h],#08h ; 2b5e
 	OR [BR:30h],#04h ; 2b61
 	OR [BR:30h],#02h ; 2b64
-	AND [BR:80h],#0F7h ; 2b67
+	AND [BR:PRC_MODE],#0F7h ; 2b67
 
 	INT [44h] ; 2b6a
 	INT [56h] ; 2b6c
@@ -2414,25 +2429,25 @@ loc_0x002B9A:
 ; ---------------------- ; 2b9f
 loc_0x002BA1:
 
-	LD HL,#8639h ; 2ba1
+	LD HL,#@COFF(loc_0x018639) ; 2ba1
 	JRS loc_0x002BB5
 ; ---------------------- ; 2ba4
 loc_0x002BA6:
 
-	LD NB,#03h ; 2ba6
+	LD NB,#@CPAG(loc_0x018DBB) ; 2ba6
 	CARL loc_0x018DBB ; 2ba9
 
 	LD BA,#5190h ; 2bac
 	LD [1667h],BA ; 2baf
-	LD HL,#86B8h ; 2bb2
+	LD HL,#@COFF(loc_0x0186B8)  ; for a jump: NB = 3, PC = 86b8, jump target = 186b8 (rom3.asm)
 
 loc_0x002BB5:
 
-	LD B,#03h ; 2bb5
+	LD B,#@CPAG(loc_0x0186B8) ; 2bb5
 	CARL loc_0x00227C ; 2bb7
 
 	LD EP,#00h ; 2bba
-	LD A,[BR:52h] ; 2bbd
+	LD A,[BR:KEY_PAD] ; 2bbd
 	XOR A,#0FFh ; 2bbf
 	LD [1665h],A ; 2bc1
 
@@ -2458,8 +2473,8 @@ loc_0x002BE3:
 
 	AND SC,#3Fh ; 2be3
 	OR SC,#80h ; 2be5
-	LD HL,#9E15h ; 2be7
-	LD B,#03h ; 2bea
+	LD HL,#@COFF(loc_0x019E15) ; 2be7
+	LD B,#@CPAG(loc_0x019E15) ; 2bea
 	CARL loc_0x00228F ; 2bec
 
 	AND SC,#3Fh ; 2bef
@@ -2670,8 +2685,10 @@ loc_0x002D6B:
 MainLoop:
 	CARL Main ; 2d6c
 	JRS MainLoop
+; ---------------------- ; 2d6f
+dummy_func:
 	RET
-; ---------------------- ; 2D71
+; ---------------------- ; 2d71
 global loc_0x002D72
 loc_0x002D72:
 
@@ -2860,8 +2877,8 @@ __START:
 	AND SC, #0CFh
 
 	; Load subprogram
-	LD HL, #2D71h
-	LD B, #00h
+	LD HL, #@COFF(dummy_func)
+	LD B, #@CPAG(dummy_func)
 	CARL loc_0x002243
 	
 	CARL loc_0x00265C
@@ -2882,8 +2899,8 @@ __START:
 
 	AND SC, #3Fh
 
-	LD HL, #3608h
-	LD B, #00h
+	LD HL, #@COFF(loc_0x003608)
+	LD B, #@CPAG(loc_0x003608)
 	LD [161Fh], HL
 	LD [1621h], B
 
@@ -2978,30 +2995,30 @@ loc_0x002F6D:
 	LD HL, #15B1h
 	LD [190Fh], HL
 
-	LD NB, #00h
+	LD NB, #@CPAG(loc_0x00235D)
 	CARL loc_0x00235D
 
-	LD NB, #07h
+	LD NB, #@CPAG(loc_0x038EDF)
 	CARL loc_0x038EDF
 
-	LD NB, #02h 
+	LD NB, #@CPAG(loc_0x011BA5)
 	CARL loc_0x011BA5
 
-	LD NB, #02h
+	LD NB, #@CPAG(loc_0x011C7B)
 	CARL loc_0x011C7B
 
-	LD NB, #02h
+	LD NB, #@CPAG(loc_0x011CF5)
 	CARL loc_0x011CF5
 
-	LD NB, #07h
+	LD NB, #@CPAG(loc_0x0383C6)
 	CARL loc_0x0383C6
 
-	LD NB, #07h
+	LD NB, #@CPAG(loc_0x03842F)
 	CARL loc_0x03842F
 
 	RET
 
-; ---------------------- ; 2F6D
+; ---------------------- ; 2fc9
 Module_Gameplay:
 
 	LD HL, #1672h
@@ -3010,11 +3027,11 @@ Module_Gameplay:
 
 	; 3852E
 	LD [HL], #00h
-	LD NB, #07h
+	LD NB, #@CPAG(loc_0x03852E)
 	CARL loc_0x03852E
 
-	LD NB, #02h
-	CARL loc_0x009D05
+	LD NB, #@CPAG(loc_0x011D05)
+	CARL loc_0x011D05
 	CARL loc_0x002E65
 
 	AND SC, #3Fh
@@ -3031,25 +3048,25 @@ Module_Gameplay:
 	LD HL, #15B1h
 	LD [190Fh], HL
 
-	LD NB, #00h
+	LD NB, #@CPAG(loc_0x00235D)
 	CARL loc_0x00235D
 
-	LD NB, #07h
+	LD NB, #@CPAG(loc_0x038EDF)
 	CARL loc_0x038EDF
 
-	LD NB, #02h
+	LD NB, #@CPAG(loc_0x011ECF)
 	CARL loc_0x011ECF
 
-	LD NB, #02h
+	LD NB, #@CPAG(loc_0x011C7B)
 	CARL loc_0x011C7B
 
-	LD NB, #02h
+	LD NB, #@CPAG(loc_0x011CF5)
 	CARL loc_0x011CF5
 
-	LD NB, #07h
+	LD NB, #@CPAG(loc_0x0383C6)
 	CARL loc_0x0383C6
 
-	LD NB, #07h
+	LD NB, #@CPAG(loc_0x03842F)
 	CARL loc_0x03842F
 
 	RET
@@ -3393,16 +3410,15 @@ loc_0x003330:
 ; ---------------------- ; 338f
 loc_0x003390:
 	LD A,[1ACAh] ; 3390
-	LD IY,#339Eh ; 3394
-	LD YP,#00h ; 3397
+	LD IY,#@DOFF(titlescreen_clock_lookup) ; 3394
+	LD YP,#@DPAG(titlescreen_clock_lookup) ; 3397
 	CARL loc_0x002586 ; 339a
 	RET
 ; ---------------------- ; 339d
-	DB 0A4h ; 339e
-	ASCII "3K4" ; 339f
-	DB 0C6h ; 33a2
-	ASCII "3" ; 33a3
-loc_0x0033A4:
+titlescreen_clock_lookup:
+    DW titlescreen_display_nothing, titlescreen_display_date, titlescreen_display_time
+
+titlescreen_display_nothing:
 	XOR A,A ; 33a4
 	LD [15B4h],A ; 33a5
 	LD [15B8h],A ; 33a9
@@ -3414,7 +3430,7 @@ loc_0x0033A4:
 	LD [15D0h],A ; 33c1
 	RET
 ; ---------------------- ; 33c5
-loc_0x0033C6:
+titlescreen_display_time:
 	PUSH IP ; 33c6
 	PUSH IX ; 33c7
 	LD IX,#15AAh ; 33c8
@@ -3468,7 +3484,7 @@ loc_0x003414:
 	LD [15C3h],A ; 3446
 	RET
 ; ---------------------- ; 344a
-loc_0x00344B:
+titlescreen_display_date:
 	PUSH IP ; 344b
 	PUSH IX ; 344c
 	LD IX,#15AAh ; 344d
@@ -3781,7 +3797,7 @@ loc_0x0035C6:
 	POP ALE ; 35cf
 loc_0x0035D1:
 	PUSH ALE ; 35d1
-	LD IX,#21ACh ; 35d3
+	LD IX,#game_id ; 35d3
 	LD XP,#00h ; 35d6
 	LD A,[168Ch] ; 35d9
 	CARL loc_0x0027E4 ; 35dd
@@ -3824,18 +3840,18 @@ loc_0x003608:
 	JRS NZ,loc_0x003647 ; 3636
 	CARL loc_0x0026B7 ; 3638
 	CARL loc_0x0026C6 ; 363b
-	LD HL,#8388h ; 363e
-	LD B,#03h ; 3641
+	LD HL,#@COFF(loc_0x018388) ; 363e
+	LD B,#@CPAG(loc_0x018388) ; 3641
 	CARL loc_0x00227C ; 3643
 	RET
 ; ---------------------- ; 3646
 loc_0x003647:
 	LD A,#0FFh ; 3647
 	LD [168Ch],A ; 3649
-	LD NB,#03h ; 364d
+	LD NB,#@CPAG(loc_0x018035) ; 364d
 	CARL loc_0x018035 ; 3650
-	LD HL,#36ACh ; 3653
-	LD B,#00h ; 3656
+	LD HL,#@COFF(loc_0x0036AC) ; 3653
+	LD B,#@CPAG(loc_0x0036AC) ; 3656
 	CARL loc_0x00227C ; 3658
 	RET
 ; ---------------------- ; 365b
@@ -3847,18 +3863,19 @@ loc_0x00365C:
 	JRS Z,loc_0x003679 ; 3667
 	LD [168Ch],A ; 3669
 	CARL loc_0x0035D1 ; 366d
-	LD HL,#8388h ; 3670
-	LD B,#03h ; 3673
+	LD HL,#@COFF(loc_0x018388) ; 3670
+	LD B,#@CPAG(loc_0x018388) ; 3673
 	CARL loc_0x00227C ; 3675
 	RET
 ; ---------------------- ; 3678
 loc_0x003679:
 	LD [168Ch],A ; 3679
-	LD HL,#379Fh ; 367d
-	LD B,#00h ; 3680
+	LD HL,#@COFF(loc_0x00379F) ; 367d
+	LD B,#@CPAG(loc_0x00379F) ; 3680
 	CARL loc_0x00227C ; 3682
 	RET
 ; ---------------------- ; 3685
+data_3686:
 	DB 04h, 04h, 0Eh, 40h, 1Fh, 02h, 40h, 1Fh ; 3686
 	DB 02h, 00h, 14h, 02h, 00h, 14h, 02h ; 368e
 	ASCIZ "m/" ; 3695
@@ -3878,8 +3895,8 @@ loc_0x0036AC:
 	CARL loc_0x002BF9 ; 36bb
 	LD NB,#07h ; 36be
 	CARL loc_0x0382F4 ; 36c1
-	LD IY,#3686h ; 36c4
-	LD YP,#00h ; 36c7
+	LD IY,#@DOFF(data_3686) ; 36c4
+	LD YP,#@DPAG(data_3686) ; 36c7
 	CARL loc_0x002D72 ; 36ca
 	LD IY,#0012h ; 36cd
 	LD NB,#02h ; 36d0
@@ -3898,6 +3915,7 @@ loc_0x0036E6:
 	JRL NZ,loc_0x0035F4 ; 36ee
 	RET
 ; ---------------------- ; 36f1
+data_36f2:
 	DB 04h, 04h, 0Eh, 40h, 22h, 02h, 40h, 22h ; 36f2
 	DB 02h, 00h, 14h, 02h, 00h, 14h, 02h ; 36fa
 	ASCIZ "m/" ; 3701
@@ -3916,8 +3934,8 @@ loc_0x003718:
 	CARL loc_0x002BF9 ; 3727
 	LD NB,#07h ; 372a
 	CARL loc_0x0382F4 ; 372d
-	LD IY,#36F2h ; 3730
-	LD YP,#00h ; 3733
+	LD IY,#@DOFF(data_36f2) ; 3730
+	LD YP,#@DPAG(data_36f2) ; 3733
 	CARL loc_0x002D72 ; 3736
 	LD IY,#0012h ; 3739
 	LD NB,#02h ; 373c
@@ -3949,6 +3967,7 @@ loc_0x00376A:
 	CARL loc_0x00228F ; 3775
 	RET
 ; ---------------------- ; 3778
+data_3779:
 	DB 04h, 04h, 0Eh, 40h, 25h, 02h, 40h, 25h ; 3779
 	DB 02h, 00h, 14h, 02h, 00h, 14h, 02h ; 3781
 	ASCIZ "m/" ; 3788
@@ -3968,8 +3987,8 @@ loc_0x00379F:
 	CARL loc_0x002BF9 ; 37ae
 	LD NB,#07h ; 37b1
 	CARL loc_0x0382F4 ; 37b4
-	LD IY,#3779h ; 37b7
-	LD YP,#00h ; 37ba
+	LD IY,#@DOFF(data_3779) ; 37b7
+	LD YP,#@DPAG(data_3779) ; 37ba
 	CARL loc_0x002D72 ; 37bd
 	LD IY,#0012h ; 37c0
 	LD NB,#02h ; 37c3
@@ -3988,6 +4007,7 @@ loc_0x0037D9:
 	JRL NZ,loc_0x0035F4 ; 37e1
 	RET
 ; ---------------------- ; 37e4
+data_37e5:
 	DB 04h, 04h, 0Eh, 40h ; 37e5
 	ASCII "4" ; 37e9
 	DB 02h, 40h ; 37ea
@@ -4009,8 +4029,8 @@ loc_0x00380B:
 	CARL loc_0x002BF9 ; 381a
 	LD NB,#07h ; 381d
 	CARL loc_0x0382F4 ; 3820
-	LD IY,#37E5h ; 3823
-	LD YP,#00h ; 3826
+	LD IY,#@DOFF(data_37e5) ; 3823
+	LD YP,#@DPAG(data_37e5) ; 3826
 	CARL loc_0x002D72 ; 3829
 	LD A,#00h ; 382c
 	LD [168Eh],A ; 382e
@@ -4059,6 +4079,7 @@ loc_0x003885:
 	CARL loc_0x00228F ; 3888
 	RET
 ; ---------------------- ; 388b
+data_388c:
 	DB 04h, 04h, 0Eh, 40h, 28h, 02h, 40h, 28h ; 388c
 	DB 02h, 00h, 14h, 02h, 00h, 14h, 02h ; 3894
 	ASCIZ "m/" ; 389b
@@ -4078,8 +4099,8 @@ loc_0x0038B2:
 	CARL loc_0x002BF9 ; 38c1
 	LD NB,#07h ; 38c4
 	CARL loc_0x0382F4 ; 38c7
-	LD IY,#388Ch ; 38ca
-	LD YP,#00h ; 38cd
+	LD IY,#@DOFF(data_388c) ; 38ca
+	LD YP,#@DPAG(data_388c) ; 38cd
 	CARL loc_0x002D72 ; 38d0
 	LD IY,#0012h ; 38d3
 	LD NB,#02h ; 38d6
@@ -4098,6 +4119,7 @@ loc_0x0038EC:
 	JRL NZ,loc_0x0035F4 ; 38f4
 	RET
 ; ---------------------- ; 38f7
+data_38f8:
 	DB 04h, 04h, 3Eh, 40h, 17h, 02h, 40h, 17h ; 38f8
 	DB 02h, 00h, 14h, 02h, 00h, 14h, 02h ; 3900
 	ASCIZ "m/" ; 3907
@@ -4121,11 +4143,11 @@ loc_0x00391E:
 	CARL loc_0x002BF9 ; 392d
 	LD NB,#07h ; 3930
 	CARL loc_0x0382F4 ; 3933
-	LD IY,#38F8h ; 3936
-	LD YP,#00h ; 3939
+	LD IY,#@DOFF(data_38f8) ; 3936
+	LD YP,#@DPAG(data_38f8) ; 3939
 	CARL loc_0x002D72 ; 393c
-	LD IY,#87D4h ; 393f
-	LD NB,#07h ; 3942
+	LD IY,#@DOFF(data_387d4) ; 393f
+	LD NB,#@CPAG(loc_0x03836A) ; 3942
 	CARL loc_0x03836A ; 3945
 	LD IY,#00B0h ; 3948
 	LD NB,#02h ; 394b
@@ -4169,6 +4191,7 @@ loc_0x003994:
 	CARL loc_0x00228F ; 3997
 	RET
 ; ---------------------- ; 399a
+data_399b:
 	DB 04h, 04h, 3Eh, 40h, 17h, 02h, 40h, 17h ; 399b
 	DB 02h, 00h, 14h, 02h, 00h, 14h, 02h ; 39a3
 	ASCIZ "m/" ; 39aa
@@ -4190,11 +4213,11 @@ loc_0x0039C1:
 	CARL loc_0x002BF9 ; 39d0
 	LD NB,#07h ; 39d3
 	CARL loc_0x0382F4 ; 39d6
-	LD IY,#399Bh ; 39d9
-	LD YP,#00h ; 39dc
+	LD IY,#@DOFF(data_399b) ; 39d9
+	LD YP,#@DPAG(data_399b) ; 39dc
 	CARL loc_0x002D72 ; 39df
-	LD IY,#87D4h ; 39e2
-	LD NB,#07h ; 39e5
+	LD IY,#@DOFF(data_387d4) ; 39e2
+	LD NB,#@CPAG(loc_0x03836A) ; 39e5
 	CARL loc_0x03836A ; 39e8
 	LD A,#01h ; 39eb
 	LD [168Eh],A ; 39ed
@@ -4245,6 +4268,7 @@ loc_0x003A4C:
 	CARL loc_0x00228F ; 3a4f
 	RET
 ; ---------------------- ; 3a52
+data_3a53:
 	DB 04h, 04h, 0Eh, 40h, 2Eh, 02h, 40h, 2Eh ; 3a53
 	DB 02h, 00h, 14h, 02h, 00h, 14h, 02h ; 3a5b
 	ASCIZ "m/" ; 3a62
@@ -4261,8 +4285,8 @@ loc_0x003A79:
 	CARL loc_0x002BF9 ; 3a88
 	LD NB,#07h ; 3a8b
 	CARL loc_0x0382F4 ; 3a8e
-	LD IY,#3A53h ; 3a91
-	LD YP,#00h ; 3a94
+	LD IY,#@DOFF(data_3a53) ; 3a91
+	LD YP,#@DPAG(data_3a53) ; 3a94
 	CARL loc_0x002D72 ; 3a97
 	LD IY,#0012h ; 3a9a
 	LD NB,#02h ; 3a9d
@@ -4281,6 +4305,7 @@ loc_0x003AB3:
 	JRL NZ,loc_0x0035F4 ; 3abb
 	RET
 ; ---------------------- ; 3abe
+data_3abf:
 	DB 04h, 04h, 0Eh, 40h, 2Bh, 02h, 40h, 2Bh ; 3abf
 	DB 02h, 00h, 14h, 02h, 00h, 14h, 02h ; 3ac7
 	ASCIZ "m/" ; 3ace
@@ -4297,8 +4322,8 @@ loc_0x003AE5:
 	CARL loc_0x002BF9 ; 3af4
 	LD NB,#07h ; 3af7
 	CARL loc_0x0382F4 ; 3afa
-	LD IY,#3ABFh ; 3afd
-	LD YP,#00h ; 3b00
+	LD IY,#@DOFF(data_3abf) ; 3afd
+	LD YP,#@DPAG(data_3abf) ; 3b00
 	CARL loc_0x002D72 ; 3b03
 	LD IY,#0012h ; 3b06
 	LD NB,#02h ; 3b09

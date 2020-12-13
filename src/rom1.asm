@@ -1935,10 +1935,6 @@ loc_0x009CFC:
 	LD A,#0FFh ; 9cfc
 	LD [1AE8h],A ; 9cfe
 	LD BA,#8658h ; 9d02
-
-global loc_0x009D05
-loc_0x009D05:
-
 	CARL loc_0x00A97D ; 9d05
 	RET
 ; ---------------------- ; 9d08
