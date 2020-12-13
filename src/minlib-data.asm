@@ -1,3 +1,4 @@
+minlib_notelen_lookup:
 	DB 01h, 02h, 04h, 06h, 08h, 0Ch, 10h, 18h ; 61c2
 	DB 20h, 01h, 03h, 06h, 09h, 0Ch, 12h, 18h ; 61ca
 	DB 24h ; 61d2
@@ -10,17 +11,23 @@
 	ASCII "0@`" ; 61eb
 	DB 80h, 05h, 0Ah, 14h, 1Eh, 28h, 3Ch ; 61ee
 	ASCII "Px" ; 61f5
-	DB 0A0h, 02h, 04h, 08h, 10h, 01h, 02h, 03h ; 61f7
-	DB 04h, 05h, 06h, 07h, 08h, 09h, 0Ah, 0Bh ; 61ff
-	DB 0Ch, 0Dh, 0Eh, 0Fh ; 6207
+	DB 0A0h
+    
+minlib_waveform_lookup:
+    DB 02h, 04h, 08h, 10h
+
+minlib_unknown_lookup_3:
+    DB 01h, 02h, 03h, 04h, 05h, 06h, 07h, 08h
+	DB 09h, 0Ah, 0Bh, 0Ch, 0Dh, 0Eh, 0Fh
 	
-	; todo: might be other settings?
 VIBRATO_TABLE:
 	DB 08h, 04h, 01h, 03h ; 620b
 	DB 04h, 01h, 03h, 04h, 03h, 03h, 01h, 03h ; 620f
 	DB 08h, 04h, 01h, 00h, 00h, 40h, 00h, 0FFh ; 6217
 	DB 60h, 00h, 0FFh, 10h, 00h, 00h, 00h, 04h ; 621f
-	DB 0FFh, 07h, 20h, 00h, 18h, 00h ; 6227
+	DB 0FFh, 07h, 20h, 00h, 18h
+minlib_frequency_table:
+    DB 00h
 	ASCII "x`q" ; 622d
 	DB 0E0h ; 6230
 	ASCIZ "j" ; 6231
@@ -62,41 +69,8 @@ VIBRATO_TABLE:
 	ASCII "W" ; 62a8
 	DB 03h, 28h, 03h, 0FAh, 02h, 0D0h, 02h, 0A7h ; 62a9
 	DB 02h, 80h, 02h, 5Eh, 02h, 3Bh, 02h, 18h ; 62b1
-	DB 02h, 0F6h, 01h, 0E0h, 01h, 00h, 00h
-minlib_song_table:
-	DB 40h ; 62b9
-	ASCII "cAcFi" ; 62c1
-	DB 0D6h ; 62c6
-	ASCII "ced" ; 62c7
-	DB 0D8h ; 62ca
-	ASCII "dMf" ; 62cb
-	DB 8Dh ; 62ce
-	ASCII "gjhBc" ; 62cf
-	DB 0A5h ; 62d4
-	ASCII "i@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c@c" ; 62d5
-	DB 0F0h
-	DB 0F0h
-	
-	; 6343
-	include "audio/bgm_break.asm"
-
-
-	include "audio/bgm_settings.asm"
-	
-	; 646c
-	include "audio/bgm_menu.asm"
-
-	; 64df
-	include "audio/bgm_itembox.asm"
-
-
-	include "audio/bgm_help.asm"
-	
-
-	include "audio/bgm_connect.asm"
-
-	; 6872
-	include "audio/bgm_pokeselect.asm"
-
-	; 694C
-	include "audio/bgm_title.asm"
+	DB 02h, 0F6h, 01h, 0E0h, 01h, 00h, 00h ; 62b9
+    
+    include "src/audio/bgmtable.asm"
+    
+    include "src/audio/bgm.asm"

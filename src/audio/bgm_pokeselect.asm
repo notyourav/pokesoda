@@ -1,3 +1,4 @@
+bgm8:
 	; HEADER
 	DB 0B5h, 0F1h, 0A4h, 0C1h, 81h, 90h, 85h ; 6869
 	DB 28h

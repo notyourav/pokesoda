@@ -7,3 +7,5 @@ src/*.obj
 stderr.txt
 stdout.txt
 *.sta
+tools/bgm.bin
+tools/bgm.asm
