@@ -11,16 +11,19 @@ ifdef HAS_WINE
 	SREC_CAT := srec_cat
 	POKEMINID := PokeMiniD
 	POKEFLASH := pokeflash
+    PY := python3
 else ifdef HAS_WINE64
 	WINE := wine64
 	SREC_CAT := srec_cat
 	POKEMINID := PokeMiniD
 	POKEFLASH := pokeflash
+    PY := python3
 else
 	WINE :=
 	POKEMINID := $(TOOLCHAIN_DIR)/bin-windows/PokeMiniD
 	SREC_CAT := $(TOOLCHAIN_DIR)/bin-windows/srec_cat
 	POKEFLASH := $(TOOLCHAIN_DIR)/bin-windows/pokeflash
+    PY := py -3
 endif
 
 
@@ -89,7 +92,7 @@ $(TARGET).out: src/splash.asm $(OBJS)
 	$(CC88) $(CFLAGS) -Tc-v -c -v -o $@ $<
 
 src/splash.asm: src/splash.png
-	py -3 tools/splash.py
+	$(PY) tools/splash.py
 
 .PHONY: clean
 clean:
