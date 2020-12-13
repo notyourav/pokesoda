@@ -2792,31 +2792,31 @@ loc_0x002E62:
 loc_0x002E65:
 	LD EP,#00h ; 2e65
 	LD A,[162Bh] ; 2e68
-	LD [BR:80h],A ; 2e6c
+	LD [BR:PRC_MODE],A ; 2e6c
 	LD BA,[1632h] ; 2e6e
-	LD [2085h],BA ; 2e71
+	LD [REG_BASE + PRC_SCROLL_Y],BA ; 2e71
 	LD HL,#1671h ; 2e74
 	BIT [HL],#01h ; 2e77
 	JRS NZ,loc_0x002E95 ; 2e79
 	LD BA,[162Ch] ; 2e7b
-	LD [2082h],BA ; 2e7e
+	LD [REG_BASE + PRC_MAP_LO],BA ; 2e7e
 	LD A,[162Eh] ; 2e81
-	LD [BR:84h],A ; 2e85
+	LD [BR:PRC_MAP_HI],A ; 2e85
 	LD BA,[1634h] ; 2e87
-	LD [2087h],BA ; 2e8a
+	LD [REG_BASE + PRC_SPR_LO],BA ; 2e8a
 	LD A,[1636h] ; 2e8d
-	LD [BR:89h],A ; 2e91
+	LD [BR:PRC_SPR_HI],A ; 2e91
 	JRS loc_0x002EAD
 ; ---------------------- ; 2e93
 loc_0x002E95:
 	LD BA,[162Fh] ; 2e95
-	LD [2082h],BA ; 2e98
+	LD [REG_BASE + PRC_MAP_LO],BA ; 2e98
 	LD A,[1631h] ; 2e9b
-	LD [BR:84h],A ; 2e9f
+	LD [BR:PRC_MAP_HI],A ; 2e9f
 	LD BA,[1637h] ; 2ea1
-	LD [2087h],BA ; 2ea4
+	LD [REG_BASE + PRC_SPR_LO],BA ; 2ea4
 	LD A,[1639h] ; 2ea7
-	LD [BR:89h],A ; 2eab
+	LD [BR:PRC_SPR_HI],A ; 2eab
 loc_0x002EAD:
 	LD A,[163Ah] ; 2ead
 	LD [BR:40h],A ; 2eb1
