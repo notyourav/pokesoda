@@ -454,14 +454,14 @@ loc_0x0022D4:
 ; ---------------------- ; 22e0
 loc_0x0022E1:
 
-	PUSH EP ; 22e1
+	PUSH EP
 
-	LD EP,#00h ; 22e2
+	LD EP, #00h
 
-	LD [1628h],HL ; 22e5
-	LD [162Ah],B ; 22e8
+	LD [1628h], HL
+	LD [162Ah], B
 
-	POP EP ; 22ec
+	POP EP
 
 	RET
 
@@ -469,55 +469,59 @@ loc_0x0022E1:
 global loc_0x0022EE
 loc_0x0022EE:
 
-	PUSH EP ; 22ee
+	PUSH EP
 
-	LD EP,#00h ; 22ef
+	LD EP, #00h
 
-	LD HL,[1628h] ; 22f2
-	LD B,[162Ah] ; 22f5
+	LD HL, [1628h]
+	LD B, [162Ah]
 
-	POP EP ; 22f9
+	POP EP
 
 	RET
 
 ; ---------------------- ; 22f5
 DoCurrentProc:
 
-	LD EP,#00h ; 22fb
-	LD HL,[1611h] ; 22fe
-	LD A,[1613h] ; 2301
-
-	LD NB,A ; 2305
+	LD EP, #00h
+	LD HL, [1611h]
+	
+	LD A, [1613h]
+	LD NB, A
+	
 	JP HL
 
 ; ---------------------- ; 2307
 loc_0x002308:
 
-	LD EP,#00h ; 2308
-	LD HL,[1617h] ; 230b
-	LD A,[1619h] ; 230e
+	LD EP, #00h
+	LD HL, [1617h]
 
-	LD NB,A ; 2312
+	LD A, [1619h]
+	LD NB, A
+
 	JP HL
 
 ; ---------------------- ; 2314
 loc_0x002315:
 
-	LD EP,#00h ; 2315
-	LD HL,[161Ah] ; 2318
-	LD A,[161Ch] ; 231b
-
-	LD NB,A ; 231f
+	LD EP, #00h
+	LD HL, [161Ah]
+	
+	LD A,[161Ch]
+	LD NB, A
+	
 	JP HL
 
 ; ---------------------- ; 2321
 Main:
 
-	LD EP,#00h ; 2322
-	LD HL,[161Fh] ; 2325
-	LD A,[1621h] ; 2328
+	LD EP, #00h
+	LD HL, [161Fh]
 
-	LD NB,A ; 232c
+	LD A, [1621h]
+	LD NB, A
+	
 	JP HL
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -541,7 +545,7 @@ loc_0x002338:
 
 	CARL WaitNextFrame ; 2338
 
-	LD [BR:PRC_MODE],#00h ; 233b
+	LD [BR:PRC_MODE], #PRC_MODE_INVERT
 
 	RET
 
@@ -549,9 +553,9 @@ loc_0x002338:
 global loc_0x00233F
 loc_0x00233F:
 
-	CARL WaitNextFrame ; 233f
+	CARL WaitNextFrame
 
-	LD [BR:PRC_MODE],#08h ; 2342
+	LD [BR:PRC_MODE], #PRC_MODE_COPY
 
 	RET
 
@@ -585,17 +589,23 @@ memset:
 
 	RET
 
-; ----------------------
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Move bytes from one location to another
+;   Args:
+;     IX: src
+;     IY: dest
+;     BA: # bytes
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 loc_0x002356:
 
-	LD [IY],[IX] ; 2356
+	LD [IY], [IX]
 
-	INC IX ; 2357
-	INC IY ; 2358
+	INC IX
+	INC IY
 
-	DEC BA ; 2359
+	DEC BA
 
-	JRS NZ,loc_0x002356 ; 235a
+	JRS NZ, loc_0x002356
 
 	RET
 
@@ -1940,7 +1950,6 @@ loc_0x00287D:
 
 	RET
 
-; ---------------------- ; 28bc
 loc_0x0028BD:
 
 	XOR A,A ; 28bd
@@ -2125,7 +2134,6 @@ loc_0x002987:
 	LD NB,#00h ; 29ac
 	JRL loc_0x002BE3
 
-; ---------------------- ; 29af
 loc_0x0029B2:
 
 	XOR A,A ; 29b2
@@ -2237,7 +2245,6 @@ loc_0x002A4D:
 
 	RET
 
-; ---------------------- ; 2a4d
 loc_0x002A4E:
 
 	LD HL,#166Ch ; 2a4e
@@ -2304,107 +2311,113 @@ loc_0x002ABA:
 
 	RET
 
-; ---------------------- ; 2aba
 loc_0x002ABB:
-	LD HL,#166Ch ; 2abb
-	BIT [HL],#08h ; 2abe
-	JRL NZ,loc_0x002BDB ; 2ac0
-	
-	OR [HL],#08h ; 2ac3
-	LD BA,#0000h ; 2ac6
-	LD [1669h],A ; 2ac9
-	LD [1667h],BA ; 2acd
 
-	LD A,[1AB6h] ; 2ad0
-	AND A,A ; 2ad4
-	JRS Z,loc_0x002ADD ; 2ad5
+	LD HL, #166Ch
+	BIT [HL], #08h
+	JRL NZ, loc_0x002BDB
 	
-	LD A,#21h ; 2ad7
-	LD [14FAh],A ; 2ad9
+	OR [HL], #08h
+	LD BA, #0000h
+	LD [1669h], A
+	LD [1667h], BA
+
+	LD A, [1AB6h]
+	AND A, A
+	JRS Z, loc_0x002ADD
+	
+	LD A, #21h
+	LD [14FAh], A
 
 loc_0x002ADD:
 
-	CARL WaitNextFrame ; 2add
+	CARL WaitNextFrame
 
-	LD A,#00h ; 2ae0
-	LD B,#00h ; 2ae2
-	CARL loc_0x0026A9 ; 2ae4
-	CARL loc_0x0021F4 ; 2ae7
-	CARL loc_0x003B77 ; 2aea
+	LD A, #00h
+	LD B, #00h
+	CARL loc_0x0026A9
+	CARL loc_0x0021F4
+	CARL loc_0x003B77
 
-	XOR A,A ; 2aed
-	CARL loc_0x00269B ; 2aee
+	XOR A, A
+	CARL loc_0x00269B
 
-	LD A,[1B2Bh] ; 2af1
-	CP A,#00h ; 2af5
-	JRS Z,loc_0x002B0F ; 2af7
+	LD A, [1B2Bh]
+	CP A, #00h
+	JRS Z, loc_0x002B0F
 
-	CP A,#04h ; 2af9
-	JRS NZ,loc_0x002B09 ; 2afb
+	CP A, #04h
+	JRS NZ, loc_0x002B09
 
-	LD NB,#02h ; 2afd
-	CARL loc_0x012F7C ; 2b00
+	LD NB, #02h
+	CARL loc_0x012F7C
 
-	LD NB,#02h ; 2b03
-	CARL loc_0x013612 ; 2b06
+	LD NB, #02h
+	CARL loc_0x013612
 
 loc_0x002B09:
 
-	LD NB,#02h ; 2b09
-	CARL loc_0x012FE8 ; 2b0c
+	LD NB, #02h
+	CARL loc_0x012FE8
 
 loc_0x002B0F:
 
-	XOR A,A ; 2b0f
-	LD [1B2Bh],A ; 2b10
-	LD NB,#03h ; 2b14
-	CARL loc_0x018BC5 ; 2b17
-	CARL loc_0x00287D ; 2b1a
+	XOR A, A
+	LD [1B2Bh],A
 
-	LD EP,#00h ; 2b1d
-	LD BR,#20h ; 2b20
+	LD NB, #03h
+	CARL loc_0x018BC5
+	CARL loc_0x00287D
+
+	LD EP, #00h
+	LD BR, #20h
 
 loc_0x002B22:
-	BIT [BR:KEY_PAD],#80h ; 2b22
-	JRS Z,loc_0x002B22 ; 2b25
 
-	AND [BR:23h],#00h ; 2b27
-	AND [BR:24h],#03h ; 2b2a
-	AND [BR:25h],#00h ; 2b2d
-	AND [BR:26h],#0BFh ; 2b30
-	OR [BR:29h],#80h ; 2b33
-	OR [BR:25h],#80h ; 2b36
-	OR [BR:21h],#3Bh ; 2b39
-	XOR A,A ; 2b3c
-	LD [161Dh],A ; 2b3d
+	BIT [BR:52h], #80h
+	JRS Z, loc_0x002B22
 
-	LD HL,#loc_0x002BF2 ; 2b41
-	LD B,#00h ; 2b44
-	CARL loc_0x002269 ; 2b46
+	AND [BR:IRQ_ENA1], #00h
+	AND [BR:IRQ_ENA2], #03h
+	AND [BR:IRQ_ENA3], #00h
+	AND [BR:IRQ_ENA4], #0BFh
 
-	LD [BR:30h],#80h ; 2b49
-	LD BA,#0FFFFh ; 2b4c
-	LD [2032h],BA ; 2b4f
+	OR [BR:IRQ_ACT3], #80h
+	OR [BR:IRQ_ENA3], #80h
+	OR [BR:IRQ_PRI2], #3Bh
+	
+	XOR A, A
+	LD [161Dh], A
 
-	LD [BR:18h],#0Fh ; 2b52
-	OR [BR:19h],#11h ; 2b55
-	LD [BR:27h],#08h ; 2b58
-	OR [BR:20h],#08h ; 2b5b
-	OR [BR:23h],#08h ; 2b5e
-	OR [BR:30h],#04h ; 2b61
-	OR [BR:30h],#02h ; 2b64
-	AND [BR:PRC_MODE],#0F7h ; 2b67
+	LD HL, #2BF2h
+	LD B, #00h
+	CARL loc_0x002269
 
-	INT [44h] ; 2b6a
-	INT [56h] ; 2b6c
+	LD [BR:TMR1_CTRL_L], #80h
 
-	AND [BR:25h],#7Fh ; 2b6e
-	AND [BR:21h],#0F3h ; 2b71
-	AND [BR:23h],#0FBh ; 2b74
-	AND [BR:20h],#0F3h ; 2b77
+	LD BA, #0FFFFh
+	LD [2032h], BA
+
+	LD [BR:TMR1_SCALE], #0Fh
+	OR [BR:TMR1_OSC], #11h
+	LD [BR:IRQ_ACT1], #08h
+	OR [BR:IRQ_PRI1], #08h
+	OR [BR:IRQ_ENA1], #08h
+	OR [BR:TMR1_CTRL_L], #04h
+	OR [BR:TMR1_CTRL_L], #02h
+	AND [BR:PRC_MODE], #0F7h
+
+	INT [44h]
+	INT [56h]
+
+	AND [BR:IRQ_ENA3], #7Fh
+	AND [BR:IRQ_PRI2], #0F3h
+
+	AND [BR:IRQ_ENA1], #0FBh
+	AND [BR:IRQ_PRI1], #0F3h
 
 	LD A,[161Dh] ; 2b7a
-	OR A,A ; 2b7e
+	OR A, A ; 2b7e
 	JRS Z,loc_0x002BA1 ; 2b7f
 
 	LD NB,#03h ; 2b81
@@ -2426,12 +2439,12 @@ loc_0x002B9A:
 	XOR A,A ; 2b9a
 	LD [1B2Bh],A ; 2b9b
 	JRS loc_0x002B22
-; ---------------------- ; 2b9f
+
 loc_0x002BA1:
 
 	LD HL,#@COFF(loc_0x018639) ; 2ba1
 	JRS loc_0x002BB5
-; ---------------------- ; 2ba4
+
 loc_0x002BA6:
 
 	LD NB,#@CPAG(loc_0x018DBB) ; 2ba6
@@ -2451,14 +2464,14 @@ loc_0x002BB5:
 	XOR A,#0FFh ; 2bbf
 	LD [1665h],A ; 2bc1
 
-	CARL loc_0x0026B7 ; 2bc5
-	CARL loc_0x0026C6 ; 2bc8
-	CARL loc_0x003B86 ; 2bcb
+	CARL loc_0x0026B7
+	CARL loc_0x0026C6
+	CARL loc_0x003B86
 
-	XOR A,A ; 2bce
-	LD [1642h],A ; 2bcf
-	LD [1645h],A ; 2bd3
-	LD [1643h],A ; 2bd7
+	XOR A, A
+	LD [1642h], A
+	LD [1645h], A
+	LD [1643h], A
 
 loc_0x002BDB:
 
@@ -2483,124 +2496,176 @@ loc_0x002BE3:
 
 ; ---------------------- ; 2bf1
 loc_0x002BF2:
+
 	LD A,#01h ; 2bf2
 	LD [161Dh],A ; 2bf4
+
 	RET
 ; ---------------------- ; 2bf8
 global loc_0x002BF9
 loc_0x002BF9:
+
 	LD EP,#00h ; 2bf9
+
 	XOR A,A ; 2bfc
 	LD [164Eh],A ; 2bfd
 	LD [164Fh],A ; 2c01
+
 	LD BA,#0000h ; 2c05
 	LD [1654h],BA ; 2c08
 	LD [1656h],A ; 2c0b
+
 	LD BA,#0000h ; 2c0f
 	LD [1659h],BA ; 2c12
 	LD [165Bh],BA ; 2c15
+
 	SUB BA,#0010h ; 2c18
 	LD [165Dh],BA ; 2c1b
 	LD [165Fh],BA ; 2c1e
+
 	RET
+
 ; ---------------------- ; 2c21
 global loc_0x002C22
 loc_0x002C22:
+
 	PUSH IP ; 2c22
 	PUSH IY ; 2c23
+
 	LD EP,#00h ; 2c24
+
 	LD [164Eh],A ; 2c27
 	LD [164Fh],B ; 2c2b
+
 	CP A,#19h ; 2c2f
 	JRS NC,loc_0x002C3C ; 2c31
+
 	CP B,#11h ; 2c33
 	JRS NC,loc_0x002C3C ; 2c36
+
 	LD A,#00h ; 2c38
 	JRS loc_0x002C3E
-; ---------------------- ; 2c3a
+
 loc_0x002C3C:
+
 	LD A,#01h ; 2c3c
+
 loc_0x002C3E:
+
 	LD [164Dh],A ; 2c3e
 	LD [1654h],IX ; 2c42
+
 	LD A,XP ; 2c45
 	LD [1656h],A ; 2c47
+
 	LD A,[164Eh] ; 2c4b
 	LD B,#00h ; 2c4f
+
 	SLA A ; 2c51
 	RL B ; 2c53
 	SLA A ; 2c55
 	RL B ; 2c57
 	SLA A ; 2c59
 	RL B ; 2c5b
+
 	SUB BA,#0060h ; 2c5d
 	LD [1650h],BA ; 2c60
+
 	LD A,[164Fh] ; 2c63
 	LD B,#00h ; 2c67
+
 	SLA A ; 2c69
 	RL B ; 2c6b
 	SLA A ; 2c6d
 	RL B ; 2c6f
 	SLA A ; 2c71
 	RL B ; 2c73
+
 	SUB BA,#0040h ; 2c75
 	LD [1652h],BA ; 2c78
+
 	POP IY ; 2c7b
 	POP IP ; 2c7c
+
 	RET
+
 ; ---------------------- ; 2c7d
 loc_0x002C7E:
+
 	PUSH IP ; 2c7e
 	PUSH IY ; 2c7f
+
 	LD EP,#00h ; 2c80
+
 	PUSH B ; 2c83
+
 	LD B,#00h ; 2c85
+
 	SLA A ; 2c87
 	RL B ; 2c89
 	SLA A ; 2c8b
 	RL B ; 2c8d
 	SLA A ; 2c8f
 	RL B ; 2c91
+
 	SUB BA,#0060h ; 2c93
 	LD [1650h],BA ; 2c96
+
 	POP A ; 2c99
+
 	LD B,#00h ; 2c9b
+
 	SLA A ; 2c9d
 	RL B ; 2c9f
 	SLA A ; 2ca1
 	RL B ; 2ca3
 	SLA A ; 2ca5
 	RL B ; 2ca7
+
 	SUB BA,#0040h ; 2ca9
 	LD [1652h],BA ; 2cac
+
 	LD BA,#1018h ; 2caf
 	LD [164Eh],A ; 2cb2
 	LD [164Fh],B ; 2cb6
+
 	LD [1654h],IX ; 2cba
+
 	LD A,XP ; 2cbd
 	LD [1656h],A ; 2cbf
+
 	POP IY ; 2cc3
 	POP IP ; 2cc4
+
 	RET
+
 ; ---------------------- ; 2cc5
 loc_0x002CC6:
+
 	LD BA,[165Bh] ; 2cc6
+
 	SRL B ; 2cc9
 	RR A ; 2ccb
 	SRL B ; 2ccd
 	RR A ; 2ccf
 	SRL B ; 2cd1
 	RR A ; 2cd3
+
 	LD L,[164Eh] ; 2cd5
 	MLT ; 2cd9
+
 	LD IX,HL ; 2cdb
 	LD A,B ; 2cdd
+
 	LD L,[164Eh] ; 2cde
 	MLT ; 2ce2
+
 	LD H,L ; 2ce4
 	LD L,#00h ; 2ce5
 	ADD HL,IX ; 2ce7
+
 	LD BA,[1659h] ; 2ce9
+
 	SRL B ; 2cec
 	RR A ; 2cee
 	SRL B ; 2cf0
@@ -2608,87 +2673,88 @@ loc_0x002CC6:
 	SRL B ; 2cf4
 	RR A ; 2cf6
 	ADD HL,BA ; 2cf8
+
 	LD BA,[1654h] ; 2cfa
 	ADD HL,BA ; 2cfd
+
 	LD [1657h],HL ; 2cff
 	LD A,[1659h] ; 2d02
+
 	AND A,#07h ; 2d06
 	LD [1633h],A ; 2d08
+
 	LD A,[165Bh] ; 2d0c
 	AND A,#07h ; 2d10
 	LD [1632h],A ; 2d12
+
 	RET
-; ---------------------- ; 2d16
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Copy tilemap from temp location
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 loc_0x002D17:
-	LD EP,#00h ; 2d17
-	LD BA,[1654h] ; 2d1a
-	OR A,B ; 2d1d
-	OR A,[1656h] ; 2d1e
-	JRS Z,loc_0x002D6B ; 2d21
-	LD IX,[1657h] ; 2d23
-	LD A,[1656h] ; 2d26
-	LD XP,A ; 2d2a
-	LD IY,#1360h ; 2d2c
-	LD YP,#00h ; 2d2f
-	LD L,[164Eh] ; 2d32
-	LD H,#00h ; 2d36
-	SUB HL,#000Ch ; 2d38
-	LD A,#09h ; 2d3b
+
+	LD EP, #00h
+
+	LD BA, [1654h]
+	OR A, B
+
+	OR A, [1656h]
+	JRS Z, loc_0x002D6B
+
+	LD IX, [1657h]
+	LD A, [1656h]
+	LD XP, A
+
+	LD IY, #1360h
+	LD YP, #00h
+
+	LD L, [164Eh]
+	LD H, #00h
+	SUB HL, #000Ch
+
+	LD A, #09h
+
 loc_0x002D3D:
-	LD [IY],[IX] ; 2d3d
-	INC IX ; 2d3e
-	INC IY ; 2d3f
-	LD [IY],[IX] ; 2d40
-	INC IX ; 2d41
-	INC IY ; 2d42
-	LD [IY],[IX] ; 2d43
-	INC IX ; 2d44
-	INC IY ; 2d45
-	LD [IY],[IX] ; 2d46
-	INC IX ; 2d47
-	INC IY ; 2d48
-	LD [IY],[IX] ; 2d49
-	INC IX ; 2d4a
-	INC IY ; 2d4b
-	LD [IY],[IX] ; 2d4c
-	INC IX ; 2d4d
-	INC IY ; 2d4e
-	LD [IY],[IX] ; 2d4f
-	INC IX ; 2d50
-	INC IY ; 2d51
-	LD [IY],[IX] ; 2d52
-	INC IX ; 2d53
-	INC IY ; 2d54
-	LD [IY],[IX] ; 2d55
-	INC IX ; 2d56
-	INC IY ; 2d57
-	LD [IY],[IX] ; 2d58
-	INC IX ; 2d59
-	INC IY ; 2d5a
-	LD [IY],[IX] ; 2d5b
-	INC IX ; 2d5c
-	INC IY ; 2d5d
-	LD [IY],[IX] ; 2d5e
-	INC IX ; 2d5f
-	INC IY ; 2d60
-	LD [IY],[IX] ; 2d61
-	INC IY ; 2d62
-	INC IY ; 2d63
-	INC IY ; 2d64
-	INC IY ; 2d65
-	ADD IX,HL ; 2d66
-	DEC A ; 2d68
-	JRS NZ,loc_0x002D3D ; 2d69
+
+	DUP 12
+	LD [IY], [IX]
+	INC IX
+	INC IY
+	ENDM
+
+	LD [IY], [IX]
+	INC IY
+	INC IY
+
+	INC IY
+	INC IY
+
+	ADD IX, HL
+
+	DEC A
+	JRS NZ, loc_0x002D3D
+
 loc_0x002D6B:
+
 	RET
+
 ; ---------------------- ; 2d6b
 MainLoop:
-	CARL Main ; 2d6c
+
+	CARL Main
+
 	JRS MainLoop
-; ---------------------- ; 2d6f
+
 dummy_func:
+
 	RET
-; ---------------------- ; 2d71
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Set background and sprite gfx sources
+;   Args:
+;     IY: offset
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 global loc_0x002D72
 loc_0x002D72:
 
@@ -2701,20 +2767,25 @@ loc_0x002D72:
 	LD A, [IY+01h]
 	INT [7Eh]
 
+	; BG settings?
 	LD A, [IY+02h]
 	LD [162Bh], A
 	
+	; set BG gfx1 address
 	LD A, [IY+03h]
 	LD B, [IY+04h]
 	LD [162Ch], BA
 	
+	; set BG gfx1 page
 	LD A, [IY+05h]
 	LD [162Eh], A
 
+	; set BG gfx2 address
 	LD A, [IY+06h]
 	LD B, [IY+07h]
 	LD [162Fh], BA
 
+	; set BG gfx2 page
 	LD A, [IY+05h]
 	LD [1631h], A
 
@@ -2722,17 +2793,21 @@ loc_0x002D72:
 	LD [1632h], A
 	LD [1633h], A
 
+	; set mon gfx1 address
 	LD A, [IY+09h]
 	LD B, [IY+0Ah]
 	LD [1634h], BA
 
+	; set mon gfx1 page
 	LD A, [IY+0Bh]
 	LD [1636h], A
 
+	; set mon gfx2 address
 	LD A, [IY+0Ch]
 	LD B, [IY+0Dh]
 	LD [1637h], BA
 
+	; set mon gfx2 page
 	LD A, [IY+0Eh]
 	LD [1639h], A
 
@@ -2819,43 +2894,62 @@ loc_0x002E61:
 
 	RET
 
-; ---------------------- ; 2e61
 loc_0x002E62:
-	LD NB,A ; 2e62
+
+	LD NB, A
+
 	JP HL
+
 ; ---------------------- ; 2e64
 loc_0x002E65:
+
 	LD EP,#00h ; 2e65
+
 	LD A,[162Bh] ; 2e68
 	LD [BR:PRC_MODE],A ; 2e6c
+
 	LD BA,[1632h] ; 2e6e
 	LD [REG_BASE + PRC_SCROLL_Y],BA ; 2e71
+
 	LD HL,#1671h ; 2e74
 	BIT [HL],#01h ; 2e77
 	JRS NZ,loc_0x002E95 ; 2e79
+
 	LD BA,[162Ch] ; 2e7b
 	LD [REG_BASE + PRC_MAP_LO],BA ; 2e7e
+
 	LD A,[162Eh] ; 2e81
 	LD [BR:PRC_MAP_HI],A ; 2e85
+
 	LD BA,[1634h] ; 2e87
 	LD [REG_BASE + PRC_SPR_LO],BA ; 2e8a
+
 	LD A,[1636h] ; 2e8d
 	LD [BR:PRC_SPR_HI],A ; 2e91
+
 	JRS loc_0x002EAD
-; ---------------------- ; 2e93
+
 loc_0x002E95:
+
 	LD BA,[162Fh] ; 2e95
 	LD [REG_BASE + PRC_MAP_LO],BA ; 2e98
+
 	LD A,[1631h] ; 2e9b
 	LD [BR:PRC_MAP_HI],A ; 2e9f
+
 	LD BA,[1637h] ; 2ea1
 	LD [REG_BASE + PRC_SPR_LO],BA ; 2ea4
+
 	LD A,[1639h] ; 2ea7
 	LD [BR:PRC_SPR_HI],A ; 2eab
+
 loc_0x002EAD:
+
 	LD A,[163Ah] ; 2ead
 	LD [BR:40h],A ; 2eb1
+
 	RET
+
 ; ---------------------- ; 2eb3
 global __START
 __START:
