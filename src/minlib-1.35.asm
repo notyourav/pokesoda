@@ -31,8 +31,8 @@ minlib_reset_audio_registers:
 	CARL loc_0x003FE1 ; 3b69
 
 	LD A,#03h ; 3b6c
-	LD [1507h],A ; 3b6e
-	LD [1508h],A ; 3b72
+	LD [bgm_vol],A ; 3b6e
+	LD [sfx_vol],A ; 3b72
 
 	RET
 
@@ -64,11 +64,11 @@ loc_0x003B8F:
 	LD BR,#20h ; 3b8f
 	LD EP,#00h ; 3b91
     
-	LD A,[14F5h] ; 3b94
-	LD [1509h],A ; 3b98
+	LD A,[current_bgm] ; 3b94
+	LD [bgm_tmp],A ; 3b98
     
 	LD A,#00h ; 3b9c
-	LD [14F5h],A ; 3b9e
+	LD [current_bgm],A ; 3b9e
     
 	LD A,[BR:71h] ; 3ba2
 	AND A,#0FCh ; 3ba4
@@ -82,11 +82,11 @@ loc_0x003BA9:
 	LD BR,#20h ; 3ba9
 	LD EP,#00h ; 3bab
     
-	LD A,[1509h] ; 3bae
-	LD [14F5h],A ; 3bb2
+	LD A,[bgm_tmp] ; 3bae
+	LD [current_bgm],A ; 3bb2
     
 	LD A,#00h ; 3bb6
-	LD [1509h],A ; 3bb8
+	LD [bgm_tmp],A ; 3bb8
     
 	RET
     
@@ -101,25 +101,25 @@ IRQ_Timer2HI_Underflow:
 	LD [BR:27h],#20h ; 3bc4
 
 	; branch if pending sfx is odd?
-	LD A,[14FAh] ; 3bc7
+	LD A,[pending_sfx] ; 3bc7
 	BIT A,#0FFh ; 3bcb
 	JRS NZ,loc_0x003C10 ; 3bcd
 
-	LD A,[14FBh] ; 3bcf
+	LD A,[current_sfx] ; 3bcf
 	BIT A,#0FFh ; 3bd3
 	JRL NZ,loc_0x003C36 ; 3bd5
 
 loc_0x003BD8:
 
-	LD A,[1509h] ; 3bd8
+	LD A,[bgm_tmp] ; 3bd8
 	BIT A,#0FFh ; 3bdc
 	JRS NZ,loc_0x003BF5 ; 3bde
 
-	LD A,[14F4h] ; 3be0
+	LD A,[pending_bgm] ; 3be0
 	BIT A,#0FFh ; 3be4
 	JRL NZ,loc_0x003CAE ; 3be6
 
-	LD A,[14F5h] ; 3be9
+	LD A,[current_bgm] ; 3be9
 	BIT A,#0FFh ; 3bed
 	JRL NZ,loc_0x003D18 ; 3bef
 
@@ -137,63 +137,63 @@ loc_0x003BF5:
 ; ---------------------- ; 3bf7
 loc_0x003BF8:
 
-	LD A,[1503h] ; 3bf8
+	LD A,[sfx_page] ; 3bf8
 	LD XP,A ; 3bfc
 	LD A,#00h ; 3bfe
-	LD [14FAh],A ; 3c00
-	LD [14FCh],A ; 3c04
+	LD [pending_sfx],A ; 3c00
+	LD [u8_14fc],A ; 3c04
 
 	JRS loc_0x003C36
 
 ; ---------------------- ; 3c08
 loc_0x003C0A:
 
-	LD A,[1503h] ; 3c0a
+	LD A,[sfx_page] ; 3c0a
 	JRS loc_0x003C4E
 
 ; ---------------------- ; 3c0e
 loc_0x003C10:
 
-	LD [14FBh],A ; 3c10
+	LD [current_sfx],A ; 3c10
 	CP A,#0FFh ; 3c14
 	JRS Z,loc_0x003BF8 ; 3c16
 
 	LD L,#02h ; 3c18
 	MLT ; 3c1a
 
-	LD A,[1505h] ; 3c1c
+	LD A,[sfx_table_page] ; 3c1c
 	LD XP,A ; 3c20
 	LD IX,#6A77h ; 3c22
 	ADD IX,HL ; 3c25
 	LD BA,[IX] ; 3c27
-	LD [14FDh],BA ; 3c29
+	LD [sfx_index],BA ; 3c29
 
 	LD A,#00h ; 3c2c
-	LD [14FAh],A ; 3c2e
-	LD [14FCh],A ; 3c32
+	LD [pending_sfx],A ; 3c2e
+	LD [u8_14fc],A ; 3c32
 
 loc_0x003C36:
 
-	LD A,[14FCh] ; 3c36
+	LD A,[u8_14fc] ; 3c36
 	CP A,#00h ; 3c3a
 	JRL NZ,loc_0x003C8A ; 3c3c
 
 	AND [BR:48h],#0FBh ; 3c3f
-	LD A,[14FBh] ; 3c42
+	LD A,[current_sfx] ; 3c42
 	CP A,#0FFh ; 3c46
 	JRS Z,loc_0x003C0A ; 3c48
 
-	LD A,[1505h] ; 3c4a
+	LD A,[sfx_table_page] ; 3c4a
 
 loc_0x003C4E:
 
 	LD XP,A ; 3c4e
-	LD IX,[14FDh] ; 3c50
+	LD IX,[sfx_index] ; 3c50
 	LD A,[IX] ; 3c53
 	CP A,#0FFh ; 3c54
 	JRS Z,loc_0x003C96 ; 3c56
 
-	AND A,[1508h] ; 3c58
+	AND A,[sfx_vol] ; 3c58
 	LD B,[BR:71h] ; 3c5b
 	AND B,#0FCh ; 3c5d
 	ADD A,B ; 3c60
@@ -202,7 +202,7 @@ loc_0x003C4E:
 	ADD IX,#0001h ; 3c63
 	LD A,[IX] ; 3c66
 	DEC A ; 3c67
-	LD [14FCh],A ; 3c68
+	LD [u8_14fc],A ; 3c68
 
 	ADD IX,#0001h ; 3c6c
 	LD BA,[IX] ; 3c6f
@@ -215,7 +215,7 @@ loc_0x003C4E:
 	LD [BR:4Dh],B ; 3c7c
 
 	ADD IX,#0002h ; 3c7e
-	LD [14FDh],IX ; 3c81
+	LD [sfx_index],IX ; 3c81
 	OR [BR:48h],#06h ; 3c84
 
 	JRL loc_0x003BD8
@@ -223,9 +223,9 @@ loc_0x003C4E:
 ; ---------------------- ; 3c87
 loc_0x003C8A:
 
-	LD A,[14FCh] ; 3c8a
+	LD A,[u8_14fc] ; 3c8a
 	DEC A ; 3c8e
-	LD [14FCh],A ; 3c8f
+	LD [u8_14fc],A ; 3c8f
 
 	JRL loc_0x003BD8
 
@@ -236,58 +236,58 @@ loc_0x003C96:
 	AND [BR:48h],#0FBh ; 3c96
 
 	LD A,#00h ; 3c99
-	LD [14FBh],A ; 3c9b
-	LD [14FCh],A ; 3c9f
-	LD [14FDh],A ; 3ca3
-	LD [14FEh],A ; 3ca7
+	LD [current_sfx],A ; 3c9b
+	LD [u8_14fc],A ; 3c9f
+	LD [sfx_index],A ; 3ca3
+	LD [sfx_index + 1],A ; 3ca7
 
 	JRL loc_0x003BD8
 
 ; ---------------------- ; 3cab
 loc_0x003CAE:
 
-	LD [14F5h],A ; 3cae
+	LD [current_bgm],A ; 3cae
 	LD L,#02h ; 3cb2
 	MLT ; 3cb4
 
-	LD A,[1504h] ; 3cb6
+	LD A,[bgm_table_page] ; 3cb6
 	LD YP,A ; 3cba
 	LD IY,#minlib_bgm_table ; 3cbc
 	ADD IY,HL ; 3cbf
 	LD BA,[IY] ; 3cc1
-	LD [14E0h],BA ; 3cc3
+	LD [bgm_index],BA ; 3cc3
 
 	LD A,#00h ; 3cc6
-	LD [14E3h],A ; 3cc8
-	LD [14E4h],A ; 3ccc
-	LD [14E5h],A ; 3cd0
-	LD [14E6h],A ; 3cd4
-	LD [14E7h],A ; 3cd8
-	LD [14E8h],A ; 3cdc
-	LD [14E9h],A ; 3ce0
-	LD [14EAh],A ; 3ce4
-	LD [14EBh],A ; 3ce8
-	LD [14ECh],A ; 3cec
-	LD [14EDh],A ; 3cf0
-	LD [14EEh],A ; 3cf4
-	LD [14EFh],A ; 3cf8
-	LD [14F0h],A ; 3cfc
-	LD [14F1h],A ; 3d00
-	LD [14F2h],A ; 3d04
-	LD [14F3h],A ; 3d08
-	LD [14F4h],A ; 3d0c
-	LD [14F6h],A ; 3d10
-	LD [14F7h],A ; 3d14
+	LD [effect],A ; 3cc8
+	LD [u8_14e4],A ; 3ccc
+	LD [multiplier],A ; 3cd0
+	LD [waveform],A ; 3cd4
+	LD [u8_14e7],A ; 3cd8
+	LD [notelen_counter],A ; 3cdc
+	LD [u8_14e9],A ; 3ce0
+	LD [u8_14ea],A ; 3ce4
+	LD [u8_14eb],A ; 3ce8
+	LD [u8_14ec],A ; 3cec
+	LD [u8_14ed],A ; 3cf0
+	LD [u8_14ee],A ; 3cf4
+	LD [u8_14ef],A ; 3cf8
+	LD [u8_14f0],A ; 3cfc
+	LD [u8_14f1],A ; 3d00
+	LD [u8_14f2],A ; 3d04
+	LD [u8_14f3],A ; 3d08
+	LD [pending_bgm],A ; 3d0c
+	LD [loop_begin],A ; 3d10
+	LD [loop_begin + 1],A ; 3d14
 
 loc_0x003D18:
 
-	LD A,[1504h] ; 3d18
+	LD A,[bgm_table_page] ; 3d18
 	LD YP,A ; 3d1c
-	LD A,[14E8h] ; 3d1e
+	LD A,[notelen_counter] ; 3d1e
 	CP A,#00h ; 3d22
 	JRL NZ,loc_0x003EEE ; 3d24
 
-	LD A,[14FBh] ; 3d27
+	LD A,[current_sfx] ; 3d27
 	BIT A,#0FFh ; 3d2b
 	JRS NZ,loc_0x003D32 ; 3d2d
 
@@ -296,13 +296,13 @@ loc_0x003D18:
 
 loc_0x003D32:
 
-	LD A,[14EEh] ; 3d32
+	LD A,[u8_14ee] ; 3d32
 	AND A,#0CEh ; 3d36
-	LD [14EEh],A ; 3d38
+	LD [u8_14ee],A ; 3d38
 
 	LD A,#00h ; 3d3c
-	LD [14EDh],A ; 3d3e
-	LD IY,[14E0h] ; 3d42
+	LD [u8_14ed],A ; 3d3e
+	LD IY,[bgm_index] ; 3d42
 
 loc_0x003D45:
 
@@ -312,7 +312,7 @@ loc_0x003D45:
 	
 	; increase note index 
 	ADD IY,#0001h ; 3d4b
-	LD [14E0h],IY ; 3d4e
+	LD [bgm_index],IY ; 3d4e
 	LD L,#02h ; 3d51
 	MLT ; 3d53
 
@@ -323,7 +323,7 @@ loc_0x003D45:
 	JRL Z,loc_0x003DF3 ; 3d5f
 
 	LD HL,BA ; 3d62
-	LD A,[14FBh] ; 3d64
+	LD A,[current_sfx] ; 3d64
 	BIT A,#0FFh ; 3d68
 	JRS NZ,loc_0x003D70 ; 3d6a
 
@@ -333,12 +333,12 @@ loc_0x003D45:
 
 loc_0x003D70:
 
-	LD [14EFh],L ; 3d70
-	LD [14F0h],H ; 3d74
+	LD [u8_14ef],L ; 3d70
+	LD [u8_14f0],H ; 3d74
 	LD H,#00h ; 3d78
-	LD L,[14E6h] ; 3d7a
+	LD L,[waveform] ; 3d7a
 	LD IY,#minlib_waveform_lookup ; 3d7e
-	LD A,[1507h] ; 3d81
+	LD A,[bgm_vol] ; 3d81
 	BIT A,#80h ; 3d85
 	JRL NZ,loc_0x003E1E ; 3d87
 
@@ -352,9 +352,9 @@ loc_0x003D70:
 
 loc_0x003D95:
 
-	LD HL,[14EFh] ; 3d95
+	LD HL,[u8_14ef] ; 3d95
 	SUB HL,BA ; 3d98
-	LD A,[14FBh] ; 3d9a
+	LD A,[current_sfx] ; 3d9a
 	BIT A,#0FFh ; 3d9e
 	JRS NZ,loc_0x003DA6 ; 3da0
 
@@ -363,10 +363,10 @@ loc_0x003D95:
 
 loc_0x003DA6:
 
-	LD [14F1h],L ; 3da6
-	LD [14F2h],H ; 3daa
-	LD L,[14E5h] ; 3dae
-	LD B,[14E2h] ; 3db2
+	LD [u8_14f1],L ; 3da6
+	LD [u8_14f2],H ; 3daa
+	LD L,[multiplier] ; 3dae
+	LD B,[notelen] ; 3db2
 	LD IY,#minlib_notelen_lookup ; 3db6
 	LD A,#09h ; 3db9
 
@@ -376,27 +376,27 @@ loc_0x003DA6:
 	LD L,B ; 3dbf
 	LD A,[IY+L] ; 3dc0
 	DEC A ; 3dc2
-	LD [14E8h],A ; 3dc3
+	LD [notelen_counter],A ; 3dc3
 
-	LD A,[14E3h] ; 3dc7
+	LD A,[effect] ; 3dc7
 	BIT A,#0FFh ; 3dcb
 	JRS Z,loc_0x003DDC ; 3dcd
 
-	LD A,[14E8h] ; 3dcf
-	LD B,[14F3h] ; 3dd3
+	LD A,[notelen_counter] ; 3dcf
+	LD B,[u8_14f3] ; 3dd3
 	SUB A,B ; 3dd7
-	LD [14EAh],A ; 3dd8
+	LD [u8_14ea],A ; 3dd8
 
 loc_0x003DDC:
 
-	LD A,[14FBh] ; 3ddc
+	LD A,[current_sfx] ; 3ddc
 	BIT A,#0FFh ; 3de0
 	JRS NZ,loc_0x003DF0 ; 3de2
 
 	; mute audio?
 	LD A,[BR:71h] ; 3de4
 	AND A,#0FCh ; 3de6
-	OR A,[1507h] ; 3de8
+	OR A,[bgm_vol] ; 3de8
 	LD [BR:71h],A ; 3deb
 
 	; enable Timer 3
@@ -410,7 +410,7 @@ loc_0x003DF0:
 
 ; ---------------------- ; 3df2
 loc_0x003DF3:
-	LD A,[14FBh] ; 3df3
+	LD A,[current_sfx] ; 3df3
 	BIT A,#0FFh ; 3df7
 	JRS NZ,loc_0x003E03 ; 3df9
 
@@ -421,8 +421,8 @@ loc_0x003DF3:
 
 loc_0x003E03:
 
-	LD L,[14E5h] ; 3e03
-	LD B,[14E2h] ; 3e07
+	LD L,[multiplier] ; 3e03
+	LD B,[notelen] ; 3e07
 	LD IY,#minlib_notelen_lookup ; 3e0b
 	LD A,#09h ; 3e0e
 
@@ -432,7 +432,7 @@ loc_0x003E03:
 	LD L,B ; 3e14
 	LD A,[IY+L] ; 3e15
 	DEC A ; 3e17
-	LD [14E8h],A ; 3e18
+	LD [notelen_counter],A ; 3e18
 
 	JRS loc_0x003DF0
 
@@ -461,7 +461,7 @@ loc_0x003E24:
 	JRL NZ,loc_0x003EB8 ; 3e36
 
 	AND A,#0Fh ; 3e39
-	LD [14E5h],A ; 3e3b
+	LD [multiplier],A ; 3e3b
 
 	ADD IY,#0001h ; 3e3f
 	JRL loc_0x003D45
@@ -470,7 +470,7 @@ loc_0x003E24:
 loc_0x003E45:
 
 	AND A,#0Fh ; 3e45
-	LD [14E2h],A ; 3e47
+	LD [notelen],A ; 3e47
 
 	ADD IY,#0001h ; 3e4b
 	JRL loc_0x003D45
@@ -479,7 +479,7 @@ loc_0x003E45:
 loc_0x003E51:
 
 	AND A,#0Fh ; 3e51
-	LD [14E6h],A ; 3e53
+	LD [waveform],A ; 3e53
 
 	ADD IY,#0001h ; 3e57
 	JRL loc_0x003D45
@@ -487,7 +487,7 @@ loc_0x003E51:
 ; ---------------------- ; 3e5a
 loc_0x003E5D:
 
-	LD [14E3h],A ; 3e5d
+	LD [effect],A ; 3e5d
 
 	PUSH IY ; 3e61
 
@@ -501,18 +501,18 @@ loc_0x003E5D:
 	LD A,[IY] ; 3e6d
 
 	; set vibrato
-	LD [14F3h],A ; 3e6e
+	LD [u8_14f3],A ; 3e6e
 	ADD IY,#0001h ; 3e72
 	LD A,[IY] ; 3e75
-	LD [14EBh],A ; 3e76
+	LD [u8_14eb],A ; 3e76
 
 	ADD IY,#0001h ; 3e7a
 	LD A,[IY] ; 3e7d
-	LD [14ECh],A ; 3e7e
+	LD [u8_14ec],A ; 3e7e
 
-	LD A,[14EEh] ; 3e82
+	LD A,[u8_14ee] ; 3e82
 	OR A,#04h ; 3e86
-	LD [14EEh],A ; 3e88
+	LD [u8_14ee],A ; 3e88
 
 	POP IY ; 3e8c
 
@@ -525,16 +525,16 @@ loc_0x003E93:
 	PUSH IY ; 3e93
 
 	AND A,#0Fh ; 3e94
-	LD [14E4h],A ; 3e96
+	LD [u8_14e4],A ; 3e96
 
-	LD L,[14E4h] ; 3e9a
+	LD L,[u8_14e4] ; 3e9a
 	LD IY,#minlib_unknown_lookup_3 ; 3e9e
 	LD B,[IY+L] ; 3ea1
-	LD [14E9h],B ; 3ea3
+	LD [u8_14e9],B ; 3ea3
 
-	LD A,[14EEh] ; 3ea7
+	LD A,[u8_14ee] ; 3ea7
 	OR A,#02h ; 3eab
-	LD [14EEh],A ; 3ead
+	LD [u8_14ee],A ; 3ead
 
 	POP IY ; 3eb1
 
@@ -558,10 +558,10 @@ loc_0x003EB8:
 
 VolumeSet1:
 
-	LD [14F6h],IY ; 3ec6
-	LD A,[14EEh] ; 3ec9
+	LD [loop_begin],IY ; 3ec6
+	LD A,[u8_14ee] ; 3ec9
 	OR A,#08h ; 3ecd
-	LD [14EEh],A ; 3ecf
+	LD [u8_14ee],A ; 3ecf
 
 	ADD IY,#0001h ; 3ed3
 	JRL loc_0x003D45
@@ -569,8 +569,8 @@ VolumeSet1:
 ; ---------------------- ; 3ed6
 VolumeSet2:
 
-	LD IY,[14F6h] ; 3ed9
-	LD [14E0h],IY ; 3edc
+	LD IY,[loop_begin] ; 3ed9
+	LD [bgm_index],IY ; 3edc
 
 	JRL loc_0x003D45
 
@@ -592,30 +592,30 @@ VolumeSet0:
 ; ---------------------- ; 3eed
 loc_0x003EEE:
 
-	LD A,[14EEh] ; 3eee
+	LD A,[u8_14ee] ; 3eee
 	BIT A,#02h ; 3ef2
 	JRS Z,loc_0x003F02 ; 3ef4
 
-	LD A,[14E8h] ; 3ef6
-	LD B,[14E9h] ; 3efa
+	LD A,[notelen_counter] ; 3ef6
+	LD B,[u8_14e9] ; 3efa
 	CP A,B ; 3efe
 	CARL Z,loc_0x003F5D ; 3eff
 
 loc_0x003F02:
 
-	LD A,[14EEh] ; 3f02
+	LD A,[u8_14ee] ; 3f02
 	BIT A,#04h ; 3f06
 	JRS Z,loc_0x003F17 ; 3f08
 
-	LD A,[14E8h] ; 3f0a
-	LD B,[14EAh] ; 3f0e
+	LD A,[notelen_counter] ; 3f0a
+	LD B,[u8_14ea] ; 3f0e
 	INC B ; 3f12
 	CP A,B ; 3f13
 	CARL C,loc_0x003F7E ; 3f14
 
 loc_0x003F17:
 
-	LD A,[14EEh] ; 3f17
+	LD A,[u8_14ee] ; 3f17
 	BIT A,#30h ; 3f1b
 	JRS Z,loc_0x003F4D ; 3f1d
 
@@ -623,14 +623,14 @@ loc_0x003F17:
 	JRS Z,loc_0x003F43 ; 3f21
 
 	; playing sound effect?
-	LD A,[14FBh] ; 3f23
+	LD A,[current_sfx] ; 3f23
 	BIT A,#0FFh ; 3f27
 	JRS NZ,loc_0x003F43 ; 3f29
 
-	LD L,[14EFh] ; 3f2b
-	LD H,[14F0h] ; 3f2f
-	LD A,[14F1h] ; 3f33
-	LD B,[14F2h] ; 3f37
+	LD L,[u8_14ef] ; 3f2b
+	LD H,[u8_14f0] ; 3f2f
+	LD A,[u8_14f1] ; 3f33
+	LD B,[u8_14f2] ; 3f37
 
 	; set timer 3 preset LO
 	LD [BR:4Ah],L ; 3f3b
@@ -643,18 +643,18 @@ loc_0x003F17:
 
 loc_0x003F43:
 
-	LD A,[14EEh] ; 3f43
+	LD A,[u8_14ee] ; 3f43
 	AND A,#0CFh ; 3f47
-	LD [14EEh],A ; 3f49
+	LD [u8_14ee],A ; 3f49
 
 loc_0x003F4D:
 
-	LD A,[14E8h] ; 3f4d
+	LD A,[notelen_counter] ; 3f4d
 	CP A,#0FEh ; 3f51
 	JRS Z,loc_0x003F5A ; 3f53
 
 	DEC A ; 3f55
-	LD [14E8h],A ; 3f56
+	LD [notelen_counter],A ; 3f56
 
 loc_0x003F5A:
 
@@ -665,7 +665,7 @@ loc_0x003F5A:
 ; ---------------------- ; 3f5c
 loc_0x003F5D:
 
-	LD A,[14FBh] ; 3f5d
+	LD A,[current_sfx] ; 3f5d
 	BIT A,#0FFh ; 3f61
 	JRS NZ,loc_0x003F73 ; 3f63
 
@@ -680,27 +680,27 @@ loc_0x003F5D:
 
 loc_0x003F73:
 
-	LD A,[14EEh] ; 3f73
+	LD A,[u8_14ee] ; 3f73
 	OR A,#10h ; 3f77
-	LD [14EEh],A ; 3f79
+	LD [u8_14ee],A ; 3f79
 
 	RET
 
 ; ---------------------- ; 3f7d
 loc_0x003F7E:
 
-	LD A,[14EDh] ; 3f7e
+	LD A,[u8_14ed] ; 3f7e
 	INC A ; 3f82
-	LD [14EDh],A ; 3f83
+	LD [u8_14ed],A ; 3f83
 
-	LD L,[14EFh] ; 3f87
-	LD H,[14F0h] ; 3f8b
-	LD A,[14F1h] ; 3f8f
-	LD B,[14F2h] ; 3f93
+	LD L,[u8_14ef] ; 3f87
+	LD H,[u8_14f0] ; 3f8b
+	LD A,[u8_14f1] ; 3f8f
+	LD B,[u8_14f2] ; 3f93
 	LD IX,HL ; 3f97
 	LD IY,BA ; 3f99
 	LD L,H ; 3f9b
-	LD A,[14ECh] ; 3f9c
+	LD A,[u8_14ec] ; 3f9c
 	MLT ; 3fa0
 
 	PUSH HL ; 3fa2
@@ -711,8 +711,8 @@ loc_0x003F7E:
 
 	PUSH BA ; 3fa8
 
-	LD A,[14EDh] ; 3fa9
-	LD B,[14EBh] ; 3fad
+	LD A,[u8_14ed] ; 3fa9
+	LD B,[u8_14eb] ; 3fad
 	BIT A,B ; 3fb1
 	JRS NZ,loc_0x003FD9 ; 3fb2
 
@@ -725,16 +725,16 @@ loc_0x003F7E:
 loc_0x003FBA:
 
 	LD BA,IX ; 3fba
-	LD [14EFh],A ; 3fbc
-	LD [14F0h],B ; 3fc0
+	LD [u8_14ef],A ; 3fbc
+	LD [u8_14f0],B ; 3fc0
 
 	LD BA,IY ; 3fc4
-	LD [14F1h],A ; 3fc6
-	LD [14F2h],B ; 3fca
+	LD [u8_14f1],A ; 3fc6
+	LD [u8_14f2],B ; 3fca
 
-	LD A,[14EEh] ; 3fce
+	LD A,[u8_14ee] ; 3fce
 	OR A,#20h ; 3fd2
-	LD [14EEh],A ; 3fd4
+	LD [u8_14ee],A ; 3fd4
 
 	RET
 
@@ -848,22 +848,22 @@ loc_0x004052:
 	LD A,#0F0h ; 4057
 	LD [BR:4Bh],A ; 4059
     
-	LD A,[1506h] ; 405b
+	LD A,[u8_1506] ; 405b
 	LD XP,A ; 405f
-	LD IX,[14FFh] ; 4061
+	LD IX,[u16_14ff] ; 4061
 	LD A,[IX] ; 4064
 	XOR A,#0FFh ; 4065
 	LD [BR:4Dh],A ; 4067
     
 	OR [BR:49h],#06h ; 4069
 	ADD IX,#0001h ; 406c
-	LD [14F8h],IX ; 406f
+	LD [u16_14f8],IX ; 406f
     
 loc_0x004072:
 
-	LD IX,[14F8h] ; 4072
-	LD IY,[14FFh] ; 4075
-	LD BA,[1501h] ; 4078
+	LD IX,[u16_14f8] ; 4072
+	LD IY,[u16_14ff] ; 4075
+	LD BA,[u16_1501] ; 4078
     
 	ADD BA,IY ; 407b
     
@@ -884,15 +884,15 @@ IRQ_Timer3HI_Underflow:
 	LD EP,#00h ; 408b
 	LD [BR:27h],#02h ; 408e
 
-	LD A,[1506h] ; 4091
+	LD A,[u8_1506] ; 4091
 	LD XP,A ; 4095
-	LD IX,[14F8h] ; 4097
+	LD IX,[u16_14f8] ; 4097
 	LD A,[IX] ; 409a
 	XOR A,#0FFh ; 409b
 	LD [BR:4Dh],A ; 409d
 
 	ADD IX,#0001h ; 409f
-	LD [14F8h],IX ; 40a2
+	LD [u16_14f8],IX ; 40a2
 
 	POP IX ; 40a5
 	POP BR ; 40a6
@@ -1248,9 +1248,9 @@ loc_0x00422C:
 
 	XOR A,A ; 4237
 
-	LD [150Ah],A ; 4238
-	LD [150Bh],A ; 423c
-	LD [150Ch],A ; 4240
+	LD [u8_150a],A ; 4238
+	LD [u8_150b],A ; 423c
+	LD [u8_150c],A ; 4240
 
 	RET
 
@@ -1261,7 +1261,7 @@ loc_0x004245:
 	LD BR,#20h ; 4245
 	LD EP,#00h ; 4247
     
-	LD A,[150Bh] ; 424a
+	LD A,[u8_150b] ; 424a
     
 	RET
 ; ---------------------- ; 424d
@@ -1270,7 +1270,7 @@ loc_0x00424F:
 	LD BR,#20h ; 424f
 	LD EP,#00h ; 4251
 
-	LD [150Bh],B ; 4254
+	LD [u8_150b],B ; 4254
 
 	AND A,#0Fh ; 4258
 	LD L,A ; 425a
@@ -1280,9 +1280,9 @@ loc_0x00424F:
 	ADD HL,IX ; 4263
 	LD IX,HL ; 4265
 	LD A,[IX] ; 4267
-	LD [150Ah],A ; 4268
+	LD [u8_150a],A ; 4268
 
-	LD A,[150Bh] ; 426c
+	LD A,[u8_150b] ; 426c
 	AND A,A ; 4270
 	JRL NZ,loc_0x004283 ; 4271
 
@@ -1290,13 +1290,13 @@ loc_0x00424F:
 	AND [BR:61h],#0EFh ; 4277
 
 	XOR A,A ; 427a
-	LD [150Ah],A ; 427b
-	LD [150Bh],A ; 427f
+	LD [u8_150a],A ; 427b
+	LD [u8_150b],A ; 427f
 
 loc_0x004283:
 
 	XOR A,A ; 4283
-	LD [150Ch],A ; 4284
+	LD [u8_150c],A ; 4284
 
 	RET
 
@@ -1313,18 +1313,18 @@ handle32hz:
 	LD BR,#20h
 	LD EP,#00h
 
-	LD A,[150Bh]
+	LD A,[u8_150b]
 	AND A, A
 	JRS Z, handle32hz_done
 
 	DEC A
-	LD [150Bh], A
+	LD [u8_150b], A
 	JRL Z, loc_0x0042C4
 
-	LD B, [150Ah]
-	LD A, [150Ch]
+	LD B, [u8_150a]
+	LD A, [u8_150c]
 	ADD A, B
-	LD [150Ch], A
+	LD [u8_150c], A
 	JRS NC, loc_0x0042C4
 
 	OR [BR:60h],#10h
@@ -1348,24 +1348,24 @@ loc_0x0042CB:
 	LD EP,#00h ; 42cd
 	LD IX,#0000h ; 42d0
 	LD YP,#00h ; 42d3
-	LD IY,#150Dh ; 42d6
+	LD IY,#eeprom_buffer ; 42d6
 	LD HL,#0004h ; 42d9
 	CARL loc_0x0040AA ; 42dc
 	JRL NZ,loc_0x004698 ; 42df
 
-	LD A,[150Dh] ; 42e2
+	LD A,[eeprom_buffer] ; 42e2
 	CP A,#47h ; 42e6
 	JRL NZ,loc_0x0045A1 ; 42e8
 
-	LD A,[150Eh] ; 42eb
+	LD A,[eeprom_buffer + 1] ; 42eb
 	CP A,#42h ; 42ef
 	JRL NZ,loc_0x0045A1 ; 42f1
 
-	LD A,[150Fh] ; 42f4
+	LD A,[eeprom_buffer + 2] ; 42f4
 	CP A,#4Dh ; 42f8
 	JRL NZ,loc_0x0045A1 ; 42fa
 
-	LD A,[1510h] ; 42fd
+	LD A,[eeprom_buffer + 3] ; 42fd
 	CP A,#4Eh ; 4301
 	JRL NZ,loc_0x0045A1 ; 4303
 
@@ -1374,7 +1374,7 @@ loc_0x0042CB:
 loc_0x004309:
 
 	LD YP,#00h ; 4309
-	LD IY,#150Dh ; 430c
+	LD IY,#eeprom_buffer ; 430c
 	LD HL,#0012h ; 430f
 
 	PUSH IX ; 4312
@@ -1390,7 +1390,7 @@ loc_0x004309:
 	CARL loc_0x004689 ; 4321
 
 	LD YP,#00h ; 4324
-	LD IY,#150Dh ; 4327
+	LD IY,#eeprom_buffer ; 4327
 	LD HL,#0012h ; 432a
 
 	PUSH IX ; 432d
@@ -1425,7 +1425,7 @@ loc_0x00433F:
 	LD IX,HL ; 4352
     
 	LD YP,#00h ; 4354
-	LD IY,#150Dh ; 4357
+	LD IY,#eeprom_buffer ; 4357
     
 	LD HL,#0012h ; 435a
 	CARL loc_0x0040AA ; 435d
@@ -1451,7 +1451,7 @@ loc_0x004371:
 	POP IX ; 4372
     
 	LD B,#10h ; 4373
-	LD HL,#150Dh ; 4375
+	LD HL,#eeprom_buffer ; 4375
     
 loc_0x004378:
 
@@ -1467,7 +1467,7 @@ loc_0x004378:
     
 	JRL NZ,loc_0x004378 ; 437f
     
-	LD A,[150Dh] ; 4382
+	LD A,[eeprom_buffer] ; 4382
 	AND A,A ; 4386
     
 	JRL Z,loc_0x0046A1 ; 4387
@@ -1501,7 +1501,7 @@ loc_0x00438D:
 	LD IX,HL ; 43ae
     
 	LD YP,#00h ; 43b0
-	LD IY,#150Dh ; 43b3
+	LD IY,#eeprom_buffer ; 43b3
     
 	LD HL,#0012h ; 43b6
 	CARL loc_0x0040AA ; 43b9
@@ -1526,13 +1526,13 @@ loc_0x0043CD:
 	POP IP ; 43cd
 	POP IX ; 43ce
     
-	LD A,[150Dh] ; 43cf
+	LD A,[eeprom_buffer] ; 43cf
 	AND A,A ; 43d3
 	JRL Z,loc_0x0043F0 ; 43d4
     
 	PUSH IX ; 43d7
     
-	LD HL,#150Dh ; 43d8
+	LD HL,#eeprom_buffer ; 43d8
     
 loc_0x0043DB:
 
@@ -1542,7 +1542,7 @@ loc_0x0043DB:
 	INC HL ; 43e0
 	INC IX ; 43e1
     
-	CP HL,#1511h ; 43e2
+	CP HL,#eeprom_buffer + 4 ; 43e2
 	JRL NZ,loc_0x0043DB ; 43e5
     
 	JRL loc_0x0043EF
@@ -1562,7 +1562,7 @@ loc_0x0043EF:
 loc_0x0043F0:
 
 	LD B,#10h ; 43f0
-	LD HL,#150Dh ; 43f2
+	LD HL,#eeprom_buffer ; 43f2
     
 loc_0x0043F5:
 
@@ -1581,7 +1581,7 @@ loc_0x0043F5:
 	CARL loc_0x004673 ; 43ff
     
 	LD XP,#00h ; 4402
-	LD IX,#151Dh ; 4405
+	LD IX,#eeprom_buffer + 16 ; 4405
     
 	LD A,L ; 4408
 	LD [IX],A ; 4409
@@ -1600,7 +1600,7 @@ loc_0x0043F5:
 	LD IX,HL ; 4417
     
 	LD YP,#00h ; 4419
-	LD IY,#150Dh ; 441c
+	LD IY,#eeprom_buffer ; 441c
     
 	LD HL,#0012h ; 441f
 	CARL loc_0x0040FF ; 4422
@@ -1626,7 +1626,7 @@ loc_0x00443D:
 	PUSH A ; 443f
     
 	LD YP,#00h ; 4441
-	LD IY,#150Dh ; 4444
+	LD IY,#eeprom_buffer ; 4444
     
 	LD HL,#0010h ; 4447
 	CARL loc_0x0040FF ; 444a
@@ -1668,7 +1668,7 @@ loc_0x00445F:
 	LD IX,HL ; 447c
     
 	LD YP,#00h ; 447e
-	LD IY,#150Dh ; 4481
+	LD IY,#eeprom_buffer ; 4481
     
 	LD HL,#0012h ; 4484
 	CARL loc_0x0040AA ; 4487
@@ -1693,12 +1693,12 @@ loc_0x00449B:
 	POP IP ; 449b
 	POP IX ; 449c
     
-	LD A,[150Dh] ; 449d
+	LD A,[eeprom_buffer] ; 449d
 	AND A,A ; 44a1
 	JRL Z,loc_0x0044BE ; 44a2
     
 	PUSH IX ; 44a5
-	LD HL,#150Dh ; 44a6
+	LD HL,#eeprom_buffer ; 44a6
     
 loc_0x0044A9:
 
@@ -1708,7 +1708,7 @@ loc_0x0044A9:
 	INC HL ; 44ae
 	INC IX ; 44af
     
-	CP HL,#1511h ; 44b0
+	CP HL,#eeprom_buffer + 4 ; 44b0
 	JRL NZ,loc_0x0044A9 ; 44b3
     
 	JRL loc_0x0044BD
@@ -1738,7 +1738,7 @@ loc_0x0044BE:
 	LD IX,HL ; 44cb
     
 	LD YP,#00h ; 44cd
-	LD IY,#150Dh ; 44d0
+	LD IY,#eeprom_buffer ; 44d0
     
 	LD HL,#0012h ; 44d3
 	CARL loc_0x0040FF ; 44d6
@@ -1788,7 +1788,7 @@ loc_0x004509:
 	ADD HL,#0004h ; 4513
 	LD IX,HL ; 4516
 	LD YP,#00h ; 4518
-	LD IY,#150Dh ; 451b
+	LD IY,#eeprom_buffer ; 451b
 	LD HL,#0012h ; 451e
 	CARL loc_0x0040AA ; 4521
 
@@ -1812,7 +1812,7 @@ loc_0x004535:
 	POP IX ; 4536
 
 	PUSH IX ; 4537
-	LD HL,#150Dh ; 4538
+	LD HL,#eeprom_buffer ; 4538
 
 loc_0x00453B:
 
@@ -1822,7 +1822,7 @@ loc_0x00453B:
 	INC HL ; 4540
 	INC IX ; 4541
 
-	CP HL,#1511h ; 4542
+	CP HL,#eeprom_buffer + 4 ; 4542
 	JRL NZ,loc_0x00453B ; 4545
 
 	JRL loc_0x00454F
@@ -1913,7 +1913,7 @@ loc_0x0045A1:
 loc_0x0045AC:
 
 	LD YP,#00h ; 45ac
-	LD IY,#150Dh ; 45af
+	LD IY,#eeprom_buffer ; 45af
 	LD HL,#0010h ; 45b2
 
 	PUSH IX ; 45b5
@@ -1926,66 +1926,66 @@ loc_0x0045AC:
 	JRL NZ,loc_0x0045AC ; 45c3
 
 	LD YP,#00h ; 45c6
-	LD IY,#150Dh ; 45c9
+	LD IY,#eeprom_buffer ; 45c9
 	LD HL,#000Ah ; 45cc
 	LD IX,#1FF6h ; 45cf
 	CARL loc_0x0040FF ; 45d2
 
 	LD A,#01h ; 45d5
-	LD [150Dh],A ; 45d7
+	LD [eeprom_buffer],A ; 45d7
 
 	LD IX,#1FF2h ; 45db
 	LD YP,#00h ; 45de
-	LD IY,#150Dh ; 45e1
+	LD IY,#eeprom_buffer ; 45e1
 	LD HL,#0001h ; 45e4
 	CARL loc_0x0040FF ; 45e7
 	JRL NZ,loc_0x004698 ; 45ea
 
 	LD A,#03h ; 45ed
-	LD [150Dh],A ; 45ef
+	LD [eeprom_buffer],A ; 45ef
 
 	LD IX,#1FF3h ; 45f3
 	LD YP,#00h ; 45f6
-	LD IY,#150Dh ; 45f9
+	LD IY,#eeprom_buffer ; 45f9
 	LD HL,#0001h ; 45fc
 	CARL loc_0x0040FF ; 45ff
 	JRL NZ,loc_0x004698 ; 4602
 
 	LD A,#01h ; 4605
-	LD [150Dh],A ; 4607
+	LD [eeprom_buffer],A ; 4607
 
 	LD IX,#1FF4h ; 460b
 	LD YP,#00h ; 460e
-	LD IY,#150Dh ; 4611
+	LD IY,#eeprom_buffer ; 4611
 	LD HL,#0001h ; 4614
 	CARL loc_0x0040FF ; 4617
 	JRL NZ,loc_0x004698 ; 461a
 
 	LD A,#1Fh ; 461d
-	LD [150Dh],A ; 461f
+	LD [eeprom_buffer],A ; 461f
 
 	LD IX,#1FF5h ; 4623
 	LD YP,#00h ; 4626
-	LD IY,#150Dh ; 4629
+	LD IY,#eeprom_buffer ; 4629
 	LD HL,#0001h ; 462c
 	CARL loc_0x0040FF ; 462f
 	JRL NZ,loc_0x004698 ; 4632
 
 	LD A,#47h ; 4635
-	LD [150Dh],A ; 4637
+	LD [eeprom_buffer],A ; 4637
 
 	LD A,#42h ; 463b
-	LD [150Eh],A ; 463d
+	LD [eeprom_buffer + 1],A ; 463d
 
 	LD A,#4Dh ; 4641
-	LD [150Fh],A ; 4643
+	LD [eeprom_buffer + 2],A ; 4643
 
 	LD A,#4Eh ; 4647
-	LD [1510h],A ; 4649
+	LD [eeprom_buffer + 3],A ; 4649
 
 	LD IX,#0000h ; 464d
 	LD YP,#00h ; 4650
-	LD IY,#150Dh ; 4653
+	LD IY,#eeprom_buffer ; 4653
 	LD HL,#0004h ; 4656
 	CARL loc_0x0040FF ; 4659
 	JRL NZ,loc_0x004698 ; 465c
@@ -2013,7 +2013,7 @@ loc_0x004673:
 
 	LD HL,#0000h ; 4673
 	LD YP,#00h ; 4676
-	LD IY,#150Dh ; 4679
+	LD IY,#eeprom_buffer ; 4679
 	LD B,#00h ; 467c
 
 loc_0x00467E:
@@ -2021,7 +2021,7 @@ loc_0x00467E:
 	LD A,[IY] ; 467e
 	ADD HL,BA ; 467f
 	INC IY ; 4681
-	CP IY,#151Dh ; 4682
+	CP IY,#eeprom_buffer + 16 ; 4682
 	JRL NZ,loc_0x00467E ; 4685
 
 	RET
@@ -2029,7 +2029,7 @@ loc_0x00467E:
 ; ---------------------- ; 4688
 loc_0x004689:
 
-	LD HL,#150Dh ; 4689
+	LD HL,#eeprom_buffer ; 4689
 	XOR A,A ; 468c
 	LD B,#12h ; 468d
 
@@ -2082,7 +2082,7 @@ loc_0x0046A4:
 
 	LD BR,#20h ; 46a4
 	LD EP,#00h ; 46a6
-	LD HL,#150Dh ; 46a9
+	LD HL,#eeprom_buffer ; 46a9
 	XOR A,A ; 46ac
 	LD B,#18h ; 46ad
 
@@ -2885,12 +2885,12 @@ loc_0x004B35:
 loc_0x004B3C:
 	LD BR,#20h ; 4b3c
 	LD EP,#00h ; 4b3e
-	LD [150Ah],A ; 4b41
-	LD [150Bh],B ; 4b45
+	LD [u8_150a],A ; 4b41
+	LD [u8_150b],B ; 4b45
 	LD A,XP ; 4b49
-	LD [150Ch],A ; 4b4b
-	LD [150Dh],IX ; 4b4f
-	LD [1511h],H ; 4b52
+	LD [u8_150c],A ; 4b4b
+	LD [eeprom_buffer],IX ; 4b4f
+	LD [eeprom_buffer + 4],H ; 4b52
 	LD YP,#00h ; 4b56
 	LD IY,#0000h ; 4b59
 	LD HL,#0000h ; 4b5c
@@ -2907,11 +2907,11 @@ loc_0x004B6C:
 	DEC IY ; 4b70
 	JRS NZ,loc_0x004B6C ; 4b71
 loc_0x004B73:
-	LD A,[150Ah] ; 4b73
+	LD A,[u8_150a] ; 4b73
 	ADD HL,BA ; 4b77
-	LD [150Fh],L ; 4b79
-	LD [1510h],H ; 4b7d
-	LD A,[1511h] ; 4b81
+	LD [eeprom_buffer + 2],L ; 4b79
+	LD [eeprom_buffer + 3],H ; 4b7d
+	LD A,[eeprom_buffer + 4] ; 4b81
 	CP A,#01h ; 4b85
 	JRS Z,loc_0x004BA1 ; 4b87
 	LD [BR:2Ah],#80h ; 4b89
@@ -2932,12 +2932,12 @@ loc_0x004B9B:
 	JRS NZ,loc_0x004B9B ; 4b9f
 loc_0x004BA1:
 	LD IY,#REG_BASE + IO_DATA ; 4ba1
-	LD IX,[150Dh] ; 4ba4
-	LD A,[150Bh] ; 4ba7
+	LD IX,[eeprom_buffer] ; 4ba4
+	LD A,[u8_150b] ; 4ba7
 	CP A,#00h ; 4bab
 	JRS NZ,loc_0x004BB5 ; 4bad
 	LD XP,#00h ; 4baf
-	LD IX,#150Fh ; 4bb2
+	LD IX,#eeprom_buffer + 2 ; 4bb2
 loc_0x004BB5:
 	LD L,#12h ; 4bb5
 loc_0x004BB7:
@@ -3075,7 +3075,7 @@ loc_0x004BE1:
 	NOP ; 4c41
 	NOP ; 4c42
 	LD A,A ; 4c43
-	LD A,[150Ah] ; 4c44
+	LD A,[u8_150a] ; 4c44
 	CARL loc_0x004D63 ; 4c48
 	NOP ; 4c4b
 	NOP ; 4c4c
@@ -3103,7 +3103,7 @@ loc_0x004BE1:
 	NOP ; 4c62
 	NOP ; 4c63
 	LD A,A ; 4c64
-	LD A,[150Bh] ; 4c65
+	LD A,[u8_150b] ; 4c65
 	CARL loc_0x004D63 ; 4c69
 	NOP ; 4c6c
 	NOP ; 4c6d
@@ -3126,9 +3126,9 @@ loc_0x004BE1:
 	NOP ; 4c7e
 	NOP ; 4c7f
 	LD A,#00h ; 4c80
-	LD B,[150Ah] ; 4c82
+	LD B,[u8_150a] ; 4c82
 	XOR A,B ; 4c86
-	LD B,[150Bh] ; 4c87
+	LD B,[u8_150b] ; 4c87
 	XOR A,B ; 4c8b
 	CARL loc_0x004D63 ; 4c8c
 	NOP ; 4c8f
@@ -3142,7 +3142,7 @@ loc_0x004BE1:
 	NOP ; 4c97
 	NOP ; 4c98
 	LD IY,#0003h ; 4c99
-	LD H,[150Bh] ; 4c9c
+	LD H,[u8_150b] ; 4c9c
 loc_0x004CA0:
 	CP H,#00h ; 4ca0
 	JRS Z,loc_0x004CE1 ; 4ca3
@@ -3255,7 +3255,7 @@ loc_0x004D15:
 	NOP ; 4d16
 	NOP ; 4d17
 	LD XP,#00h ; 4d18
-	LD IX,#150Fh ; 4d1b
+	LD IX,#eeprom_buffer + 2 ; 4d1b
 	LD A,[IX] ; 4d1e
 	CARL loc_0x004D63 ; 4d1f
 	NOP ; 4d22
@@ -3284,7 +3284,7 @@ loc_0x004D15:
 	NOP ; 4d39
 	NOP ; 4d3a
 	LD A,A ; 4d3b
-	LD IX,#1510h ; 4d3c
+	LD IX,#eeprom_buffer + 3 ; 4d3c
 	LD A,[IX] ; 4d3f
 	CARL loc_0x004D63 ; 4d40
 	NOP ; 4d43
@@ -3595,7 +3595,7 @@ loc_0x004E79:
 	PUSH IY ; 4e8c
 	LD A,#00h ; 4e8d
 	LD H,#1Ch ; 4e8f
-	LD IX,#150Ah ; 4e91
+	LD IX,#u8_150a ; 4e91
 loc_0x004E94:
 	LD [IX],A ; 4e94
 	INC IX ; 4e95
@@ -3604,9 +3604,9 @@ loc_0x004E94:
 	POP IY ; 4e99
 	POP IX ; 4e9a
 	POP A ; 4e9b
-	LD [1510h],A ; 4e9d
-	LD [1512h],IX ; 4ea1
-	LD [151Dh],IX ; 4ea4
+	LD [eeprom_buffer + 3],A ; 4e9d
+	LD [eeprom_buffer + 5],IX ; 4ea1
+	LD [eeprom_buffer + 16],IX ; 4ea4
 	LD A,#00h ; 4ea7
 	LD H,#12h ; 4ea9
 	LD L,#00h ; 4eab
@@ -3624,7 +3624,7 @@ loc_0x004EBD:
 	JRL Z,loc_0x005601 ; 4ebf
 	BIT [BR:2Ah],#80h ; 4ec2
 	JRS Z,loc_0x004EBD ; 4ec5
-	LD [150Ah],IY ; 4ec7
+	LD [u8_150a],IY ; 4ec7
 	NOP ; 4eca
 	NOP ; 4ecb
 	LD A,A ; 4ecc
@@ -3760,7 +3760,7 @@ loc_0x004F22:
 	NOP ; 4f5b
 	NOP ; 4f5c
 	LD A,A ; 4f5d
-	LD IX,#1516h ; 4f5e
+	LD IX,#eeprom_buffer + 9 ; 4f5e
 loc_0x004F61:
 	CARL loc_0x005634 ; 4f61
 	CP A,#0FFh ; 4f64
@@ -3937,7 +3937,7 @@ loc_0x00501C:
 	LD A,H ; 502a
 	XOR A,[IX] ; 502b
 	LD H,A ; 502c
-	CP IX,#1519h ; 502d
+	CP IX,#eeprom_buffer + 12 ; 502d
 	JRL Z,loc_0x00509F ; 5030
 	INC IX ; 5033
 	NOP ; 5034
@@ -3984,15 +3984,15 @@ loc_0x00501C:
 ; ---------------------- ; 505c
 loc_0x00505F:
 	POP B ; 505f
-	LD A,[151Ah] ; 5061
+	LD A,[eeprom_buffer + 13] ; 5061
 	CP A,#00h ; 5065
 	JRL NZ,loc_0x0055F8 ; 5067
 	LD A,#01h ; 506a
-	LD [151Ah],A ; 506c
-	LD IY,#1514h ; 5070
+	LD [eeprom_buffer + 13],A ; 506c
+	LD IY,#eeprom_buffer + 7 ; 5070
 	LD [IY],IX ; 5073
 	LD L,#00h ; 5075
-	CP IX,#1519h ; 5077
+	CP IX,#eeprom_buffer + 12 ; 5077
 	JRL Z,loc_0x0050AB ; 507a
 	INC IX ; 507d
 	NOP ; 507e
@@ -4028,7 +4028,7 @@ loc_0x00505F:
 	JRL loc_0x004F61
 ; ---------------------- ; 509c
 loc_0x00509F:
-	LD A,[151Ah] ; 509f
+	LD A,[eeprom_buffer + 13] ; 509f
 	LD A,A ; 50a3
 	NOP ; 50a4
 	NOP ; 50a5
@@ -4040,8 +4040,8 @@ loc_0x00509F:
 loc_0x0050AB:
 	CP A,#00h ; 50ab
 	JRS NZ,loc_0x0050C5 ; 50ad
-	LD IY,#150Ah ; 50af
-	LD IX,#1516h ; 50b2
+	LD IY,#u8_150a ; 50af
+	LD IX,#eeprom_buffer + 9 ; 50b2
 	LD A,[IX] ; 50b5
 	LD [IY],A ; 50b6
 	INC IX ; 50b7
@@ -4059,11 +4059,11 @@ loc_0x0050AB:
 	JRS loc_0x0050DB
 ; ---------------------- ; 50c3
 loc_0x0050C5:
-	LD IY,#1514h ; 50c5
+	LD IY,#eeprom_buffer + 7 ; 50c5
 	LD IX,[IY] ; 50c8
 	LD [IX],H ; 50ca
-	LD IY,#150Ah ; 50cb
-	LD IX,#1516h ; 50ce
+	LD IY,#u8_150a ; 50cb
+	LD IX,#eeprom_buffer + 9 ; 50ce
 	LD A,[IX] ; 50d1
 	LD [IY],A ; 50d2
 	INC IX ; 50d3
@@ -4078,10 +4078,10 @@ loc_0x0050DB:
 	CP A,#03h ; 50db
 	JRL C,loc_0x00531B ; 50dd
 	DEC A ; 50e0
-	CP A,[1510h] ; 50e1
+	CP A,[eeprom_buffer + 3] ; 50e1
 	JRL NC,loc_0x0055FE ; 50e4
 	LD A,#03h ; 50e7
-	LD [150Fh],A ; 50e9
+	LD [eeprom_buffer + 2],A ; 50e9
 	NOP ; 50ed
 	LD A,A ; 50ee
 loc_0x0050EF:
@@ -4199,13 +4199,13 @@ loc_0x005171:
 	CP A,#01h ; 5171
 	JRL NZ,loc_0x005604 ; 5173
 	LD A,#01h ; 5176
-	AND A,[150Fh] ; 5178
+	AND A,[eeprom_buffer + 2] ; 5178
 	JRL NZ,loc_0x0051B4 ; 517b
 	LD A,#02h ; 517e
-	AND A,[150Fh] ; 5180
+	AND A,[eeprom_buffer + 2] ; 5180
 	JRL NZ,loc_0x0051EC ; 5183
 	LD A,#04h ; 5186
-	AND A,[150Fh] ; 5188
+	AND A,[eeprom_buffer + 2] ; 5188
 	JRL NZ,loc_0x00521E ; 518b
 	NOP ; 518e
 	NOP ; 518f
@@ -4246,7 +4246,7 @@ loc_0x005171:
 ; ---------------------- ; 51b1
 loc_0x0051B4:
 	LD HL,#0000h ; 51b4
-	LD IX,#151Ah ; 51b7
+	LD IX,#eeprom_buffer + 13 ; 51b7
 	LD A,#00h ; 51ba
 	LD [IX],A ; 51bc
 	DEC IX ; 51bd
@@ -4257,9 +4257,9 @@ loc_0x0051B4:
 	LD [IX],A ; 51c2
 	DEC IX ; 51c3
 	LD [IX],A ; 51c4
-	LD A,[150Fh] ; 51c5
+	LD A,[eeprom_buffer + 2] ; 51c5
 	AND A,#0FEh ; 51c9
-	LD [150Fh],A ; 51cb
+	LD [eeprom_buffer + 2],A ; 51cb
 	NOP ; 51cf
 	NOP ; 51d0
 	NOP ; 51d1
@@ -4290,17 +4290,17 @@ loc_0x0051B4:
 ; ---------------------- ; 51e9
 loc_0x0051EC:
 	PUSH HL ; 51ec
-	LD A,[150Ch] ; 51ed
+	LD A,[u8_150c] ; 51ed
 	LD H,#00h ; 51f1
 	LD L,A ; 51f3
 	LD A,#03h ; 51f4
 	DIV ; 51f6
-	LD [151Bh],L ; 51f8
-	LD [151Ch],H ; 51fc
+	LD [eeprom_buffer + 14],L ; 51f8
+	LD [eeprom_buffer + 15],H ; 51fc
 	POP HL ; 5200
-	LD A,[150Fh] ; 5201
+	LD A,[eeprom_buffer + 2] ; 5201
 	AND A,#0FDh ; 5205
-	LD [150Fh],A ; 5207
+	LD [eeprom_buffer + 2],A ; 5207
 	NOP ; 520b
 	NOP ; 520c
 	NOP ; 520d
@@ -4321,16 +4321,16 @@ loc_0x0051EC:
 ; ---------------------- ; 521b
 loc_0x00521E:
 	PUSH HL ; 521e
-	LD IY,#151Dh ; 521f
+	LD IY,#eeprom_buffer + 16 ; 521f
 	LD HL,[IY] ; 5222
 	INC HL ; 5224
 	INC HL ; 5225
 	INC HL ; 5226
 	LD [IY],HL ; 5227
 	POP HL ; 5229
-	LD A,[150Fh] ; 522a
+	LD A,[eeprom_buffer + 2] ; 522a
 	AND A,#0FBh ; 522e
-	LD [150Fh],A ; 5230
+	LD [eeprom_buffer + 2],A ; 5230
 	NOP ; 5234
 	NOP ; 5235
 	NOP ; 5236
@@ -4362,7 +4362,7 @@ loc_0x005249:
 	LD A,H ; 5257
 	XOR A,[IX] ; 5258
 	LD H,A ; 5259
-	CP IX,#1519h ; 525a
+	CP IX,#eeprom_buffer + 12 ; 525a
 	JRL Z,loc_0x0052CC ; 525d
 	INC IX ; 5260
 	NOP ; 5261
@@ -4409,15 +4409,15 @@ loc_0x005249:
 ; ---------------------- ; 5289
 loc_0x00528C:
 	POP B ; 528c
-	LD A,[151Ah] ; 528e
+	LD A,[eeprom_buffer + 13] ; 528e
 	CP A,#00h ; 5292
 	JRL NZ,loc_0x0055F8 ; 5294
 	LD A,#01h ; 5297
-	LD [151Ah],A ; 5299
-	LD IY,#1514h ; 529d
+	LD [eeprom_buffer + 13],A ; 5299
+	LD IY,#eeprom_buffer + 7 ; 529d
 	LD [IY],IX ; 52a0
 	LD L,#00h ; 52a2
-	CP IX,#1519h ; 52a4
+	CP IX,#eeprom_buffer + 12 ; 52a4
 	JRL Z,loc_0x0052D8 ; 52a7
 	INC IX ; 52aa
 	NOP ; 52ab
@@ -4453,7 +4453,7 @@ loc_0x00528C:
 	JRL loc_0x0050EF
 ; ---------------------- ; 52c9
 loc_0x0052CC:
-	LD A,[151Ah] ; 52cc
+	LD A,[eeprom_buffer + 13] ; 52cc
 	LD A,A ; 52d0
 	NOP ; 52d1
 	NOP ; 52d2
@@ -4465,9 +4465,9 @@ loc_0x0052CC:
 loc_0x0052D8:
 	CP A,#00h ; 52d8
 	JRS NZ,loc_0x0052F4 ; 52da
-	LD IX,#151Dh ; 52dc
+	LD IX,#eeprom_buffer + 16 ; 52dc
 	LD IY,[IX] ; 52df
-	LD IX,#1516h ; 52e1
+	LD IX,#eeprom_buffer + 9 ; 52e1
 	LD A,[IX] ; 52e4
 	LD [IY],A ; 52e5
 	INC IX ; 52e6
@@ -4485,12 +4485,12 @@ loc_0x0052D8:
 	JRS loc_0x00530C
 ; ---------------------- ; 52f2
 loc_0x0052F4:
-	LD IY,#1514h ; 52f4
+	LD IY,#eeprom_buffer + 7 ; 52f4
 	LD IX,[IY] ; 52f7
 	LD [IX],H ; 52f9
-	LD IX,#151Dh ; 52fa
+	LD IX,#eeprom_buffer + 16 ; 52fa
 	LD IY,[IX] ; 52fd
-	LD IX,#1516h ; 52ff
+	LD IX,#eeprom_buffer + 9 ; 52ff
 	LD A,[IX] ; 5302
 	LD [IY],A ; 5303
 	INC IX ; 5304
@@ -4502,7 +4502,7 @@ loc_0x0052F4:
 	LD A,[IX] ; 530a
 	LD [IY],A ; 530b
 loc_0x00530C:
-	LD IX,#151Bh ; 530c
+	LD IX,#eeprom_buffer + 14 ; 530c
 	LD A,[IX] ; 530f
 	DEC A ; 5310
 	JRL Z,loc_0x00532A ; 5311
@@ -4512,9 +4512,9 @@ loc_0x00530C:
 	JRL loc_0x0050EF
 ; ---------------------- ; 5318
 loc_0x00531B:
-	LD [151Ch],A ; 531b
+	LD [eeprom_buffer + 15],A ; 531b
 	LD A,#0FFh ; 531f
-	LD [150Fh],A ; 5321
+	LD [eeprom_buffer + 2],A ; 5321
 	NOP ; 5325
 	NOP ; 5326
 	JRL loc_0x005330
@@ -4529,7 +4529,7 @@ loc_0x005330:
 	CARL loc_0x005634 ; 5330
 	CP A,#0FFh ; 5333
 	JRL Z,loc_0x0055F5 ; 5335
-	LD A,[151Ch] ; 5338
+	LD A,[eeprom_buffer + 15] ; 5338
 	CP A,#00h ; 533c
 	JRS Z,loc_0x005348 ; 533e
 	CP A,#01h ; 5340
@@ -4551,7 +4551,7 @@ loc_0x005350:
 loc_0x005352:
 	LD L,A ; 5352
 	INC A ; 5353
-	LD [151Ch],A ; 5354
+	LD [eeprom_buffer + 15],A ; 5354
 	LD A,#01h ; 5358
 	LD IX,#151Fh ; 535a
 	LD [IX],A ; 535d
@@ -4683,30 +4683,30 @@ loc_0x0053E0:
 	DEC H ; 53e9
 	JRS NZ,loc_0x0053E0 ; 53ea
 loc_0x0053EC:
-	LD A,[1510h] ; 53ec
-	CP A,[150Ch] ; 53f0
+	LD A,[eeprom_buffer + 3] ; 53ec
+	CP A,[u8_150c] ; 53f0
 	JRL C,loc_0x0055FE ; 53f3
-	LD A,[150Fh] ; 53f6
+	LD A,[eeprom_buffer + 2] ; 53f6
 	CP A,#0FFh ; 53fa
 	JRS Z,loc_0x005408 ; 53fc
-	LD IY,#151Dh ; 53fe
+	LD IY,#eeprom_buffer + 16 ; 53fe
 	LD HL,[IY] ; 5401
 	INC HL ; 5403
 	INC HL ; 5404
 	INC HL ; 5405
 	LD [IY],HL ; 5406
 loc_0x005408:
-	LD L,[151Ch] ; 5408
+	LD L,[eeprom_buffer + 15] ; 5408
 	LD H,#00h ; 540c
 	LD A,#0Ah ; 540e
 	DIV ; 5410
-	LD [1514h],L ; 5412
+	LD [eeprom_buffer + 7],L ; 5412
 	LD B,#00h ; 5416
-	LD [1516h],B ; 5418
-	LD [1515h],B ; 541c
+	LD [eeprom_buffer + 9],B ; 5418
+	LD [eeprom_buffer + 8],B ; 541c
 	LD B,#0Ah ; 5420
-	LD [1517h],B ; 5422
-	LD L,[151Ch] ; 5426
+	LD [eeprom_buffer + 10],B ; 5422
+	LD L,[eeprom_buffer + 15] ; 5426
 	LD IX,#151Fh ; 542a
 	LD IY,#151Fh ; 542d
 	LD H,#08h ; 5430
@@ -4715,18 +4715,18 @@ loc_0x005434:
 	LD A,[IX] ; 5434
 loc_0x005435:
 	PUSH A ; 5435
-	LD A,[1517h] ; 5437
+	LD A,[eeprom_buffer + 10] ; 5437
 	DEC A ; 543b
-	LD [1517h],A ; 543c
+	LD [eeprom_buffer + 10],A ; 543c
 	CP A,#09h ; 5440
 	JRS Z,loc_0x005458 ; 5442
 	CP A,#00h ; 5444
 	JRS Z,loc_0x00545E ; 5446
 	POP A ; 5448
-	LD B,[1515h] ; 544a
+	LD B,[eeprom_buffer + 8] ; 544a
 	SLA A ; 544e
 	RL B ; 5450
-	LD [1515h],B ; 5452
+	LD [eeprom_buffer + 8],B ; 5452
 	JRS loc_0x0054AA
 ; ---------------------- ; 5456
 loc_0x005458:
@@ -4736,7 +4736,7 @@ loc_0x005458:
 ; ---------------------- ; 545c
 loc_0x00545E:
 	POP A ; 545e
-	LD B,[1515h] ; 5460
+	LD B,[eeprom_buffer + 8] ; 5460
 	LD [IY],B ; 5464
 	PUSH L ; 5465
 	PUSH H ; 5467
@@ -4757,19 +4757,19 @@ loc_0x005472:
 	LD A,L ; 5481
 	CP A,B ; 5482
 	JRS NZ,loc_0x005491 ; 5483
-	LD A,[1516h] ; 5485
+	LD A,[eeprom_buffer + 9] ; 5485
 	SLA A ; 5489
-	LD [1516h],A ; 548b
+	LD [eeprom_buffer + 9],A ; 548b
 	JRS loc_0x00549D
 ; ---------------------- ; 548f
 loc_0x005491:
-	LD A,[1516h] ; 5491
+	LD A,[eeprom_buffer + 9] ; 5491
 	SLA A ; 5495
 	OR A,#01h ; 5497
-	LD [1516h],A ; 5499
+	LD [eeprom_buffer + 9],A ; 5499
 loc_0x00549D:
 	LD A,#0Ah ; 549d
-	LD [1517h],A ; 549f
+	LD [eeprom_buffer + 10],A ; 549f
 	INC IY ; 54a3
 	POP A ; 54a4
 	POP H ; 54a6
@@ -4784,22 +4784,22 @@ loc_0x0054AA:
 	JRS loc_0x005434
 ; ---------------------- ; 54b3
 loc_0x0054B5:
-	LD A,[1514h] ; 54b5
+	LD A,[eeprom_buffer + 7] ; 54b5
 	CP A,#03h ; 54b9
 	JRL Z,loc_0x005565 ; 54bb
 	CP A,#05h ; 54be
 	JRL Z,loc_0x005516 ; 54c0
-	LD A,[1516h] ; 54c3
+	LD A,[eeprom_buffer + 9] ; 54c3
 	SLA A ; 54c7
 	SLA A ; 54c9
-	LD [1516h],A ; 54cb
+	LD [eeprom_buffer + 9],A ; 54cb
 	LD H,#03h ; 54cf
 	LD IX,#151Fh ; 54d1
-	LD IY,#1518h ; 54d4
+	LD IY,#eeprom_buffer + 11 ; 54d4
 	CARL loc_0x005607 ; 54d7
 	CP A,#01h ; 54da
 	JRL Z,loc_0x0055F8 ; 54dc
-	LD IX,#151Dh ; 54df
+	LD IX,#eeprom_buffer + 16 ; 54df
 	LD IY,[IX] ; 54e2
 	LD IX,#151Fh ; 54e4
 	LD A,[IX] ; 54e7
@@ -4808,17 +4808,17 @@ loc_0x0054B5:
 	INC IY ; 54ea
 	LD A,[IX] ; 54eb
 	LD [IY],A ; 54ec
-	LD A,[1516h] ; 54ed
+	LD A,[eeprom_buffer + 9] ; 54ed
 	SLA A ; 54f1
 	SLA A ; 54f3
 	SLA A ; 54f5
 	LD H,#03h ; 54f7
 	LD IX,#1522h ; 54f9
-	LD IY,#1518h ; 54fc
+	LD IY,#eeprom_buffer + 11 ; 54fc
 	CARL loc_0x005607 ; 54ff
 	CP A,#01h ; 5502
 	JRL Z,loc_0x0055F8 ; 5504
-	LD IY,#150Dh ; 5507
+	LD IY,#eeprom_buffer ; 5507
 	LD IX,#1522h ; 550a
 	LD A,[IX] ; 550d
 	LD [IY],A ; 550e
@@ -4829,32 +4829,32 @@ loc_0x0054B5:
 	JRL loc_0x005592
 ; ---------------------- ; 5513
 loc_0x005516:
-	LD A,[1516h] ; 5516
+	LD A,[eeprom_buffer + 9] ; 5516
 	SLA A ; 551a
 	SLA A ; 551c
 	SLA A ; 551e
-	LD [1516h],A ; 5520
+	LD [eeprom_buffer + 9],A ; 5520
 	LD H,#02h ; 5524
 	LD IX,#151Fh ; 5526
-	LD IY,#1518h ; 5529
+	LD IY,#eeprom_buffer + 11 ; 5529
 	CARL loc_0x005607 ; 552c
 	CP A,#01h ; 552f
 	JRL Z,loc_0x0055F8 ; 5531
-	LD IX,#151Dh ; 5534
+	LD IX,#eeprom_buffer + 16 ; 5534
 	LD IY,[IX] ; 5537
 	LD IX,#151Fh ; 5539
 	LD A,[IX] ; 553c
 	LD [IY],A ; 553d
-	LD A,[1516h] ; 553e
+	LD A,[eeprom_buffer + 9] ; 553e
 	SLA A ; 5542
 	SLA A ; 5544
 	LD H,#03h ; 5546
 	LD IX,#1521h ; 5548
-	LD IY,#1518h ; 554b
+	LD IY,#eeprom_buffer + 11 ; 554b
 	CARL loc_0x005607 ; 554e
 	CP A,#01h ; 5551
 	JRL Z,loc_0x0055F8 ; 5553
-	LD IY,#150Dh ; 5556
+	LD IY,#eeprom_buffer ; 5556
 	LD IX,#1521h ; 5559
 	LD A,[IX] ; 555c
 	LD [IY],A ; 555d
@@ -4865,7 +4865,7 @@ loc_0x005516:
 	JRL loc_0x005592
 ; ---------------------- ; 5562
 loc_0x005565:
-	LD A,[1516h] ; 5565
+	LD A,[eeprom_buffer + 9] ; 5565
 	SLA A ; 5569
 	SLA A ; 556b
 	SLA A ; 556d
@@ -4873,11 +4873,11 @@ loc_0x005565:
 	SLA A ; 5571
 	LD H,#02h ; 5573
 	LD IX,#151Fh ; 5575
-	LD IY,#1518h ; 5578
+	LD IY,#eeprom_buffer + 11 ; 5578
 	CARL loc_0x005607 ; 557b
 	CP A,#01h ; 557e
 	JRL Z,loc_0x0055F8 ; 5580
-	LD IY,#150Dh ; 5583
+	LD IY,#eeprom_buffer ; 5583
 	LD IX,#151Fh ; 5586
 	LD A,[IX] ; 5589
 	LD [IY],A ; 558a
@@ -4890,7 +4890,7 @@ loc_0x005565:
 loc_0x005592:
 	LD HL,#0000h ; 5592
 	LD B,#00h ; 5595
-	LD IX,#150Ah ; 5597
+	LD IX,#u8_150a ; 5597
 	LD A,[IX] ; 559a
 	ADD HL,BA ; 559b
 	INC IX ; 559d
@@ -4901,7 +4901,7 @@ loc_0x005592:
 	ADD HL,BA ; 55a3
 	CP A,#00h ; 55a5
 	JRS Z,loc_0x0055B7 ; 55a7
-	LD IY,#1512h ; 55a9
+	LD IY,#eeprom_buffer + 5 ; 55a9
 	LD IX,[IY] ; 55ac
 	LD IY,BA ; 55ae
 loc_0x0055B0:
@@ -4911,19 +4911,19 @@ loc_0x0055B0:
 	DEC IY ; 55b4
 	JRS NZ,loc_0x0055B0 ; 55b5
 loc_0x0055B7:
-	LD A,[150Dh] ; 55b7
+	LD A,[eeprom_buffer] ; 55b7
 	LD B,L ; 55bb
 	CP A,B ; 55bc
 	JRL NZ,loc_0x0055FB ; 55bd
-	LD A,[150Eh] ; 55c0
+	LD A,[eeprom_buffer + 1] ; 55c0
 	LD B,H ; 55c4
 	CP A,B ; 55c5
 	JRL NZ,loc_0x0055FB ; 55c6
-	LD A,[150Ah] ; 55c9
+	LD A,[u8_150a] ; 55c9
 	LD H,A ; 55cd
-	LD A,[150Bh] ; 55ce
+	LD A,[u8_150b] ; 55ce
 	LD B,A ; 55d2
-	LD A,[150Ch] ; 55d3
+	LD A,[u8_150c] ; 55d3
 	LD L,A ; 55d7
 	LD A,#00h ; 55d8
 	RET
@@ -4935,12 +4935,12 @@ loc_0x0055DB:
 	LD H,#00h ; 55df
 	LD L,#0Fh ; 55e1
 	MLT ; 55e3
-	LD IY,[150Ah] ; 55e5
+	LD IY,[u8_150a] ; 55e5
 	SUB IY,HL ; 55e8
 	JRS NC,loc_0x0055EF ; 55ea
 	LD IY,#0000h ; 55ec
 loc_0x0055EF:
-	LD [150Ah],IY ; 55ef
+	LD [u8_150a],IY ; 55ef
 	LD A,#01h ; 55f2
 	RET
 ; ---------------------- ; 55f4
@@ -5018,7 +5018,7 @@ loc_0x00563F:
 	CP L,#0FFh ; 5647
 	JRS NZ,loc_0x005654 ; 564a
 	LD A,#05h ; 564c
-	LD [150Fh],A ; 564e
+	LD [eeprom_buffer + 2],A ; 564e
 	JRS loc_0x005659
 ; ---------------------- ; 5652
 loc_0x005654:
@@ -5130,8 +5130,8 @@ loc_0x0056FD:
 	CARL loc_0x004E79 ; 5705
 	CP A,#01h ; 5708
 	JRS NZ,loc_0x00571D ; 570a
-	LD A,[150Ah] ; 570c
-	LD B,[150Bh] ; 5710
+	LD A,[u8_150a] ; 570c
+	LD B,[u8_150b] ; 5710
 	LD IY,BA ; 5714
 	OR A,B ; 5716
 	CP A,#00h ; 5717
@@ -5245,8 +5245,8 @@ loc_0x0057E1:
 	POP IP ; 57ef
 	CP A,#01h ; 57f0
 	JRS NZ,loc_0x005805 ; 57f2
-	LD A,[150Ah] ; 57f4
-	LD B,[150Bh] ; 57f8
+	LD A,[u8_150a] ; 57f4
+	LD B,[u8_150b] ; 57f8
 	LD IY,BA ; 57fc
 	OR A,B ; 57fe
 	CP A,#00h ; 57ff
@@ -5332,8 +5332,8 @@ loc_0x005893:
 	JRL Z,loc_0x005923 ; 58a4
 	CP A,#01h ; 58a7
 	JRS NZ,loc_0x0058BC ; 58a9
-	LD A,[150Ah] ; 58ab
-	LD B,[150Bh] ; 58af
+	LD A,[u8_150a] ; 58ab
+	LD B,[u8_150b] ; 58af
 	LD IY,BA ; 58b3
 	OR A,B ; 58b5
 	CP A,#00h ; 58b6
@@ -5988,13 +5988,13 @@ loc_0x005C7C:
 	JRS Z,loc_0x005CB7 ; 5ca3
 
 	LD A,YP ; 5ca5
-	LD [1503h],A ; 5ca7
+	LD [sfx_page],A ; 5ca7
 
 	LD BA,#minlib_startup_audio_data ; 5cab
-	LD [14FDh],BA ; 5cae
+	LD [sfx_index],BA ; 5cae
 
 	LD A,#0FFh ; 5cb1
-	LD [14FAh],A ; 5cb3
+	LD [pending_sfx],A ; 5cb3
 
 loc_0x005CB7:
 

@@ -11,3 +11,4 @@ tools/bgm.bin
 tools/bgm.asm
 tools/bgm.bin.bak
 src/splash.asm
+*.bak
