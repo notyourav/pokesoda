@@ -12,3 +12,7 @@ tools/bgm.asm
 tools/bgm.bin.bak
 src/splash.asm
 *.bak
+*.tiles
+*.sprites
+*.bmp
+*.pyc
