@@ -6,6 +6,7 @@ src/*.obj
 *.map
 stderr.txt
 stdout.txt
+.DS_Store
 *.sta
 tools/bgm.bin
 tools/bgm.asm

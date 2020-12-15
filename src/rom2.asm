@@ -361,6 +361,8 @@ loc_0x01027A:
 	RET
 
 ; ---------------------- ; 1027a
+global pool_01027B
+pool_01027B:
 	DB 07h, 82h ; 1027b
 	ASCII "5" ; 1027d
 	DB 82h, 23h, 02h, 0CEh, 0D0h, 0B7h, 1Ah, 0B1h ; 1027e
@@ -394,30 +396,21 @@ loc_0x01027A:
 	ASCII "8" ; 102fe
 	DB 0CEh, 0D4h, 0B5h, 1Ah, 0F2h, 0C1h, 0A3h, 0F2h ; 102ff
 	ASCII "y" ; 10307
-	DB 0FFh, 0F8h, 81h, 82h, 0C5h, 82h, 0A1h, 02h
-; ---------------------- ; 10308
-loc_0x010310:
-
-	LD A,[1AB8h] ; 10310
-	LD B,#00h ; 10314
-
-	LD IY,#0327h ; 10316
-	LD YP,#01h ; 10319
-
-	ADD IY,BA ; 1031c
-	ADD IY,BA ; 1031e
-
-	LD BA,[IY] ; 10320
-	CARL loc_0x00794F ; 10322
-
-	RET
-
-; ---------------------- ; 10325
-	DB 0F8h, 2Bh, 03h, 3Ah, 03h, 3Dh, 9Ah, 01h ; 10326
-	DB 08h, 00h, 0F8h, 0ACh, 08h, 00h, 04h, 0ADh ; 1032e
-	DB 0C1h, 99h, 2Eh, 03h, 3Dh, 9Ah, 01h, 08h ; 10336
-	DB 00h, 0E0h, 0ACh, 08h, 00h, 0ECh, 0ACh, 0C1h ; 1033e
-	DB 99h, 3Dh, 03h, 0CEh, 0D0h, 0BBh, 1Ah ; 10346
+	DB 0FFh, 0F8h
+global pool_01030A
+pool_01030A:
+	DB 81h, 82h, 0C5h, 82h, 0A1h, 02h ; 10308
+	DB 0CEh, 0D0h, 0B8h, 1Ah, 0B1h, 00h, 0C7h, 27h ; 10310
+	DB 03h, 0CEh, 0C7h, 01h, 0CFh ; 10318
+	ASCII "B" ; 1031d
+	DB 0CFh ; 1031e
+	ASCII "B" ; 1031f
+	DB 0CFh, 0D8h, 0F2h, 2Bh, 0F6h, 0F8h, 0F8h, 2Bh ; 10320
+	DB 03h, 3Ah, 03h, 3Dh, 9Ah, 01h, 08h, 00h ; 10328
+	DB 0F8h, 0ACh, 08h, 00h, 04h, 0ADh, 0C1h, 99h ; 10330
+	DB 2Eh, 03h, 3Dh, 9Ah, 01h, 08h, 00h, 0E0h ; 10338
+	DB 0ACh, 08h, 00h, 0ECh, 0ACh, 0C1h, 99h, 3Dh ; 10340
+	DB 03h, 0CEh, 0D0h, 0BBh, 1Ah ; 10348
 	ASCII "2" ; 1034d
 	DB 02h, 0E7h, 13h, 0CEh, 0D0h ; 1034e
 	ASCII "C" ; 10353
@@ -428,7 +421,10 @@ loc_0x010310:
 	DB 0F2h, 0A1h, 0FFh, 0B0h, 08h, 0B1h, 08h, 0F2h ; 1036d
 	ASCII "3" ; 10375
 	DB 0A3h, 0F8h, 0C5h, 0B8h, 1Ah, 95h, 01h, 0E6h ; 10376
-	DB 06h, 0B5h, 00h, 0F2h, 8Dh, 0FFh, 0F8h, 10h ; 1037e
+	DB 06h, 0B5h, 00h, 0F2h, 8Dh, 0FFh, 0F8h
+global pool_010385
+pool_010385:
+	DB 10h ; 1037e
 	DB 83h ; 10386
 	ASCII "I" ; 10387
 	DB 83h, 3Ah, 03h, 0CEh, 0D0h, 0Fh, 1Bh, 02h ; 10388
@@ -454,7 +450,10 @@ loc_0x010310:
 	DB 0Fh, 1Bh, 0CEh ; 103d9
 	ASCII "5-" ; 103dc
 	DB 0E6h, 0Ch, 86h, 0F2h, 0A8h, 0FFh, 0CEh, 0D0h ; 103de
-	DB 0Fh, 1Bh, 0F2h, 0DFh, 0D6h, 0F8h, 8Bh, 83h ; 103e6
+	DB 0Fh, 1Bh, 0F2h, 0DFh, 0D6h, 0F8h
+global pool_0103EC
+pool_0103EC:
+	DB 8Bh, 83h ; 103e6
 	DB 0A9h, 83h, 9Ah, 03h, 3Dh, 9Ah, 01h, 08h ; 103ee
 	DB 00h, 08h, 0ACh, 08h, 00h, 10h, 0ACh, 0C1h ; 103f6
 	DB 99h, 0F5h, 03h, 3Dh, 9Ah, 01h, 08h, 00h ; 103fe
@@ -539,6 +538,8 @@ loc_0x0104CE:
 	RET
 
 ; ---------------------- ; 104e2
+global pool_0104E3
+pool_0104E3:
 	DB 0C0h, 84h, 0CEh, 84h, 0F2h, 03h, 3Dh, 9Ah ; 104e3
 	DB 01h, 0D6h, 99h, 00h, 00h ; 104eb
 	ASCIZ "B" ; 104f0
@@ -561,7 +562,11 @@ loc_0x0104CE:
 	DB 0E9h, 04h, 0E9h, 04h, 0E9h, 04h, 0CEh, 0D0h ; 10536
 	DB 0BBh, 1Ah, 0CEh ; 1053e
 	ASCII "0" ; 10541
-	DB 18h, 0EBh, 0CEh, 0FFh, 0F8h, 13h, 85h, 3Ch ; 10542
+	DB 18h, 0EBh, 0CEh, 0FFh, 0F8h
+
+global pool_010547
+pool_010547:
+	DB 13h, 85h, 3Ch
 	DB 85h, 0E9h, 04h, 0B2h, 08h, 0CEh, 0D8h, 0CFh ; 1054a
 	ASCII "C" ; 10552
 	DB 0A3h, 0CEh, 0C7h, 01h, 0CFh, 0D8h, 0F2h, 27h ; 10553
@@ -1361,6 +1366,10 @@ loc_0x0107A0:
 	DB 40h, 19h, 80h, 0CEh ; 113a7
 	ASCII "D" ; 113ab
 	DB 19h, 0F8h ; 113ac
+
+global pool_0113AE
+pool_0113AE:
+
 	ASCII "v" ; 113ae
 	DB 93h ; 113af
 	ASCII "q" ; 113b0
@@ -2235,6 +2244,7 @@ loc_0x011A7A:
 ; ---------------------- ; 11adb
 global loc_0x011ADC
 loc_0x011ADC:
+
 	LD HL,#168Fh ; 11adc
 
 	LD EP,#00h ; 11adf
@@ -2907,8 +2917,9 @@ loc_0x011EFD:
 	BIT B,#80h ; 11f07
 	JRS Z,loc_0x011F1B ; 11f09
 
-	LD HL,BA ; 11f0b
-	CARS loc_0x011F3B ; 11f0d
+	; jmp to function
+	LD HL, BA
+	CARS loc_0x011F3B
 
 	JRS loc_0x011EFD
 
@@ -3029,6 +3040,8 @@ loc_0x011F3B:
 	DB 1Ah, 01h, 00h, 28h, 0C8h, 01h, 00h ; 1202e
 	ASCII "H" ; 12035
 	DB 0C8h, 0C1h, 99h, 2Fh, 20h ; 12036
+global pool_01203B
+pool_01203B:
 	ASCII "q" ; 1203b
 	DB 9Ah ; 1203c
 	ASCII "q" ; 1203d
@@ -3058,7 +3071,10 @@ loc_0x011F3B:
 	DB 0C8h, 02h, 00h ; 1206c
 	ASCII "p" ; 1206f
 	DB 0C8h, 0C1h, 99h ; 12070
-	ASCII "A q" ; 12073
+	ASCII "A "
+global pool_012075
+pool_012075:
+	ASCII "q"
 	DB 9Ah ; 12076
 	ASCII "q" ; 12077
 	DB 9Ah ; 12078
@@ -3074,6 +3090,8 @@ loc_0x011F3B:
 	DB 0CEh, 0D4h ; 12099
 	ASCII "x" ; 1209b
 	DB 1Bh, 0C4h, 7Bh, 20h, 0F2h, 0ADh, 0D8h, 0F8h ; 1209c
+global pool_0120A4
+pool_0120A4:
 	ASCII "q" ; 120a4
 	DB 9Ah, 91h, 0A0h, 8Bh, 20h, 9Dh, 99h ; 120a5
 	ASCII "D" ; 120ac
@@ -3164,6 +3182,9 @@ loc_0x0121A9:
 
 ; ---------------------- ; 121ac
 	DB 0AAh, 20h, 0C4h, 20h, 0DCh, 20h ; 121ad
+
+global pool_0121B3
+pool_0121B3:
 	ASCII "q" ; 121b3
 	DB 9Ah ; 121b4
 	ASCII "h" ; 121b5
@@ -7124,97 +7145,220 @@ loc_0x013641:
 	DB 0F2h ; 14c04
 	ASCII "I" ; 14c05
 	DB 0ADh, 0F8h, 0B0h, 01h, 0F1h, 07h, 0B0h, 02h ; 14c06
-	DB 0F1h, 03h, 0B0h, 03h, 0CEh ; 14c0e
-	ASCII "H" ; 14c13
-	DB 1Bh ; 14c14
-	ASCII "1" ; 14c15
-	DB 0E6h, 2Eh, 0CEh ; 14c16
-	ASCII "D" ; 14c19
-	DB 1Bh, 0CEh, 0D0h, 3Fh, 1Bh, 28h, 0E7h, 24h ; 14c1a
-	DB 0C5h, 40h, 1Bh ; 14c22
-	ASCII "E(" ; 14c25
-	DB 0E6h, 04h, 8Eh, 0F1h, 1Ah, 0B5h, 03h, 0F2h ; 14c27
-	DB 0Dh, 01h, 0F2h ; 14c2f
-	ASCII "I" ; 14c32
-	DB 0E3h, 0CEh, 0C4h, 01h, 0F2h, 85h, 0CEh, 0E7h ; 14c33
-	DB 0Ah, 0F2h, 0B8h, 0E3h, 0CEh, 0C4h, 01h, 0F2h ; 14c3b
-	DB 0A5h, 0F4h, 0F8h, 0CEh, 40h, 19h, 28h, 0E7h ; 14c43
-	DB 1Ah, 0CEh ; 14c4b
-	ASCII "P" ; 14c4d
-	DB 02h, 0CEh ; 14c4e
-	ASCII "X" ; 14c50
-	DB 03h, 0D5h, 1Dh ; 14c51
-	ASCII "K" ; 14c54
-	DB 0E4h, 2Bh, 0C5h, 0FDh ; 14c55
-	ASCII "J" ; 14c59
-	DB 0CEh, 40h, 1Ah, 28h, 0E6h, 1Dh, 0C5h, 0Dh ; 14c5a
-	ASCII "K" ; 14c62
-	DB 0F1h, 18h, 0CEh ; 14c63
-	ASCII "P" ; 14c66
-	DB 02h, 0CEh ; 14c67
-	ASCII "X" ; 14c69
-	DB 03h, 0D5h, 1Dh ; 14c6a
-	ASCII "K" ; 14c6d
-	DB 0E5h, 12h, 0C5h, 1Eh ; 14c6e
-	ASCII "K" ; 14c72
-	DB 0CEh, 40h, 1Ah, 28h, 0E6h, 04h, 0C5h, 2Eh ; 14c73
-	ASCII "K" ; 14c7b
-	DB 0CFh, 0E1h, 0F2h, 0CFh, 0ACh, 0F8h, 0CEh, 0D0h ; 14c7c
-	ASCII "q" ; 14c84
-	DB 16h, 22h, 0Fh, 0E7h, 0Ch, 0CEh, 0D0h ; 14c85
-	ASCII "B" ; 14c8c
-	DB 16h, 22h, 09h, 0E6h, 04h, 0F2h, 7Ch, 0FFh ; 14c8d
-	DB 0CEh, 0D0h ; 14c95
-	ASCII "B" ; 14c97
-	DB 16h, 96h, 09h, 0E6h, 16h, 0CEh, 0D0h, 0B6h ; 14c98
-	DB 1Ah, 20h, 0E6h, 07h, 0B0h, 18h, 0CEh, 0D4h ; 14ca0
-	DB 0FAh, 14h, 0CEh, 40h, 19h, 80h ; 14ca8
-	ASCII "2" ; 14cae
-	DB 04h, 0E4h, 15h, 0CEh, 0D0h, 0B6h, 1Ah, 20h ; 14caf
-	DB 0E6h, 07h, 0B0h, 00h, 0CEh, 0D4h, 0FAh, 14h ; 14cb7
-	DB 0CEh, 40h, 19h, 28h, 0E6h, 02h, 88h, 0CEh ; 14cbf
-	ASCII "D" ; 14cc7
-	DB 19h, 0F8h, 0CEh, 0D0h ; 14cc8
-	ASCII "B" ; 14ccc
-	DB 16h, 96h, 20h, 0E7h, 13h, 96h, 40h, 0E6h ; 14ccd
-	DB 21h, 0C5h, 3Eh ; 14cd5
-	ASCII "K" ; 14cd8
-	DB 0CEh, 40h, 1Ah, 28h, 0E6h, 12h, 0C5h, 5Bh ; 14cd9
-	ASCII "K" ; 14ce1
-	DB 0F1h, 0Dh, 0C5h, 7Ch ; 14ce2
-	ASCII "K" ; 14ce6
-	DB 0CEh, 40h, 1Ah, 28h, 0E6h, 04h, 0C5h, 99h ; 14ce7
-	ASCII "K" ; 14cef
-	DB 0CFh, 0E1h, 0F2h, 5Bh, 0ACh, 0F8h, 0F2h, 8Ah ; 14cf0
-	DB 0FFh, 0F2h ; 14cf8
-	ASCII "K" ; 14cfa
-	DB 0FFh, 0CEh, 40h, 19h, 28h, 0E6h, 27h, 0CEh ; 14cfb
-	DB 40h, 1Ah, 28h, 0E6h, 0Fh, 0CEh, 40h, 0Ah ; 14d03
-	DB 0CEh, 00h, 19h ; 14d0b
-	ASCII "2P" ; 14d0e
-	DB 0E4h, 0Eh, 0B0h ; 14d10
-	ASCII "P" ; 14d13
-	DB 0F1h, 0Ah, 0CEh, 40h, 0Ah, 0CEh, 10h, 19h ; 14d14
-	DB 0E5h, 02h ; 14d1c
-	ASCII "8" ; 14d1e
-	DB 0CEh ; 14d1f
-	ASCII "H" ; 14d20
-	DB 0Eh, 0BCh, 12h, 1Bh, 0F2h, 5Bh, 0ACh, 0F8h ; 14d21
-	ASCII "8" ; 14d29
-	DB 0CEh ; 14d2a
-	ASCII "D" ; 14d2b
-	DB 18h, 0CEh ; 14d2c
-	ASCII "D" ; 14d2e
-	DB 19h, 0CEh ; 14d2f
-	ASCII "D" ; 14d31
-	DB 1Ah, 0CEh ; 14d32
-	ASCII "D" ; 14d34
-	DB 1Bh, 0F8h, 29h, 0CDh ; 14d35
+	DB 0F1h, 03h
+; ---------------------- ; 14c0e
+loc_0x014C10:
+	LD A,#03h ; 14c10
+	LD B,[IX+1Bh] ; 14c12
+	CP A,B ; 14c15
+	JRS Z,loc_0x014C45 ; 14c16
+	LD [IX+1Bh],A ; 14c18
+	LD A,[1B3Fh] ; 14c1b
+	OR A,A ; 14c1f
+	JRS NZ,loc_0x014C45 ; 14c20
+	LD HL,#1B40h ; 14c22
+	LD A,[HL] ; 14c25
+	OR A,A ; 14c26
+	JRS Z,loc_0x014C2C ; 14c27
+	DEC [HL] ; 14c29
+	JRS loc_0x014C45
+loc_0x014C2C:
+	LD [HL],#03h ; 14c2c
+	CARL loc_0x014D3D ; 14c2e
+	CARL loc_0x012F7C ; 14c31
+	LD NB,#01h ; 14c34
+	CARL loc_0x009ABE ; 14c37
+	JRS NZ,loc_0x014C45 ; 14c3a
+	CARL loc_0x012FF6 ; 14c3c
+	LD NB,#01h ; 14c3f
+	CARL loc_0x00C0E9 ; 14c42
+loc_0x014C45:
+	RET
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Toy car update
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+loc_0x014C46:
+	LD A,[IX+19h] ; 14c46
+	OR A,A ; 14c49
+
+	; bob
+	JRS NZ,loc_0x014C65 ; 14c4a
+
+	; load sprite offset
+	LD L,[IX+02h] ; 14c4c
+	LD H,[IX+03h] ; 14c4f
+
+	CP HL,#4B1Dh ; 14c52
+	JRS C,loc_0x014C81 ; 14c55
+
+	LD HL,#4AFDh ; 14c57
+
+	LD A,[IX+1Ah] ; 14c5a
+	OR A,A ; 14c5d
+	JRS Z,loc_0x014C7C ; 14c5e
+
+	LD HL,#4B0Dh ; 14c60
+	JRS loc_0x014C7C
+
+loc_0x014C65:
+	LD L,[IX+02h] ; 14c65
+	LD H,[IX+03h] ; 14c68
+
+	CP HL,#4B1Dh ; 14c6b
+	JRS NC,loc_0x014C81 ; 14c6e
+
+	LD HL,#4B1Eh ; 14c70
+	LD A,[IX+1Ah] ; 14c73
+	OR A,A ; 14c76
+	JRS Z,loc_0x014C7C ; 14c77
+
+	LD HL,#4B2Eh ; 14c79
+
+loc_0x014C7C:
+
+	LD BA,HL ; 14c7c
+	CARL loc_0x00794F ; 14c7e
+
+loc_0x014C81:
+
+	RET
+
+; ---------------------- ; 14c81
+loc_0x014C82:
+	LD A,[1671h] ; 14c82
+	AND A,#0Fh ; 14c86
+	JRS NZ,loc_0x014C95 ; 14c88
+	LD A,[1642h] ; 14c8a
+	AND A,#09h ; 14c8e
+	JRS Z,loc_0x014C95 ; 14c90
+	CARL loc_0x014C10 ; 14c92
+loc_0x014C95:
+	LD A,[1642h] ; 14c95
+	BIT A,#09h ; 14c99
+	JRS Z,loc_0x014CB2 ; 14c9b
+	LD A,[1AB6h] ; 14c9d
+	AND A,A ; 14ca1
+	JRS Z,loc_0x014CAA ; 14ca2
+	LD A,#18h ; 14ca4
+	LD [14FAh],A ; 14ca6
+loc_0x014CAA:
+	LD A,[IX+19h] ; 14caa
+	INC A ; 14cad
+	CP A,#04h ; 14cae
+	JRS C,loc_0x014CC6 ; 14cb0
+loc_0x014CB2:
+	LD A,[1AB6h] ; 14cb2
+	AND A,A ; 14cb6
+	JRS Z,loc_0x014CBF ; 14cb7
+	LD A,#00h ; 14cb9
+	LD [14FAh],A ; 14cbb
+loc_0x014CBF:
+	LD A,[IX+19h] ; 14cbf
+	OR A,A ; 14cc2
+	JRS Z,loc_0x014CC6 ; 14cc3
+	DEC A ; 14cc5
+loc_0x014CC6:
+	LD [IX+19h],A ; 14cc6
+	RET
+; ------------
+loc_0x014CCA:
+
+	LD A,[1642h] ; 14cca
+
+	BIT A,#20h ; 14cce
+	JRS NZ,loc_0x014CE4 ; 14cd0
+
+	BIT A,#40h ; 14cd2
+	JRS Z,loc_0x014CF6 ; 14cd4
+
+	LD HL,#4B3Eh ; 14cd6
+
+	LD A,[IX+1Ah] ; 14cd9
+	OR A,A ; 14cdc
+	JRS Z,loc_0x014CF0 ; 14cdd
+
+	LD HL,#4B5Bh ; 14cdf
+	JRS loc_0x014CF0
+
+loc_0x014CE4:
+
+	LD HL,#4B7Ch ; 14ce4
+
+	LD A,[IX+1Ah] ; 14ce7
+	OR A,A ; 14cea
+	JRS Z,loc_0x014CF0 ; 14ceb
+
+	LD HL,#4B99h ; 14ced
+
+loc_0x014CF0:
+
+	LD BA,HL ; 14cf0
+	CARL loc_0x00794F ; 14cf2
+
+	RET
+
+loc_0x014CF6:
+
+	CARL loc_0x014C82 ; 14cf6
+	CARL loc_0x014C46 ; 14cf9
+
+	LD A,[IX+19h] ; 14cfc
+	OR A,A ; 14cff
+	JRS Z,loc_0x014D28 ; 14d00
+
+	LD A,[IX+1Ah] ; 14d02
+	OR A,A ; 14d05
+	JRS Z,loc_0x014D16 ; 14d06
+
+	LD A,[IX+0Ah] ; 14d08
+	ADD A,[IX+19h] ; 14d0b
+
+	CP A,#50h ; 14d0e
+	JRS C,loc_0x014D1F ; 14d10
+
+	LD A,#50h ; 14d12
+	JRS loc_0x014D1F
+
+loc_0x014D16:
+
+	LD A,[IX+0Ah] ; 14d16
+	SUB A,[IX+19h] ; 14d19
+	JRS NC,loc_0x014D1F ; 14d1c
+
+	XOR A,A ; 14d1e
+
+loc_0x014D1F:
+
+	; set x pos and y bob
+	LD B,[IX+0Eh]
+	LD [pet_x], BA
+
+	CARL loc_0x007982 ; 14d25
+
+loc_0x014D28:
+
+	RET
+
+; ---------------------- ; 14d28
+loc_0x014D29:
+	XOR A,A ; 14d29
+	LD [IX+18h],A ; 14d2a
+	LD [IX+19h],A ; 14d2d
+	LD [IX+1Ah],A ; 14d30
+	LD [IX+1Bh],A ; 14d33
+	RET
+; ---------------------- ; 14d36
+	DB 29h, 0CDh ; 14d37
 	ASCII "q" ; 14d39
 	DB 9Ah, 0FDh ; 14d3a
 	ASCII "J" ; 14d3c
 loc_0x014D3D:
-	DB 0B0h, 09h, 0CEh, 0D4h, 3Fh, 1Bh, 0F8h, 9Dh ; 14d3d
+	LD A,#09h ; 14d3d
+	LD [1B3Fh],A ; 14d3f
+	RET
+; ---------------------- ; 14d43
+	DB 9Dh ; 14d3d
 	DB 99h, 26h, 0CEh, 01h, 00h, 0CCh, 0CAh, 8Eh ; 14d45
 	DB 99h, 9Dh, 99h ; 14d4d
 	ASCII "q" ; 14d50
@@ -7394,29 +7538,44 @@ loc_0x014D3D:
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 ; Handle pet walking
+;   Args:
+;     IX: pet
+;     IY: movement tbl offset
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 loc_0x014FF0:
-	LD B,[IY] ; 14ff0
+
+	; delta
+	LD B,[IY] ; 14ff0ß
+
 	BIT B,#80h ; 14ff1
 	JRS Z,loc_0x015000 ; 14ff3
+
 	LD A,[IX+0Ah] ; 14ff5
 	ADD A,B ; 14ff8
 	BIT A,#80h ; 14ff9
 	JRS C,loc_0x01500A ; 14ffb
+
 	XOR A,A ; 14ffd
 	JRS loc_0x01500A
-; ---------------------- ; 14ffe
+
 loc_0x015000:
+
 	LD A,[IX+0Ah] ; 15000
 	ADD A,B ; 15003
 	CP A,#50h ; 15004
 	JRS C,loc_0x01500A ; 15006
+	
 	LD A,#50h ; 15008
+
 loc_0x01500A:
+
 	LD [1B12h],A ; 1500a
 	LD [IX+0Ah],A ; 1500e
+
 	INC IY ; 15011
+
 	RET
+
 ; ---------------------- ; 15012
 loc_0x015013:
 	LD A,[1AE9h] ; 15013
