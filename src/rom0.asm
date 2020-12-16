@@ -3511,6 +3511,7 @@ loc_0x003390:
 ; ---------------------- ; 339d
 titlescreen_clock_lookup:
     DW titlescreen_display_nothing, titlescreen_display_date, titlescreen_display_time
+; accessing this table from index 8 leads to ACE from the save file
 
 titlescreen_display_nothing:
 	XOR A,A ; 33a4
