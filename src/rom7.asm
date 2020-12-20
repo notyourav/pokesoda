@@ -24,7 +24,10 @@
 	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 3809d
 	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 380a5
 	DB 00h, 00h, 00h, 00h, 7Fh, 80h, 81h, 82h ; 380ad
-	DB 83h, 84h, 85h, 00h, 00h, 00h, 00h, 00h ; 380b5
+	DB 83h, 84h, 85h
+global pool_0380B8
+pool_0380B8:
+	DB 00h, 00h, 00h, 00h, 00h
 	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 380bd
 	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 380c5
 	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 380cd
@@ -1295,6 +1298,9 @@ loc_0x038BBF:
 	DB 82h, 00h, 02h, 01h, 00h, 0B8h ; 38c56
 	ASCII "z>" ; 38c5c
 	DB 82h ; 38c5e
+
+global pool_038C5F
+pool_038C5F:
 	ASCII "x" ; 38c5f
 	DB 8Ah, 0FBh, 8Ah, 0F0h, 82h ; 38c60
 	ASCII "r" ; 38c65
@@ -1776,6 +1782,8 @@ loc_0x0393F1:
 	DJR NZ,loc_0x0393F1 ; 393f4
 	RET
 ; ---------------------- ; 393f6
+global pool_0393F7
+pool_0393F7:
 	DB 0BCh, 93h, 0C1h, 93h, 0B0h, 93h
 ; ---------------------- ; 393f7
 loc_0x0393FD:
