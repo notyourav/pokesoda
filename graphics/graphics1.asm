@@ -6121,6 +6121,8 @@ SECT ".rom6"
 
     include "graphics/inside.tiles"
     
+global tiles_outside_torchick
+tiles_outside_torchick:
     include "graphics/outside.tiles"
     
     include "graphics/036c00-037180.tiles"

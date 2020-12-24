@@ -1,4 +1,4 @@
-minlib_notelen_lookup:
+minlib_mn_notelen_lookup:
 	DB 01h, 02h, 04h, 06h, 08h, 0Ch, 10h, 18h ; 61c2
 	DB 20h, 01h, 03h, 06h, 09h, 0Ch, 12h, 18h ; 61ca
 	DB 24h ; 61d2

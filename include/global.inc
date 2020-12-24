@@ -72,8 +72,13 @@ OFF_I1 EQU 0FFh^128
 PRC_MODE_INVERT equ 0h
 PRC_MODE_COPY equ 8h
 
-ASSERT MACRO COND
-    IF COND == 0
+assert MACRO condition
+    IF condition == 0
         FAIL 'ASSERTION FAILED'
     ENDIF
+ENDM
+
+farcall MACRO function
+    LD NB, #@CPAG(function)
+    CARL function
 ENDM

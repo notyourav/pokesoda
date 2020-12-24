@@ -31,8 +31,8 @@ minlib_reset_audio_registers:
 	CARL loc_0x003FE1 ; 3b69
 
 	LD A,#03h ; 3b6c
-	LD [bgm_vol],A ; 3b6e
-	LD [sfx_vol],A ; 3b72
+	LD [mn_bgm_vol],A ; 3b6e
+	LD [mn_sfx_vol],A ; 3b72
 
 	RET
 
@@ -64,11 +64,11 @@ loc_0x003B8F:
 	LD BR,#20h ; 3b8f
 	LD EP,#00h ; 3b91
     
-	LD A,[current_bgm] ; 3b94
-	LD [bgm_tmp],A ; 3b98
+	LD A,[mn_current_bgm] ; 3b94
+	LD [mn_bgm_tmp],A ; 3b98
     
 	LD A,#00h ; 3b9c
-	LD [current_bgm],A ; 3b9e
+	LD [mn_current_bgm],A ; 3b9e
     
 	LD A,[BR:71h] ; 3ba2
 	AND A,#0FCh ; 3ba4
@@ -82,11 +82,11 @@ loc_0x003BA9:
 	LD BR,#20h ; 3ba9
 	LD EP,#00h ; 3bab
     
-	LD A,[bgm_tmp] ; 3bae
-	LD [current_bgm],A ; 3bb2
+	LD A,[mn_bgm_tmp] ; 3bae
+	LD [mn_current_bgm],A ; 3bb2
     
 	LD A,#00h ; 3bb6
-	LD [bgm_tmp],A ; 3bb8
+	LD [mn_bgm_tmp],A ; 3bb8
     
 	RET
     
@@ -101,25 +101,25 @@ IRQ_Timer2HI_Underflow:
 	LD [BR:27h],#20h ; 3bc4
 
 	; branch if pending sfx is odd?
-	LD A,[pending_sfx] ; 3bc7
+	LD A,[mn_pending_sfx] ; 3bc7
 	BIT A,#0FFh ; 3bcb
 	JRS NZ,loc_0x003C10 ; 3bcd
 
-	LD A,[current_sfx] ; 3bcf
+	LD A,[mn_current_sfx] ; 3bcf
 	BIT A,#0FFh ; 3bd3
 	JRL NZ,loc_0x003C36 ; 3bd5
 
 loc_0x003BD8:
 
-	LD A,[bgm_tmp] ; 3bd8
+	LD A,[mn_bgm_tmp] ; 3bd8
 	BIT A,#0FFh ; 3bdc
 	JRS NZ,loc_0x003BF5 ; 3bde
 
-	LD A,[pending_bgm] ; 3be0
+	LD A,[mn_pending_bgm] ; 3be0
 	BIT A,#0FFh ; 3be4
 	JRL NZ,loc_0x003CAE ; 3be6
 
-	LD A,[current_bgm] ; 3be9
+	LD A,[mn_current_bgm] ; 3be9
 	BIT A,#0FFh ; 3bed
 	JRL NZ,loc_0x003D18 ; 3bef
 
@@ -137,10 +137,10 @@ loc_0x003BF5:
 ; ---------------------- ; 3bf7
 loc_0x003BF8:
 
-	LD A,[sfx_page] ; 3bf8
+	LD A,[mn_sfx_page] ; 3bf8
 	LD XP,A ; 3bfc
 	LD A,#00h ; 3bfe
-	LD [pending_sfx],A ; 3c00
+	LD [mn_pending_sfx],A ; 3c00
 	LD [u8_14fc],A ; 3c04
 
 	JRS loc_0x003C36
@@ -148,28 +148,28 @@ loc_0x003BF8:
 ; ---------------------- ; 3c08
 loc_0x003C0A:
 
-	LD A,[sfx_page] ; 3c0a
+	LD A,[mn_sfx_page] ; 3c0a
 	JRS loc_0x003C4E
 
 ; ---------------------- ; 3c0e
 loc_0x003C10:
 
-	LD [current_sfx],A ; 3c10
+	LD [mn_current_sfx],A ; 3c10
 	CP A,#0FFh ; 3c14
 	JRS Z,loc_0x003BF8 ; 3c16
 
 	LD L,#02h ; 3c18
 	MLT ; 3c1a
 
-	LD A,[sfx_table_page] ; 3c1c
+	LD A,[mn_sfx_table_page] ; 3c1c
 	LD XP,A ; 3c20
 	LD IX,#6A77h ; 3c22
 	ADD IX,HL ; 3c25
 	LD BA,[IX] ; 3c27
-	LD [sfx_index],BA ; 3c29
+	LD [mn_sfx_index],BA ; 3c29
 
 	LD A,#00h ; 3c2c
-	LD [pending_sfx],A ; 3c2e
+	LD [mn_pending_sfx],A ; 3c2e
 	LD [u8_14fc],A ; 3c32
 
 loc_0x003C36:
@@ -179,21 +179,21 @@ loc_0x003C36:
 	JRL NZ,loc_0x003C8A ; 3c3c
 
 	AND [BR:48h],#0FBh ; 3c3f
-	LD A,[current_sfx] ; 3c42
+	LD A,[mn_current_sfx] ; 3c42
 	CP A,#0FFh ; 3c46
 	JRS Z,loc_0x003C0A ; 3c48
 
-	LD A,[sfx_table_page] ; 3c4a
+	LD A,[mn_sfx_table_page] ; 3c4a
 
 loc_0x003C4E:
 
 	LD XP,A ; 3c4e
-	LD IX,[sfx_index] ; 3c50
+	LD IX,[mn_sfx_index] ; 3c50
 	LD A,[IX] ; 3c53
 	CP A,#0FFh ; 3c54
 	JRS Z,loc_0x003C96 ; 3c56
 
-	AND A,[sfx_vol] ; 3c58
+	AND A,[mn_sfx_vol] ; 3c58
 	LD B,[BR:71h] ; 3c5b
 	AND B,#0FCh ; 3c5d
 	ADD A,B ; 3c60
@@ -215,7 +215,7 @@ loc_0x003C4E:
 	LD [BR:4Dh],B ; 3c7c
 
 	ADD IX,#0002h ; 3c7e
-	LD [sfx_index],IX ; 3c81
+	LD [mn_sfx_index],IX ; 3c81
 	OR [BR:48h],#06h ; 3c84
 
 	JRL loc_0x003BD8
@@ -236,34 +236,34 @@ loc_0x003C96:
 	AND [BR:48h],#0FBh ; 3c96
 
 	LD A,#00h ; 3c99
-	LD [current_sfx],A ; 3c9b
+	LD [mn_current_sfx],A ; 3c9b
 	LD [u8_14fc],A ; 3c9f
-	LD [sfx_index],A ; 3ca3
-	LD [sfx_index + 1],A ; 3ca7
+	LD [mn_sfx_index],A ; 3ca3
+	LD [mn_sfx_index + 1],A ; 3ca7
 
 	JRL loc_0x003BD8
 
 ; ---------------------- ; 3cab
 loc_0x003CAE:
 
-	LD [current_bgm],A ; 3cae
+	LD [mn_current_bgm],A ; 3cae
 	LD L,#02h ; 3cb2
 	MLT ; 3cb4
 
-	LD A,[bgm_table_page] ; 3cb6
+	LD A,[mn_bgm_table_page] ; 3cb6
 	LD YP,A ; 3cba
 	LD IY,#minlib_bgm_table ; 3cbc
 	ADD IY,HL ; 3cbf
 	LD BA,[IY] ; 3cc1
-	LD [bgm_index],BA ; 3cc3
+	LD [mn_bgm_index],BA ; 3cc3
 
 	LD A,#00h ; 3cc6
-	LD [effect],A ; 3cc8
+	LD [mn_effect],A ; 3cc8
 	LD [u8_14e4],A ; 3ccc
-	LD [multiplier],A ; 3cd0
-	LD [waveform],A ; 3cd4
+	LD [mn_multiplier],A ; 3cd0
+	LD [mn_waveform],A ; 3cd4
 	LD [u8_14e7],A ; 3cd8
-	LD [notelen_counter],A ; 3cdc
+	LD [mn_notelen_counter],A ; 3cdc
 	LD [u8_14e9],A ; 3ce0
 	LD [u8_14ea],A ; 3ce4
 	LD [u8_14eb],A ; 3ce8
@@ -275,19 +275,19 @@ loc_0x003CAE:
 	LD [u8_14f1],A ; 3d00
 	LD [u8_14f2],A ; 3d04
 	LD [u8_14f3],A ; 3d08
-	LD [pending_bgm],A ; 3d0c
-	LD [loop_begin],A ; 3d10
-	LD [loop_begin + 1],A ; 3d14
+	LD [mn_pending_bgm],A ; 3d0c
+	LD [mn_loop_begin],A ; 3d10
+	LD [mn_loop_begin + 1],A ; 3d14
 
 loc_0x003D18:
 
-	LD A,[bgm_table_page] ; 3d18
+	LD A,[mn_bgm_table_page] ; 3d18
 	LD YP,A ; 3d1c
-	LD A,[notelen_counter] ; 3d1e
+	LD A,[mn_notelen_counter] ; 3d1e
 	CP A,#00h ; 3d22
 	JRL NZ,loc_0x003EEE ; 3d24
 
-	LD A,[current_sfx] ; 3d27
+	LD A,[mn_current_sfx] ; 3d27
 	BIT A,#0FFh ; 3d2b
 	JRS NZ,loc_0x003D32 ; 3d2d
 
@@ -302,7 +302,7 @@ loc_0x003D32:
 
 	LD A,#00h ; 3d3c
 	LD [u8_14ed],A ; 3d3e
-	LD IY,[bgm_index] ; 3d42
+	LD IY,[mn_bgm_index] ; 3d42
 
 loc_0x003D45:
 
@@ -312,7 +312,7 @@ loc_0x003D45:
 	
 	; increase note index 
 	ADD IY,#0001h ; 3d4b
-	LD [bgm_index],IY ; 3d4e
+	LD [mn_bgm_index],IY ; 3d4e
 	LD L,#02h ; 3d51
 	MLT ; 3d53
 
@@ -323,7 +323,7 @@ loc_0x003D45:
 	JRL Z,loc_0x003DF3 ; 3d5f
 
 	LD HL,BA ; 3d62
-	LD A,[current_sfx] ; 3d64
+	LD A,[mn_current_sfx] ; 3d64
 	BIT A,#0FFh ; 3d68
 	JRS NZ,loc_0x003D70 ; 3d6a
 
@@ -336,9 +336,9 @@ loc_0x003D70:
 	LD [u8_14ef],L ; 3d70
 	LD [u8_14f0],H ; 3d74
 	LD H,#00h ; 3d78
-	LD L,[waveform] ; 3d7a
+	LD L,[mn_waveform] ; 3d7a
 	LD IY,#minlib_waveform_lookup ; 3d7e
-	LD A,[bgm_vol] ; 3d81
+	LD A,[mn_bgm_vol] ; 3d81
 	BIT A,#80h ; 3d85
 	JRL NZ,loc_0x003E1E ; 3d87
 
@@ -354,7 +354,7 @@ loc_0x003D95:
 
 	LD HL,[u8_14ef] ; 3d95
 	SUB HL,BA ; 3d98
-	LD A,[current_sfx] ; 3d9a
+	LD A,[mn_current_sfx] ; 3d9a
 	BIT A,#0FFh ; 3d9e
 	JRS NZ,loc_0x003DA6 ; 3da0
 
@@ -365,9 +365,9 @@ loc_0x003DA6:
 
 	LD [u8_14f1],L ; 3da6
 	LD [u8_14f2],H ; 3daa
-	LD L,[multiplier] ; 3dae
-	LD B,[notelen] ; 3db2
-	LD IY,#minlib_notelen_lookup ; 3db6
+	LD L,[mn_multiplier] ; 3dae
+	LD B,[mn_notelen] ; 3db2
+	LD IY,#minlib_mn_notelen_lookup ; 3db6
 	LD A,#09h ; 3db9
 
 	MLT ; 3dbb
@@ -376,27 +376,27 @@ loc_0x003DA6:
 	LD L,B ; 3dbf
 	LD A,[IY+L] ; 3dc0
 	DEC A ; 3dc2
-	LD [notelen_counter],A ; 3dc3
+	LD [mn_notelen_counter],A ; 3dc3
 
-	LD A,[effect] ; 3dc7
+	LD A,[mn_effect] ; 3dc7
 	BIT A,#0FFh ; 3dcb
 	JRS Z,loc_0x003DDC ; 3dcd
 
-	LD A,[notelen_counter] ; 3dcf
+	LD A,[mn_notelen_counter] ; 3dcf
 	LD B,[u8_14f3] ; 3dd3
 	SUB A,B ; 3dd7
 	LD [u8_14ea],A ; 3dd8
 
 loc_0x003DDC:
 
-	LD A,[current_sfx] ; 3ddc
+	LD A,[mn_current_sfx] ; 3ddc
 	BIT A,#0FFh ; 3de0
 	JRS NZ,loc_0x003DF0 ; 3de2
 
 	; mute audio?
 	LD A,[BR:71h] ; 3de4
 	AND A,#0FCh ; 3de6
-	OR A,[bgm_vol] ; 3de8
+	OR A,[mn_bgm_vol] ; 3de8
 	LD [BR:71h],A ; 3deb
 
 	; enable Timer 3
@@ -410,7 +410,7 @@ loc_0x003DF0:
 
 ; ---------------------- ; 3df2
 loc_0x003DF3:
-	LD A,[current_sfx] ; 3df3
+	LD A,[mn_current_sfx] ; 3df3
 	BIT A,#0FFh ; 3df7
 	JRS NZ,loc_0x003E03 ; 3df9
 
@@ -421,9 +421,9 @@ loc_0x003DF3:
 
 loc_0x003E03:
 
-	LD L,[multiplier] ; 3e03
-	LD B,[notelen] ; 3e07
-	LD IY,#minlib_notelen_lookup ; 3e0b
+	LD L,[mn_multiplier] ; 3e03
+	LD B,[mn_notelen] ; 3e07
+	LD IY,#minlib_mn_notelen_lookup ; 3e0b
 	LD A,#09h ; 3e0e
 
 	MLT ; 3e10
@@ -432,7 +432,7 @@ loc_0x003E03:
 	LD L,B ; 3e14
 	LD A,[IY+L] ; 3e15
 	DEC A ; 3e17
-	LD [notelen_counter],A ; 3e18
+	LD [mn_notelen_counter],A ; 3e18
 
 	JRS loc_0x003DF0
 
@@ -461,7 +461,7 @@ loc_0x003E24:
 	JRL NZ,loc_0x003EB8 ; 3e36
 
 	AND A,#0Fh ; 3e39
-	LD [multiplier],A ; 3e3b
+	LD [mn_multiplier],A ; 3e3b
 
 	ADD IY,#0001h ; 3e3f
 	JRL loc_0x003D45
@@ -470,7 +470,7 @@ loc_0x003E24:
 loc_0x003E45:
 
 	AND A,#0Fh ; 3e45
-	LD [notelen],A ; 3e47
+	LD [mn_notelen],A ; 3e47
 
 	ADD IY,#0001h ; 3e4b
 	JRL loc_0x003D45
@@ -479,7 +479,7 @@ loc_0x003E45:
 loc_0x003E51:
 
 	AND A,#0Fh ; 3e51
-	LD [waveform],A ; 3e53
+	LD [mn_waveform],A ; 3e53
 
 	ADD IY,#0001h ; 3e57
 	JRL loc_0x003D45
@@ -487,7 +487,7 @@ loc_0x003E51:
 ; ---------------------- ; 3e5a
 loc_0x003E5D:
 
-	LD [effect],A ; 3e5d
+	LD [mn_effect],A ; 3e5d
 
 	PUSH IY ; 3e61
 
@@ -558,7 +558,7 @@ loc_0x003EB8:
 
 VolumeSet1:
 
-	LD [loop_begin],IY ; 3ec6
+	LD [mn_loop_begin],IY ; 3ec6
 	LD A,[u8_14ee] ; 3ec9
 	OR A,#08h ; 3ecd
 	LD [u8_14ee],A ; 3ecf
@@ -569,8 +569,8 @@ VolumeSet1:
 ; ---------------------- ; 3ed6
 VolumeSet2:
 
-	LD IY,[loop_begin] ; 3ed9
-	LD [bgm_index],IY ; 3edc
+	LD IY,[mn_loop_begin] ; 3ed9
+	LD [mn_bgm_index],IY ; 3edc
 
 	JRL loc_0x003D45
 
@@ -596,7 +596,7 @@ loc_0x003EEE:
 	BIT A,#02h ; 3ef2
 	JRS Z,loc_0x003F02 ; 3ef4
 
-	LD A,[notelen_counter] ; 3ef6
+	LD A,[mn_notelen_counter] ; 3ef6
 	LD B,[u8_14e9] ; 3efa
 	CP A,B ; 3efe
 	CARL Z,loc_0x003F5D ; 3eff
@@ -607,7 +607,7 @@ loc_0x003F02:
 	BIT A,#04h ; 3f06
 	JRS Z,loc_0x003F17 ; 3f08
 
-	LD A,[notelen_counter] ; 3f0a
+	LD A,[mn_notelen_counter] ; 3f0a
 	LD B,[u8_14ea] ; 3f0e
 	INC B ; 3f12
 	CP A,B ; 3f13
@@ -622,8 +622,8 @@ loc_0x003F17:
 	BIT A,#20h ; 3f1f
 	JRS Z,loc_0x003F43 ; 3f21
 
-	; playing sound effect?
-	LD A,[current_sfx] ; 3f23
+	; playing sound mn_effect?
+	LD A,[mn_current_sfx] ; 3f23
 	BIT A,#0FFh ; 3f27
 	JRS NZ,loc_0x003F43 ; 3f29
 
@@ -649,12 +649,12 @@ loc_0x003F43:
 
 loc_0x003F4D:
 
-	LD A,[notelen_counter] ; 3f4d
+	LD A,[mn_notelen_counter] ; 3f4d
 	CP A,#0FEh ; 3f51
 	JRS Z,loc_0x003F5A ; 3f53
 
 	DEC A ; 3f55
-	LD [notelen_counter],A ; 3f56
+	LD [mn_notelen_counter],A ; 3f56
 
 loc_0x003F5A:
 
@@ -665,7 +665,7 @@ loc_0x003F5A:
 ; ---------------------- ; 3f5c
 loc_0x003F5D:
 
-	LD A,[current_sfx] ; 3f5d
+	LD A,[mn_current_sfx] ; 3f5d
 	BIT A,#0FFh ; 3f61
 	JRS NZ,loc_0x003F73 ; 3f63
 
@@ -5988,13 +5988,13 @@ loc_0x005C7C:
 	JRS Z,loc_0x005CB7 ; 5ca3
 
 	LD A,YP ; 5ca5
-	LD [sfx_page],A ; 5ca7
+	LD [mn_sfx_page],A ; 5ca7
 
 	LD BA,#minlib_startup_audio_data ; 5cab
-	LD [sfx_index],BA ; 5cae
+	LD [mn_sfx_index],BA ; 5cae
 
 	LD A,#0FFh ; 5cb1
-	LD [pending_sfx],A ; 5cb3
+	LD [mn_pending_sfx],A ; 5cb3
 
 loc_0x005CB7:
 

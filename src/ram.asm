@@ -1,4 +1,5 @@
 INCLUDE "global.inc"
+INCLUDE "engine_constants.inc"
 
 DEFSECT ".vram", DATA AT 1000H
 SECT ".vram"
@@ -15,29 +16,29 @@ tilemap: DS 0C0h
 DEFSECT ".wram", DATA AT 14E0H
 SECT ".wram"
 
-global bgm_index
-bgm_index: DS 2
+global mn_bgm_index
+mn_bgm_index: DS 2
 
-global notelen
-notelen: DS 1
+global mn_notelen
+mn_notelen: DS 1
 
-global effect
-effect: DS 1
+global mn_effect
+mn_effect: DS 1
 
 global u8_14e4
 u8_14e4: DS 1
 
-global multiplier
-multiplier: DS 1
+global mn_multiplier
+mn_multiplier: DS 1
 
-global waveform
-waveform: DS 1
+global mn_waveform
+mn_waveform: DS 1
 
 global u8_14e7
 u8_14e7: DS 1
 
-global notelen_counter
-notelen_counter: DS 1
+global mn_notelen_counter
+mn_notelen_counter: DS 1
 
 global u8_14e9
 u8_14e9: DS 1
@@ -72,29 +73,29 @@ u8_14f2: DS 1
 global u8_14f3
 u8_14f3: DS 1
 
-global pending_bgm
-pending_bgm: DS 1
+global mn_pending_bgm ; 14f4
+mn_pending_bgm: DS 1
 
-global current_bgm
-current_bgm: DS 1
+global mn_current_bgm ; 14f5
+mn_current_bgm: DS 1
 
-global loop_begin
-loop_begin: DS 2
+global mn_loop_begin ; 14f6
+mn_loop_begin: DS 2
 
 global u16_14f8
 u16_14f8: DS 2
 
-global pending_sfx
-pending_sfx: DS 1
+global mn_pending_sfx ; 14fa
+mn_pending_sfx: DS 1
 
-global current_sfx
-current_sfx: DS 1
+global mn_current_sfx ; 14fb
+mn_current_sfx: DS 1
 
 global u8_14fc
 u8_14fc: DS 1
 
-global sfx_index
-sfx_index: DS 2
+global mn_sfx_index
+mn_sfx_index: DS 2
 
 global u16_14ff
 u16_14ff: DS 2
@@ -102,26 +103,26 @@ u16_14ff: DS 2
 global u16_1501
 u16_1501: DS 2
 
-global sfx_page
-sfx_page: DS 1
+global mn_sfx_page
+mn_sfx_page: DS 1
 
-global bgm_table_page
-bgm_table_page: DS 1
+global mn_bgm_table_page
+mn_bgm_table_page: DS 1
 
-global sfx_table_page
-sfx_table_page: DS 1
+global mn_sfx_table_page
+mn_sfx_table_page: DS 1
 
 global u8_1506
 u8_1506: DS 1
 
-global bgm_vol
-bgm_vol: DS 1
+global mn_bgm_vol
+mn_bgm_vol: DS 1
 
-global sfx_vol
-sfx_vol: DS 1
+global mn_sfx_vol
+mn_sfx_vol: DS 1
 
-global bgm_tmp
-bgm_tmp: DS 1
+global mn_bgm_tmp
+mn_bgm_tmp: DS 1
 
 global u8_150a
 u8_150a: DS 1
@@ -136,17 +137,50 @@ global eeprom_buffer ; 150D
 eeprom_buffer: DS 12h
 
 global filler151F ; 151F
-filler151F: DS 5B8h
+filler151F: DS 122h
 
-; 1641: keys 2 frames ago
-; 1642: keys 1 frame ago
-; 1643: new unpressed last frame
-; 1644: new pressed last frame
-; 1645: dup of 1643?
+; 162C: tilemap frame 1 offset
+; 162E: tilemap frame 1 page
+; 162F: tilemap frame 2 offset
+; 1631: tilemap frame 2 page
 
-; 1AB6: SFX volume
-; 1AB7: BGM volume
-; 1AB8: rumble motor on
+; two frames ago
+global keys_old2 ; 1641
+keys_old2: DS 1
+
+global keys_old ; 1642
+keys_old: DS 1
+
+global keys_new_unpressed ; 1643
+keys_new_unpressed: DS 1
+
+global keys_new_pressed ; 1644
+keys_new_pressed: DS 1
+
+; dup of keys_new_unpressed?
+global unk1645 ; 1645
+unk1645: DS 1
+
+global filler1646 ; 1646
+filler1646: DS 49h
+
+global entities ; 168F
+entities: DS 20 * MAX_SPRITES
+
+global filler181F ; 181F
+filler1A8F: DS 297h
+
+global sfx_vol ; 1AB6
+sfx_vol: DS 1
+
+global bgm_vol ; 1AB7
+bgm_vol: DS 1
+
+global rumble_on ; 1AB8
+rumble_on: DS 1
+
+global filler1AB9 ; 1AB9
+filler1AB9: DS 1Eh
 
 global pet_breed ; 1AD7
 pet_breed: DS 1

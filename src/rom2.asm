@@ -1,4 +1,6 @@
 INCLUDE "global.inc"
+INCLUDE "engine_constants.inc"
+INCLUDE "sprite_entity.inc"
 
 DEFSECT ".rom2", CODE AT 010000H
 SECT ".rom2"
@@ -1634,12 +1636,12 @@ loc_0x01166A:
 ; ---------------------- ; 1166c
 loc_0x01166D:
 
-	LD A,[1AB6h] ; 1166d
+	LD A,[sfx_vol] ; 1166d
 	AND A,A ; 11671
 	JRS Z,loc_0x01167A ; 11672
 
 	LD A,#03h ; 11674
-	LD [14FAh],A ; 11676
+	LD [mn_pending_sfx],A ; 11676
 
 loc_0x01167A:
 
@@ -1679,11 +1681,13 @@ loc_0x011689:
 global loc_0x01168D
 loc_0x01168D:
 
-	LD IX,#168Fh ; 1168d
-	LD XP,#00h ; 11690
+	LD IX,#@DOFF(entities)
+	LD XP,#@DPAG(entities)
+
 	LD HL,[190Fh] ; 11693
 	LD EP,#00h ; 11696
-	LD B,#04h ; 11699
+
+	LD B, #MAX_ENT_GRP1
 
 loc_0x01169B:
 
@@ -1693,16 +1697,16 @@ loc_0x01169B:
 	OR A,[IX+01h] ; 1169e
 	JRS Z,loc_0x0116C5 ; 116a1
 
-	LD A,[IX+0Ah] ; 116a3
+	LD A,[IX+ENT_X] ; 116a3
 	ADD A,#10h ; 116a6
 	LD [1913h],A ; 116a8
 
-	LD A,[IX+0Eh] ; 116ac
+	LD A,[IX+ENT_Y] ; 116ac
 	ADD A,#10h ; 116af
 	LD [1914h],A ; 116b1
 
-	LD A,[IX+14h] ; 116b5
-	LD B,[IX+15h] ; 116b8
+	LD A,[IX+ENT_CUR_STATE_LO] ; 116b5
+	LD B,[IX+ENT_CUR_STATE_HI] ; 116b8
 	LD IY,BA ; 116bb
 
 	LD A,[IX+16h] ; 116bd
@@ -1711,7 +1715,7 @@ loc_0x01169B:
 
 loc_0x0116C5:
 
-	ADD IX,#0020h ; 116c5
+	ADD IX, #20h
 
 	POP B ; 116c8
 
@@ -1725,13 +1729,13 @@ loc_0x0116C5:
 global loc_0x0116D0
 loc_0x0116D0:
 
-	LD IX,#170Fh ; 116d0
-	LD XP,#00h ; 116d3
+	LD IX, #@DOFF(entities) + 80h
+	LD XP, #@DPAG(entities)
 
 	LD HL,[190Fh] ; 116d6
 	LD EP,#00h ; 116d9
 
-	LD B,#02h ; 116dc
+	LD B, #MAX_ENT_GRP2
 
 loc_0x0116DE:
 
@@ -1742,7 +1746,7 @@ loc_0x0116DE:
 	JRS Z,loc_0x011724 ; 116e4
 
 	LD IY,[165Dh] ; 116e6
-	LD A,[IX+0Ah] ; 116e9
+	LD A,[IX+ENT_X] ; 116e9
 	LD B,[IX+0Bh] ; 116ec
 	SUB BA,IY ; 116ef
 
@@ -1753,7 +1757,7 @@ loc_0x0116DE:
 	JRS NC,loc_0x011724 ; 116fb
 
 	LD IY,[165Fh] ; 116fd
-	LD A,[IX+0Eh] ; 11700
+	LD A,[IX+ENT_Y] ; 11700
 	LD B,[IX+0Fh] ; 11703
 	SUB BA,IY ; 11706
 
@@ -1763,8 +1767,8 @@ loc_0x0116DE:
 	CP BA,#0080h ; 1170f
 	JRS NC,loc_0x011724 ; 11712
 
-	LD A,[IX+14h] ; 11714
-	LD B,[IX+15h] ; 11717
+	LD A,[IX+ENT_CUR_STATE_LO] ; 11714
+	LD B,[IX+ENT_CUR_STATE_HI] ; 11717
 	LD IY,BA ; 1171a
 
 	LD A,[IX+16h] ; 1171c
@@ -1773,7 +1777,7 @@ loc_0x0116DE:
 
 loc_0x011724:
 
-	ADD IX,#0020h ; 11724
+	ADD IX, #20h
 
 	POP B ; 11727
 
@@ -1787,13 +1791,13 @@ loc_0x011724:
 global loc_0x01172F
 loc_0x01172F:
 
-	LD IX,#174Fh ; 1172f
-	LD XP,#00h ; 11732
+	LD IX, #@DOFF(entities) + 0C0h ; is this a separate list?
+	LD XP, #@DPAG(entities)
 
 	LD HL,[190Fh] ; 11735
 	LD EP,#00h ; 11738
 
-	LD B,#0Eh ; 1173b
+	LD B, #MAX_ENT_GRP3
 
 loc_0x01173D:
 
@@ -1804,7 +1808,7 @@ loc_0x01173D:
 	JRS Z,loc_0x011783 ; 11743
 
 	LD IY,[165Dh] ; 11745
-	LD A,[IX+0Ah] ; 11748
+	LD A,[IX+ENT_X] ; 11748
 	LD B,[IX+0Bh] ; 1174b
 
 	SUB BA,IY ; 1174e
@@ -1815,7 +1819,7 @@ loc_0x01173D:
 	JRS NC,loc_0x011783 ; 1175a
 
 	LD IY,[165Fh] ; 1175c
-	LD A,[IX+0Eh] ; 1175f
+	LD A,[IX+ENT_Y] ; 1175f
 	LD B,[IX+0Fh] ; 11762
 
 	SUB BA,IY ; 11765
@@ -1825,8 +1829,8 @@ loc_0x01173D:
 	CP BA,#0080h ; 1176e
 	JRS NC,loc_0x011783 ; 11771
 
-	LD A,[IX+14h] ; 11773
-	LD B,[IX+15h] ; 11776
+	LD A,[IX+ENT_CUR_STATE_LO] ; 11773
+	LD B,[IX+ENT_CUR_STATE_HI] ; 11776
 
 	LD IY,BA ; 11779
 	LD A,[IX+16h] ; 1177b
@@ -1836,7 +1840,7 @@ loc_0x01173D:
 
 loc_0x011783:
 
-	ADD IX,#0020h ; 11783
+	ADD IX, #20h
 
 	POP B ; 11786
 
@@ -1915,7 +1919,7 @@ loc_0x011842:
 ; ---------------------- ; 1186f
 loc_0x011871:
 
-	ADD IX,#0020h ; 11871
+	ADD IX, #20h
 
 loc_0x011874:
 
@@ -1924,13 +1928,13 @@ loc_0x011874:
 ; ---------------------- ; 11874
 global loc_0x011875
 loc_0x011875:
-	LD IX,#168Fh ; 11875
-	LD XP,#00h ; 11878
+	LD IX,#@DOFF(entities)
+	LD XP,#@DPAG(entities)
 
 	LD HL,[190Fh] ; 1187b
 	LD EP,#00h ; 1187e
 
-	LD B,#14h ; 11881
+	LD B, #MAX_SPRITES
 
 loc_0x011883:
 
@@ -1949,7 +1953,7 @@ loc_0x011883:
 	JRS Z,loc_0x0118C6 ; 11894
 
 	LD IY,[165Dh] ; 11896
-	LD A,[IX+0Ah] ; 11899
+	LD A,[IX+ENT_X] ; 11899
 	LD B,[IX+0Bh] ; 1189c
 
 	SUB BA,IY ; 1189f
@@ -1960,7 +1964,7 @@ loc_0x011883:
 	JRS NC,loc_0x0118E9 ; 118ab
 
 	LD IY,[165Fh] ; 118ad
-	LD A,[IX+0Eh] ; 118b0
+	LD A,[IX+ENT_Y] ; 118b0
 	LD B,[IX+0Fh] ; 118b3
 
 	SUB BA,IY ; 118b6
@@ -1974,18 +1978,18 @@ loc_0x011883:
 
 loc_0x0118C6:
 
-	LD A,[IX+0Ah] ; 118c6
+	LD A,[IX+ENT_X] ; 118c6
 	ADD A,#10h ; 118c9
 	LD [1913h],A ; 118cb
 
-	LD A,[IX+0Eh] ; 118cf
+	LD A,[IX+ENT_Y] ; 118cf
 	ADD A,#10h ; 118d2
 	LD [1914h],A ; 118d4
 
 loc_0x0118D8:
 
-	LD A,[IX+14h] ; 118d8
-	LD B,[IX+15h] ; 118db
+	LD A,[IX+ENT_CUR_STATE_LO] ; 118d8
+	LD B,[IX+ENT_CUR_STATE_HI] ; 118db
 	LD IY,BA ; 118de
 
 	LD A,[IX+16h] ; 118e0
@@ -1996,7 +2000,7 @@ loc_0x0118D8:
 
 loc_0x0118E9:
 
-	ADD IX,#0020h ; 118e9
+	ADD IX, #20h
 
 	POP B ; 118ec
 
@@ -2022,7 +2026,7 @@ loc_0x0118F4:
 
 loc_0x011905:
 
-	ADD IX,#0020h ; 11905
+	ADD IX, #20h
 
 loc_0x011908:
 
@@ -2032,13 +2036,13 @@ loc_0x011908:
 global loc_0x011909
 loc_0x011909:
 
-	LD IX,#168Fh ; 11909
-	LD XP,#00h ; 1190c
+	LD IX,#@DOFF(entities)
+	LD XP,#@DPAG(entities)
 
 	LD HL,[190Fh] ; 1190f
 	LD EP,#00h ; 11912
 
-	LD B,#14h ; 11915
+	LD B, #MAX_SPRITES
 
 loc_0x011917:
 
@@ -2057,7 +2061,7 @@ loc_0x011917:
 	JRS Z,loc_0x01195A ; 11928
 
 	LD IY,[165Dh] ; 1192a
-	LD A,[IX+0Ah] ; 1192d
+	LD A,[IX+ENT_X] ; 1192d
 	LD B,[IX+0Bh] ; 11930
 
 	SUB BA,IY ; 11933
@@ -2068,7 +2072,7 @@ loc_0x011917:
 	JRS NC,loc_0x01197D ; 1193f
 
 	LD IY,[165Fh] ; 11941
-	LD A,[IX+0Eh] ; 11944
+	LD A,[IX+ENT_Y] ; 11944
 	LD B,[IX+0Fh] ; 11947
 
 	SUB BA,IY ; 1194a
@@ -2082,18 +2086,18 @@ loc_0x011917:
 
 loc_0x01195A:
 
-	LD A,[IX+0Ah] ; 1195a
+	LD A,[IX+ENT_X] ; 1195a
 	ADD A,#10h ; 1195d
 	LD [1913h],A ; 1195f
 
-	LD A,[IX+0Eh] ; 11963
+	LD A,[IX+ENT_Y] ; 11963
 	ADD A,#10h ; 11966
 	LD [1914h],A ; 11968
 
 loc_0x01196C:
 
-	LD A,[IX+14h] ; 1196c
-	LD B,[IX+15h] ; 1196f
+	LD A,[IX+ENT_CUR_STATE_LO] ; 1196c
+	LD B,[IX+ENT_CUR_STATE_HI] ; 1196f
 	LD IY,BA ; 11972
 
 	LD A,[IX+16h] ; 11974
@@ -2104,7 +2108,7 @@ loc_0x01196C:
 
 loc_0x01197D:
 
-	ADD IX,#0020h ; 1197d
+	ADD IX, #20h
 
 	POP B ; 11980
 
@@ -2124,7 +2128,14 @@ loc_0x01197D:
 	ASCII "G" ; 11997
 	DB 0CEh ; 11998
 	ASCII "D" ; 11999
-	DB 06h, 93h, 0FAh, 0CFh, 0D8h, 0CEh ; 1199a
+	DB 06h, 93h, 0FAh
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Pet sprite state walking
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+global loc_0x01199D
+loc_0x01199D:
+	DB 0CFh, 0D8h, 0CEh ; 1199a
 	ASCII "D" ; 119a0
 	DB 04h, 0CEh ; 119a1
 	ASCII "L" ; 119a3
@@ -2140,7 +2151,14 @@ loc_0x01197D:
 	ASCII "G" ; 119bb
 	DB 0CEh ; 119bc
 	ASCII "D" ; 119bd
-	DB 07h, 93h, 0F8h, 0CFh, 0DBh, 0F8h, 0CFh, 0E6h ; 119be
+	DB 07h, 93h, 0F8h
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Pet bob state
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+global loc_0x0119C1
+loc_0x0119C1:
+	DB 0CFh, 0DBh, 0F8h, 0CFh, 0E6h ; 119be
 	DB 0C1h, 07h, 00h, 8Eh, 0E7h, 0F6h, 0C3h, 02h ; 119c6
 	DB 00h, 0F8h ; 119ce
 	ASCII "G" ; 119d0
@@ -2212,32 +2230,11 @@ loc_0x01197D:
 ; ---------------------- ; 11a75
 loc_0x011A7A:
 
-	XOR A,A ; 11a7a
+	XOR A, A
 
-	LD [15B4h],A ; 11a7b
-	LD [15B8h],A ; 11a7f
-	LD [15BCh],A ; 11a83
-	LD [15C0h],A ; 11a87
-	LD [15C4h],A ; 11a8b
-	LD [15C8h],A ; 11a8f
-	LD [15CCh],A ; 11a93
-	LD [15D0h],A ; 11a97
-	LD [15D4h],A ; 11a9b
-	LD [15D8h],A ; 11a9f
-	LD [15DCh],A ; 11aa3
-	LD [15E0h],A ; 11aa7
-	LD [15E4h],A ; 11aab
-	LD [15E8h],A ; 11aaf
-	LD [15ECh],A ; 11ab3
-	LD [15F0h],A ; 11ab7
-	LD [15F4h],A ; 11abb
-	LD [15F8h],A ; 11abf
-	LD [15FCh],A ; 11ac3
-	LD [1600h],A ; 11ac7
-	LD [1604h],A ; 11acb
-	LD [1608h],A ; 11acf
-	LD [160Ch],A ; 11ad3
-	LD [1610h],A ; 11ad7
+	DUPF i, 0, 95, 4
+	LD [15B4h+i], A
+	ENDM
 
 	RET
 
@@ -2245,12 +2242,12 @@ loc_0x011A7A:
 global loc_0x011ADC
 loc_0x011ADC:
 
-	LD HL,#168Fh ; 11adc
+	LD HL,#@DOFF(entities)
+	LD EP,#@DPAG(entities)
 
-	LD EP,#00h ; 11adf
 	LD IY,#0000h ; 11ae2
 
-	LD B,#14h ; 11ae5
+	LD B, #MAX_SPRITES
 
 	LD IX,#0020h ; 11ae7
 
@@ -2276,8 +2273,8 @@ loc_0x011AEA:
 loc_0x011B03:
 
 	LD [IX],IY ; 11b03
-	LD [IX+0Ah],L ; 11b05
-	LD [IX+0Eh],H ; 11b08
+	LD [IX+ENT_X],L ; 11b05
+	LD [IX+ENT_Y],H ; 11b08
 
 	LD A,[IY+02h] ; 11b0b
 	LD B,[IY+03h] ; 11b0e
@@ -2286,8 +2283,8 @@ loc_0x011B03:
 
 	LD A,[IY+04h] ; 11b17
 	LD B,[IY+05h] ; 11b1a
-	LD [IX+02h],A ; 11b1d
-	LD [IX+03h],B ; 11b20
+	LD [IX+ENT_NEXT_STATE_LO],A ; 11b1d
+	LD [IX+ENT_NEXT_STATE_HI],B ; 11b20
 
 	XOR A,A ; 11b23
 	LD [IX+07h],A ; 11b24
@@ -2324,8 +2321,8 @@ loc_0x011B03:
 	LD [IX+06h],A ; 11b68
 
 	LD BA,#1A6Dh ; 11b6b
-	LD [IX+14h],A ; 11b6e
-	LD [IX+15h],B ; 11b71
+	LD [IX+ENT_CUR_STATE_LO],A ; 11b6e
+	LD [IX+ENT_CUR_STATE_HI],B ; 11b71
 
 	LD A,#01h ; 11b74
 	LD [IX+16h],A ; 11b76
@@ -2352,12 +2349,12 @@ loc_0x011B84:
 	PUSH BA ; 11b86
 
 	LD YP,#01h ; 11b87
-	LD IX,#168Fh ; 11b8a
 
-	LD XP,#00h ; 11b8d
+	LD IX,#@DOFF(entities)
+	LD XP,#@DPAG(entities)
+
 	LD EP,#00h ; 11b90
-
-	LD B,#14h ; 11b93
+	LD B, #MAX_SPRITES
 
 loc_0x011B95:
 
@@ -2365,7 +2362,7 @@ loc_0x011B95:
 	OR A,[IX+01h] ; 11b96
 	JRL Z,loc_0x011B03 ; 11b99
 
-	ADD IX,#0020h ; 11b9c
+	ADD IX, #20h
 
 	DJR NZ,loc_0x011B95 ; 11b9f
 
@@ -2380,12 +2377,13 @@ global loc_0x011BA5
 loc_0x011BA5:
 
 	LD YP,#01h ; 11ba5
-	LD IX,#168Fh ; 11ba8
 
-	LD XP,#00h ; 11bab
+	LD IX,#@DOFF(entities)
+	LD XP,#@DPAG(entities)
+
 	LD EP,#00h ; 11bae
 
-	LD B,#14h ; 11bb1
+	LD B, #MAX_SPRITES
 
 loc_0x011BB3:
 
@@ -2404,8 +2402,8 @@ loc_0x011BB3:
 	DEC [HL] ; 11bc8
 	JRS NZ,loc_0x011C05 ; 11bc9
 
-	LD L,[IX+02h] ; 11bcb
-	LD H,[IX+03h] ; 11bce
+	LD L,[IX+ENT_NEXT_STATE_LO] ; 11bcb
+	LD H,[IX+ENT_NEXT_STATE_HI] ; 11bce
 	LD IY,HL ; 11bd1
 
 loc_0x011BD3:
@@ -2425,8 +2423,8 @@ loc_0x011BD3:
 loc_0x011BE5:
 
 	LD BA,IY ; 11be5
-	LD [IX+02h],A ; 11be7
-	LD [IX+03h],B ; 11bea
+	LD [IX+ENT_NEXT_STATE_LO],A ; 11be7
+	LD [IX+ENT_NEXT_STATE_HI],B ; 11bea
 	JRS loc_0x011C05
 
 loc_0x011BEF:
@@ -2434,13 +2432,13 @@ loc_0x011BEF:
 	LD [IX+06h],A ; 11bef
 
 	LD BA,[IY] ; 11bf2
-	LD [IX+14h],A ; 11bf4
-	LD [IX+15h],B ; 11bf7
+	LD [IX+ENT_CUR_STATE_LO],A ; 11bf4
+	LD [IX+ENT_CUR_STATE_HI],B ; 11bf7
 
 	ADD IY,#0002h ; 11bfa
 	LD BA,IY ; 11bfd
-	LD [IX+02h],A ; 11bff
-	LD [IX+03h],B ; 11c02
+	LD [IX+ENT_NEXT_STATE_LO],A ; 11bff
+	LD [IX+ENT_NEXT_STATE_HI],B ; 11c02
 
 loc_0x011C05:
 
@@ -2460,12 +2458,12 @@ loc_0x011C0D:
 loc_0x011C0E:
 
 	LD YP,#01h ; 11c0e
-	LD IX,#168Fh ; 11c11
 
-	LD XP,#00h ; 11c14
+	LD IX,#@DOFF(entities)
+	LD XP,#@DPAG(entities)
+
 	LD EP,#00h ; 11c17
-
-	LD B,#14h ; 11c1a
+	LD B, #MAX_SPRITES
 
 loc_0x011C1C:
 
@@ -2481,7 +2479,7 @@ loc_0x011C1C:
 
 loc_0x011C2C:
 
-	ADD IX,#0020h ; 11c2c
+	ADD IX, #20h
 
 	POP B ; 11c2f
 
@@ -2566,13 +2564,13 @@ loc_0x011C75:
 global loc_0x011C7B
 loc_0x011C7B:
 
-	LD IX,#168Fh ; 11c7b
-	LD XP,#00h ; 11c7e
+	LD IX, #@DOFF(entities)
+	LD XP, #@DPAG(entities)
 
 	LD HL,[190Fh] ; 11c81
 	LD EP,#00h ; 11c84
 
-	LD B,#14h ; 11c87
+	LD B, #MAX_SPRITES
 
 loc_0x011C89:
 
@@ -2587,7 +2585,7 @@ loc_0x011C89:
 	JRS Z,loc_0x011CC8 ; 11c96
 
 	LD IY,[165Dh] ; 11c98
-	LD A,[IX+0Ah] ; 11c9b
+	LD A,[IX+ENT_X] ; 11c9b
 	LD B,[IX+0Bh] ; 11c9e
 	SUB BA,IY ; 11ca1
 
@@ -2598,7 +2596,7 @@ loc_0x011C89:
 	JRS NC,loc_0x011CEA ; 11cad
 
 	LD IY,[165Fh] ; 11caf
-	LD A,[IX+0Eh] ; 11cb2
+	LD A,[IX+ENT_Y] ; 11cb2
 	LD B,[IX+0Fh] ; 11cb5
 	SUB BA,IY ; 11cb8
 
@@ -2612,10 +2610,10 @@ loc_0x011C89:
 
 loc_0x011CC8:
 
-	LD A,[IX+0Ah] ; 11cc8
+	LD A,[IX+ENT_X] ; 11cc8
 	ADD A,#10h ; 11ccb
 	LD [1913h],A ; 11ccd
-	LD A,[IX+0Eh] ; 11cd1
+	LD A,[IX+ENT_Y] ; 11cd1
 	ADD A,#10h ; 11cd4
 	LD [1914h],A ; 11cd6
 
@@ -2665,105 +2663,12 @@ loc_0x011CFF:
 global loc_0x011D05
 loc_0x011D05:
 
-	LD EP,#00h ; 11d05
+	LD EP, #0
 
-	; DUP
-	LD BA,[15B1h] ; 11d08
-	LD [1300h],BA ; 11d0b
-	LD BA,[15B3h] ; 11d0e
-	LD [1302h],BA ; 11d11
-	LD BA,[15B5h] ; 11d14
-	LD [1304h],BA ; 11d17
-	LD BA,[15B7h] ; 11d1a
-	LD [1306h],BA ; 11d1d
-	LD BA,[15B9h] ; 11d20
-	LD [1308h],BA ; 11d23
-	LD BA,[15BBh] ; 11d26
-	LD [130Ah],BA ; 11d29
-	LD BA,[15BDh] ; 11d2c
-	LD [130Ch],BA ; 11d2f
-	LD BA,[15BFh] ; 11d32
-	LD [130Eh],BA ; 11d35
-	LD BA,[15C1h] ; 11d38
-	LD [1310h],BA ; 11d3b
-	LD BA,[15C3h] ; 11d3e
-	LD [1312h],BA ; 11d41
-	LD BA,[15C5h] ; 11d44
-	LD [1314h],BA ; 11d47
-	LD BA,[15C7h] ; 11d4a
-	LD [1316h],BA ; 11d4d
-	LD BA,[15C9h] ; 11d50
-	LD [1318h],BA ; 11d53
-	LD BA,[15CBh] ; 11d56
-	LD [131Ah],BA ; 11d59
-	LD BA,[15CDh] ; 11d5c
-	LD [131Ch],BA ; 11d5f
-	LD BA,[15CFh] ; 11d62
-	LD [131Eh],BA ; 11d65
-	LD BA,[15D1h] ; 11d68
-	LD [1320h],BA ; 11d6b
-	LD BA,[15D3h] ; 11d6e
-	LD [1322h],BA ; 11d71
-	LD BA,[15D5h] ; 11d74
-	LD [1324h],BA ; 11d77
-	LD BA,[15D7h] ; 11d7a
-	LD [1326h],BA ; 11d7d
-	LD BA,[15D9h] ; 11d80
-	LD [1328h],BA ; 11d83
-	LD BA,[15DBh] ; 11d86
-	LD [132Ah],BA ; 11d89
-	LD BA,[15DDh] ; 11d8c
-	LD [132Ch],BA ; 11d8f
-	LD BA,[15DFh] ; 11d92
-	LD [132Eh],BA ; 11d95
-	LD BA,[15E1h] ; 11d98
-	LD [1330h],BA ; 11d9b
-	LD BA,[15E3h] ; 11d9e
-	LD [1332h],BA ; 11da1
-	LD BA,[15E5h] ; 11da4
-	LD [1334h],BA ; 11da7
-	LD BA,[15E7h] ; 11daa
-	LD [1336h],BA ; 11dad
-	LD BA,[15E9h] ; 11db0
-	LD [1338h],BA ; 11db3
-	LD BA,[15EBh] ; 11db6
-	LD [133Ah],BA ; 11db9
-	LD BA,[15EDh] ; 11dbc
-	LD [133Ch],BA ; 11dbf
-	LD BA,[15EFh] ; 11dc2
-	LD [133Eh],BA ; 11dc5
-	LD BA,[15F1h] ; 11dc8
-	LD [1340h],BA ; 11dcb
-	LD BA,[15F3h] ; 11dce
-	LD [1342h],BA ; 11dd1
-	LD BA,[15F5h] ; 11dd4
-	LD [1344h],BA ; 11dd7
-	LD BA,[15F7h] ; 11dda
-	LD [1346h],BA ; 11ddd
-	LD BA,[15F9h] ; 11de0
-	LD [1348h],BA ; 11de3
-	LD BA,[15FBh] ; 11de6
-	LD [134Ah],BA ; 11de9
-	LD BA,[15FDh] ; 11dec
-	LD [134Ch],BA ; 11def
-	LD BA,[15FFh] ; 11df2
-	LD [134Eh],BA ; 11df5
-	LD BA,[1601h] ; 11df8
-	LD [1350h],BA ; 11dfb
-	LD BA,[1603h] ; 11dfe
-	LD [1352h],BA ; 11e01
-	LD BA,[1605h] ; 11e04
-	LD [1354h],BA ; 11e07
-	LD BA,[1607h] ; 11e0a
-	LD [1356h],BA ; 11e0d
-	LD BA,[1609h] ; 11e10
-	LD [1358h],BA ; 11e13
-	LD BA,[160Bh] ; 11e16
-	LD [135Ah],BA ; 11e19
-	LD BA,[160Dh] ; 11e1c
-	LD [135Ch],BA ; 11e1f
-	LD BA,[160Fh] ; 11e22
-	LD [135Eh],BA ; 11e25
+	DUPF i, 0, 94, 2
+	LD BA, [15B1h+i]
+	LD [1300h+i], BA
+	ENDM
 
 	RET
 
@@ -2772,8 +2677,8 @@ loc_0x011E29:
 
 	LD [IX],IY ; 11e29
 
-	LD [IX+0Ah],L ; 11e2b
-	LD [IX+0Eh],H ; 11e2e
+	LD [IX+ENT_X],L ; 11e2b
+	LD [IX+ENT_Y],H ; 11e2e
 
 	LD A,[IY+03h] ; 11e31
 	LD B,[IY+04h] ; 11e34
@@ -2785,8 +2690,8 @@ loc_0x011E29:
 
 	LD A,[IY+06h] ; 11e43
 	LD B,[IY+07h] ; 11e46
-	LD [IX+02h],A ; 11e49
-	LD [IX+03h],B ; 11e4c
+	LD [IX+ENT_NEXT_STATE_LO],A ; 11e49
+	LD [IX+ENT_NEXT_STATE_HI],B ; 11e4c
 
 	LD A,[IY+08h] ; 11e4f
 	LD [IX+1Eh],A ; 11e52
@@ -2822,8 +2727,8 @@ loc_0x011E29:
 	LD [IX+06h],A ; 11e90
 
 	LD BA,#1A6Dh ; 11e93
-	LD [IX+14h],A ; 11e96
-	LD [IX+15h],B ; 11e99
+	LD [IX+ENT_CUR_STATE_LO],A ; 11e96
+	LD [IX+ENT_CUR_STATE_HI],B ; 11e99
 
 	LD A,#01h ; 11e9c
 	LD [IX+16h],A ; 11e9e
@@ -2840,7 +2745,7 @@ loc_0x011E29:
 
 loc_0x011EAE:
 
-	LD NB,A ; 11eae
+	LD NB, A
 
 	JP HL
 
@@ -2848,27 +2753,28 @@ loc_0x011EAE:
 global loc_0x011EB1
 loc_0x011EB1:
 
-	PUSH IP ; 11eb1
-	PUSH IX ; 11eb2
-	PUSH BA ; 11eb3
+	PUSH IP
+	PUSH IX
+	PUSH BA
 
-	LD IX,#168Fh ; 11eb4
-	LD XP,#00h ; 11eb7
-	LD EP,#00h ; 11eba
-	LD B,#14h ; 11ebd
+	LD IX, #@DOFF(entities)
+	LD XP, #@DPAG(entities)
+
+	LD EP, #0
+	LD B, #MAX_SPRITES
 
 loc_0x011EBF:
 
-	LD A,[IX] ; 11ebf
-	OR A,[IX+01h] ; 11ec0
-	JRL Z,loc_0x011E29 ; 11ec3
+	LD A, [IX]
+	OR A, [IX+01h]
+	JRL Z, loc_0x011E29
 
-	ADD IX,#0020h ; 11ec6
-	DJR NZ,loc_0x011EBF ; 11ec9
+	ADD IX, #20h
+	DJR NZ, loc_0x011EBF
 
-	POP BA ; 11ecb
-	POP IX ; 11ecc
-	POP IP ; 11ecd
+	POP BA
+	POP IX
+	POP IP
 
 	RET
 
@@ -2876,46 +2782,49 @@ loc_0x011EBF:
 global loc_0x011ECF
 loc_0x011ECF:
 
-	; ?
-	LD IX,#168Fh ; 11ecf
-	LD XP,#00h ; 11ed2
+	; sprite array base address
+	LD IX, #@DOFF(entities)
+	LD XP, #@DPAG(entities)
 
-	LD EP,#00h ; 11ed5
+	LD EP, #0
+	LD B, #MAX_SPRITES
 
-	; sprite index?
-	LD B,#14h ; 11ed8
-
+; iterate over every sprite
 loc_0x011EDA:
 
-	PUSH B ; 11eda
+	PUSH B
 
-	LD A,[IX] ; 11edc
-	OR A,[IX+01h] ; 11edd
-	JRS Z,loc_0x011F31 ; 11ee0
+	LD A, [IX]
+	OR A, [IX+01h]
+	JRS Z, loc_0x011F31
 
-	LD L,[IX+04h] ; 11ee2
-	LD H,[IX+05h] ; 11ee5
-	LD A,[IX+1Fh] ; 11ee8
-	CARS loc_0x011F39 ; 11eeb
+	LD L, [IX+04h]
+	LD H, [IX+05h]
+	LD A, [IX+1Fh]
+	CARS loc_0x011F39
 
-	LD HL,IX ; 11eed
-	ADD HL,#0006h ; 11eef
-	DEC [HL] ; 11ef2
-	JRS NZ,loc_0x011F31 ; 11ef3
+	LD HL, IX
+	ADD HL, #6
+	DEC [HL]
+	JRS NZ, loc_0x011F31
 
-	LD L,[IX+02h] ; 11ef5
-	LD H,[IX+03h] ; 11ef8
-	LD IY,HL ; 11efb
+	; load the state for this frame
+	LD L, [IX+ENT_NEXT_STATE_LO]
+	LD H, [IX+ENT_NEXT_STATE_HI]
+	LD IY, HL
 
 loc_0x011EFD:
 
-	LD A,[IX+1Eh] ; 11efd
-	LD YP,A ; 11f00
-	LD BA,[IY] ; 11f02
-	ADD IY,#0002h ; 11f04
+	; load page
+	LD A, [IX+ENT_STATE_PAGE]
+	LD YP, A
 
-	BIT B,#80h ; 11f07
-	JRS Z,loc_0x011F1B ; 11f09
+	; load state addr
+	LD BA, [IY]
+	ADD IY, #2
+
+	BIT B, #80h
+	JRS Z, loc_0x011F1B
 
 	; jmp to function
 	LD HL, BA
@@ -2923,45 +2832,44 @@ loc_0x011EFD:
 
 	JRS loc_0x011EFD
 
-; ---------------------- ; 11f0f
 loc_0x011F11:
 
-	LD BA,IY ; 11f11
+	LD BA, IY
 
-	LD [IX+02h],A ; 11f13
-	LD [IX+03h],B ; 11f16
+	LD [IX+ENT_NEXT_STATE_LO], A
+	LD [IX+ENT_NEXT_STATE_HI], B
 
 	JRS loc_0x011F31
 
-; ---------------------- ; 11f19
+; Set sprite state
 loc_0x011F1B:
 
-	LD [IX+06h],A ; 11f1b
+	LD [IX+06h], A
 
-	LD BA,[IY] ; 11f1e
-	LD [IX+14h],A ; 11f20
-	LD [IX+15h],B ; 11f23
+	LD BA,[IY]
+	LD [IX+ENT_CUR_STATE_LO], A
+	LD [IX+ENT_CUR_STATE_HI], B
 
-	ADD IY,#0002h ; 11f26
-	LD BA,IY ; 11f29
+	ADD IY, #2
+	LD BA, IY
 
-	LD [IX+02h],A ; 11f2b
-	LD [IX+03h],B ; 11f2e
+	LD [IX+ENT_NEXT_STATE_LO], A
+	LD [IX+ENT_NEXT_STATE_HI], B
 
 loc_0x011F31:
 
-	ADD IX,#0020h ; 11f31
+	ADD IX, #20h ; sizeof entity
 
-	POP B ; 11f34
+	POP B
 
-	DJR NZ,loc_0x011EDA ; 11f36
+	DJR NZ, loc_0x011EDA
 
 	RET
 
 ; ---------------------- ; 11f38
 loc_0x011F39:
 
-	LD NB,A ; 11f39
+	LD NB, A
 
 loc_0x011F3B:
 
@@ -3657,67 +3565,78 @@ loc_0x01276B:
 	ASCII "T" ; 12777
 	DB 0A7h ; 12778
 	ASCII "v" ; 12779
-	DB 1Ah, 0CEh, 0D0h, 0D7h, 1Ah, 00h, 0B1h, 00h ; 1277a
-	DB 0CFh ; 12782
-	ASCII "B" ; 12783
-	DB 0CFh, 0DBh, 0F8h
+	DB 1Ah
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Pet sprite state idle
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+global loc_0x01277B
+loc_0x01277B:
+
+	LD A, [pet_breed]
+	ADD A, A
+	LD B, #0
+
+	ADD IY, BA
+	LD IY, [IY]
+
+	RET
+
 ; ---------------------- ; 12784
 loc_0x012787:
 
-	LD A,[1B15h] ; 12787
-	CP A,#04h ; 1278b
-	JRS Z,loc_0x0127C3 ; 1278d
+	LD A, [pet_close_act]
+	CP A, #4
+	JRS Z, loc_0x0127C3
 
-	CP A,#03h ; 1278f
-	JRS Z,loc_0x0127B9 ; 12791
+	CP A, #3
+	JRS Z, loc_0x0127B9
 
-	LD A,[1B14h] ; 12793
-	OR A,A ; 12797
-	JRS NZ,loc_0x0127AF ; 12798
+	LD A, [pet_close]
+	OR A, A
+	JRS NZ, loc_0x0127AF
 
-	LD NB,#01h ; 1279a
-	CARL loc_0x009B8D ; 1279d
+	farcall loc_0x009B8D
 
-	JRS NZ,loc_0x0127BE ; 127a0
+	JRS NZ, loc_0x0127BE
 
-	LD NB,#01h ; 127a2
-	CARL loc_0x009B56 ; 127a5
+	farcall loc_0x009B56
 
-	JRS Z,loc_0x0127CB ; 127a8
+	JRS Z, loc_0x0127CB
 
-	ADD IY,#0002h ; 127aa
+	ADD IY, #2
 	JRS loc_0x0127CB
 
 loc_0x0127AF:
 
-	LD A,[1B15h] ; 127af
-	CP A,#05h ; 127b3
-	JRS Z,loc_0x0127C8 ; 127b5
+	LD A,[pet_close_act]
+	CP A, #5
+	JRS Z, loc_0x0127C8
 
 	JRS loc_0x0127CB
 
 loc_0x0127B9:
 
-	ADD IY,#0004h ; 127b9
+	ADD IY, #4
 	JRS loc_0x0127CB
 
 loc_0x0127BE:
 
-	ADD IY,#000Ah ; 127be
+	ADD IY, #10
 	JRS loc_0x0127CB
 
 loc_0x0127C3:
 
-	ADD IY,#0006h ; 127c3
+	ADD IY, #6
 	JRS loc_0x0127CB
 
 loc_0x0127C8:
 
-	ADD IY,#0008h ; 127c8
+	ADD IY, #8
 
 loc_0x0127CB:
 
-	LD IY,[IY] ; 127cb
+	LD IY, [IY]
 
 	RET
 
@@ -4059,7 +3978,10 @@ loc_0x012962:
 loc_0x012966:
 	LD A,#0Bh ; 12966
 	JRS loc_0x0129B4
-; ---------------------- ; 12968
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Pet state sneeze
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+global loc_0x01296A
 loc_0x01296A:
 	LD A,#14h ; 1296a
 	JRS loc_0x0129B4
@@ -4107,14 +4029,21 @@ loc_0x0129A6:
 	LD A,#05h ; 129a6
 	JRS loc_0x0129B4
 ; ---------------------- ; 129a8
+global loc_0x0129AA
+loc_0x0129AA:
 	DB 0B0h, 01h, 0F1h, 07h, 0B0h, 16h, 0F1h, 03h
 ; ---------------------- ; 129aa
 global loc_0x0129B2
 loc_0x0129B2:
+
 	LD A,#00h ; 129b2
+
 loc_0x0129B4:
+
 	LD [1B1Ch],A ; 129b4
+
 	RET
+
 ; ---------------------- ; 129b8
 loc_0x0129B9:
 	LD A,[1ADBh] ; 129b9
@@ -5322,6 +5251,8 @@ loc_0x013005:
 	DB 0Ah, 00h, 7Ch, 0C6h, 0Ah, 00h, 80h, 0C6h ; 13450
 	DB 0C1h, 99h ; 13458
 	ASCII "P4" ; 1345a
+
+loc_0x01345C:
 	DB 0CEh, 0D0h ; 1345c
 	ASCII "B" ; 1345e
 	DB 16h, 96h, 01h, 0EBh, 0EEh, 00h, 0CEh, 0D0h ; 1345f

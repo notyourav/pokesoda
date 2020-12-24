@@ -1562,18 +1562,28 @@ loc_0x038F07:
 loc_0x038F16:
 	RET
 ; ---------------------- ; 38f16
+global pool_038F17
+pool_038F17:
 	DB 02h, 04h, 04h, 04h, 04h, 04h, 03h, 01h ; 38f17
 	DB 01h, 01h, 01h, 01h, 20h, 21h, 22h, 23h ; 38f1f
 	DB 24h, 25h, 26h, 27h, 28h, 29h, 2Ah, 2Bh ; 38f27
 	ASCII "0123456789:;@ABCDEFGHIJKPQRSTUVWXYZ[`abcdefghijkpqrstuvwxyz{" ; 38f2f
 	DB 80h, 81h, 82h, 83h, 84h, 85h, 86h, 87h ; 38f6b
-	DB 88h, 89h, 8Ah, 8Bh, 02h, 04h, 04h, 04h ; 38f73
+	DB 88h, 89h, 8Ah, 8Bh
+
+global pool_038F77
+pool_038F77:
+	DB 02h, 04h, 04h, 04h ; 38f73
 	DB 04h, 04h, 03h, 01h, 01h, 01h, 01h, 01h ; 38f7b
 	DB 20h, 21h, 22h, 23h, 24h, 25h, 26h, 27h ; 38f83
 	DB 28h, 29h, 2Ah, 2Bh ; 38f8b
 	ASCII "0123456789:;@ABCDEFGHIJKPQRSTUVWXYZ[`abcdefghijkpqrstuvwxyz{" ; 38f8f
 	DB 80h, 81h, 82h, 83h, 84h, 85h, 86h, 87h ; 38fcb
-	DB 88h, 89h, 8Ah, 8Bh, 02h, 04h, 04h, 04h ; 38fd3
+	DB 88h, 89h, 8Ah, 8Bh
+
+global pool_038FD7
+pool_038FD7:
+	DB 02h, 04h, 04h, 04h ; 38fd3
 	DB 04h, 04h, 03h, 01h, 01h, 01h, 01h, 01h ; 38fdb
 	DB 20h, 21h, 22h, 23h, 24h, 25h, 26h, 27h ; 38fe3
 	DB 28h, 29h, 2Ah, 2Bh ; 38feb
