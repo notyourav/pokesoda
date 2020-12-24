@@ -2829,13 +2829,21 @@ SECT ".rom12"
     include "graphics/title_screen.tiles"
     
     include "graphics/065200-065700.tiles"
-    
+
+global tiles_outside_treecko
+tiles_outside_treecko:
     include "graphics/tree_frame0.tiles"
-    
+
+global tiles_outside2_treecko
+tiles_outside2_treecko:
     include "graphics/tree_frame1.tiles"
-	
+
+global tiles_outside_mudkip
+tiles_outside_mudkip:
 	include "graphics/garden_frame0.tiles"
-    
+
+global tiles_outside2_mudkip
+tiles_outside2_mudkip:
     include "graphics/garden_frame1.tiles"
 	
 	include "graphics/more_faces.tiles"

@@ -104,7 +104,7 @@ LK88 := $(WINE) $(C88_DIR)/lk88.exe
 CFLAGS += -g -I$(TOOLCHAIN_DIR)/include
 LCFLAGS += -e -d pokemini -M
 LKFLAGS += $(OBJS)
-ASFLAGS += -v
+ASFLAGS += -Iinclude #-v
 
 
 # Steps
@@ -137,7 +137,7 @@ $(TARGET).out: $(CONVERTED_IMGS) $(CONVERTED_TILES) $(CONVERTED_SPRITES) $(OBJS)
 	$(LK88) $(LKFLAGS) -o $@
 
 %.obj: %.asm
-	$(CC88) $(CFLAGS) -Tc-v -c -v -o $@ $<
+	$(AS88) $(ASFLAGS) -o $@ $<
 
 src/splash.asm: src/splash.png
 	$(PY) tools/splash.py

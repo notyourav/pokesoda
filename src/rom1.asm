@@ -50,7 +50,10 @@ SECT ".rom1"
 	DB 0C1h ; 80c2
 	ASCII "O" ; 80c3
 	DB 9Ah, 0Dh, 08h, 00h, 94h, 0C1h, 08h, 00h ; 80c4
-	DB 90h, 0C1h, 0C1h, 99h, 82h, 80h, 9Dh, 99h ; 80cc
+	DB 90h, 0C1h, 0C1h, 99h, 82h, 80h
+
+	DW @COFF(loc_0x01199D)
+
 	DB 0E3h, 0A7h ; 80d4
 	ASCII "O" ; 80d6
 	DB 9Ah, 0Dh, 7Bh, 0A7h, 0E1h, 80h, 0F8h, 80h ; 80d7
@@ -155,7 +158,10 @@ SECT ".rom1"
 	DB 0A7h, 8Ch, 82h, 92h, 82h, 98h, 82h, 01h ; 8285
 	DB 00h, 14h, 0B1h, 8Eh, 99h, 01h, 00h, 98h ; 828d
 	DB 0B3h, 8Eh, 99h, 01h, 00h, 18h, 0B6h, 8Eh ; 8295
-	DB 99h, 0AAh, 0A9h ; 829d
+	DB 99h
+
+	DW @COFF(loc_0x0129AA)
+
 	ASCII "O" ; 82a0
 	DB 9Ah, 10h, 0DAh, 0A9h, 9Dh, 99h ; 82a1
 	ASCII "E" ; 82a7
@@ -422,8 +428,10 @@ loc_0x00852E:
 	DB 0B2h, 05h, 00h, 0ACh, 0B3h, 19h, 00h, 0A8h ; 8775
 	DB 0B3h, 14h, 00h, 0ACh, 0B3h, 1Ch, 00h, 0A8h ; 877d
 	DB 0B3h, 05h, 00h, 0ACh, 0B3h ; 8785
-	ASCII "j" ; 878a
-	DB 0A9h, 14h, 00h, 0B0h, 0B3h, 0Ah, 00h ; 878b
+
+	DW @COFF(loc_0x01296A)
+
+	DB 14h, 00h, 0B0h, 0B3h, 0Ah, 00h ; 878b
 	ASCII "d" ; 8792
 	DB 0B2h, 0C1h, 99h, 24h, 87h, 1Eh, 00h, 0E4h ; 8793
 	DB 0B4h, 05h, 00h, 28h, 0B6h, 14h, 00h, 0E4h ; 879b
@@ -455,7 +463,11 @@ loc_0x00852E:
 	DB 0A9h, 28h, 00h ; 8813
 	ASCII "4" ; 8816
 	DB 0B6h, 0Ah, 00h, 28h, 0B6h, 0Ah, 00h, 0E4h ; 8817
-	DB 0B4h, 0C1h, 99h, 0CEh, 87h, 7Bh, 0A7h, 2Ch ; 881f
+	DB 0B4h, 0C1h, 99h, 0CEh, 87h
+	
+	DW @COFF(loc_0x01277B)
+	
+	DB 2Ch
 	DB 88h ; 8827
 	ASCII "d" ; 8828
 	DB 88h, 9Ch, 88h, 1Eh, 00h, 18h, 0B0h, 08h ; 8829
@@ -717,7 +729,11 @@ loc_0x00852E:
 	ASCII "H" ; 8c62
 	DB 0B3h, 2Eh, 00h ; 8c63
 	ASCII "d" ; 8c66
-	DB 0B2h, 0C1h, 99h, 0Ch, 80h, 28h, 00h, 0B8h ; 8c67
+	DB 0B2h
+
+	DW @COFF(loc_0x0119C1)
+
+	DB 0Ch, 80h, 28h, 00h, 0B8h ; 8c67
 	DB 0B5h, 28h, 00h, 0BCh, 0B5h, 18h, 00h, 0C0h ; 8c6f
 	DB 0B5h, 28h, 00h, 0BCh, 0B5h, 18h, 00h, 0C0h ; 8c77
 	DB 0B5h, 28h, 00h, 0BCh, 0B5h, 18h, 00h, 0C0h ; 8c7f
@@ -2166,9 +2182,9 @@ loc_0x009E5B:
 	DB 0FFh, 0FFh, 0F8h
 ; ---------------------- ; 9e64
 loc_0x009E67:
-	CARL loc_0x00ABDA ; 9e67
-	LD HL,#1B12h ; 9e6a
-	SUB [HL],A ; 9e6d
+	CARL loc_0x00ABDA
+	LD HL,#1B12h ; walking?
+	SUB [HL], A
 	JRS NC,loc_0x009E73 ; 9e6f
 	XOR A,A ; 9e71
 	LD [HL],A ; 9e72
@@ -3485,150 +3501,238 @@ loc_0x00A7D3:
 	DB 0E6h, 05h, 8Eh, 0EFh, 8Dh, 00h
 ; ---------------------- ; 0a808
 loc_0x00A80E:
-	LD A,[1ADCh] ; 0a80e
+
+	; angry?
+	LD A,[pet_mood] ; 0a80e
 	CP A,#02h ; 0a812
 	JRS Z,loc_0x00A846 ; 0a814
+
 	PUSH IP ; 0a816
 	PUSH IX ; 0a817
+
 	LD IX,#15AAh ; 0a818
 	LD XP,#00h ; 0a81b
 	CARL loc_0x004706 ; 0a81e
+
 	LD A,[15ADh] ; 0a821
+
 	POP IX ; 0a825
 	POP IP ; 0a826
+
 	CP A,#06h ; 0a827
 	JRS C,loc_0x00A82F ; 0a829
+
 	CP A,#12h ; 0a82b
 	JRS C,loc_0x00A846 ; 0a82d
+
 loc_0x00A82F:
+
 	LD BA,#000Ah ; 0a82f
 	LD NB,#03h ; 0a832
 	CARL loc_0x018FFE ; 0a835
+
 	OR A,A ; 0a838
 	JRS NZ,loc_0x00A846 ; 0a839
+
 	LD A,#24h ; 0a83b
 	LD [1B1Bh],A ; 0a83d
+
 	LD BA,#8BE0h ; 0a841
 	JRS loc_0x00A897
-; ---------------------- ; 0a844
+
 loc_0x00A846:
-	LD A,[1ADCh] ; 0a846
+
+	LD A,[pet_mood] ; 0a846
 	CP A,#00h ; 0a84a
 	JRS NZ,loc_0x00A860 ; 0a84c
+
 	LD BA,#000Ah ; 0a84e
 	LD NB,#03h ; 0a851
 	CARL loc_0x018FFE ; 0a854
+
 	OR A,A ; 0a857
 	JRS NZ,loc_0x00A860 ; 0a858
+
 	LD NB,#02h ; 0a85a
 	CARL loc_0x01299E ; 0a85d
+
 loc_0x00A860:
+
 	PUSH IP ; 0a860
 	PUSH IY ; 0a861
-	LD IY,#0A8F8h ; 0a862
-	LD YP,#00h ; 0a865
-	LD A,[1ADCh] ; 0a868
+
+	LD IY,#@DOFF(pool_00A8F8)
+	LD YP,#@DPAG(pool_00A8F8)
+
+	LD A,[pet_mood] ; 0a868
 	ADD A,A ; 0a86c
 	LD B,#00h ; 0a86d
+
 	ADD IY,BA ; 0a86f
 	LD IY,[IY] ; 0a871
+
 	LD BA,#000Ah ; 0a873
 	LD NB,#03h ; 0a876
 	CARL loc_0x018FFE ; 0a879
+
 	LD B,A ; 0a87c
 	ADD A,A ; 0a87d
 	ADD A,B ; 0a87e
 	LD B,#00h ; 0a87f
+
 	ADD IY,BA ; 0a881
 	LD A,[IY] ; 0a883
+
 	INC IY ; 0a884
+
 	LD [1B1Bh],A ; 0a885
 	LD BA,[IY] ; 0a889
+
 	POP IY ; 0a88b
 	POP IP ; 0a88c
+
 	LD L,[IX+18h] ; 0a88d
 	LD H,[IX+19h] ; 0a890
 	CP HL,BA ; 0a893
 	JRS Z,loc_0x00A89A ; 0a895
+
 loc_0x00A897:
+
 	CARL loc_0x00A97D ; 0a897
+
 loc_0x00A89A:
+
 	LD L,[IX+18h] ; 0a89a
 	LD H,[IX+19h] ; 0a89d
 	CP HL,#80D2h ; 0a8a0
 	JRS Z,loc_0x00A8E3 ; 0a8a3
+
 	CP HL,#8126h ; 0a8a5
 	JRS Z,loc_0x00A8C9 ; 0a8a8
+
 	CP HL,#802Ah ; 0a8aa
 	JRS Z,loc_0x00A8BF ; 0a8ad
+
 	CP HL,#807Eh ; 0a8af
 	JRS NZ,loc_0x00A8F1 ; 0a8b2
+
 	LD HL,#1B12h ; 0a8b4
 	LD A,[HL] ; 0a8b7
 	CP A,#50h ; 0a8b8
 	JRS NC,loc_0x00A8F1 ; 0a8ba
+
 	INC [HL] ; 0a8bc
+
 	JRS loc_0x00A8D8
-; ---------------------- ; 0a8bd
+
 loc_0x00A8BF:
+
 	LD HL,#1B12h ; 0a8bf
 	LD A,[HL] ; 0a8c2
 	OR A,A ; 0a8c3
 	JRS Z,loc_0x00A8F1 ; 0a8c4
+
 	DEC [HL] ; 0a8c6
+
 	JRS loc_0x00A8F1
-; ---------------------- ; 0a8c7
+
 loc_0x00A8C9:
+
 	LD HL,#1B12h ; 0a8c9
 	CARL loc_0x00ABDA ; 0a8cc
+
 	ADD [HL],A ; 0a8cf
+
 	LD A,[HL] ; 0a8d1
 	CP A,#50h ; 0a8d2
 	JRS C,loc_0x00A8D8 ; 0a8d4
+
 	LD [HL],#50h ; 0a8d6
+
 loc_0x00A8D8:
+
 	CARL loc_0x00AA62 ; 0a8d8
+
 	JRS Z,loc_0x00A8F1 ; 0a8db
-	LD [1B12h],B ; 0a8dd
+
+	LD [pet_x], B ; 0a8dd
+
 	JRS loc_0x00A8F1
-; ---------------------- ; 0a8e1
+
 loc_0x00A8E3:
+
 	LD HL,#1B12h ; 0a8e3
 	CARL loc_0x00ABDA ; 0a8e6
+
 	SUB [HL],A ; 0a8e9
 	JRS NC,loc_0x00A8F1 ; 0a8eb
+
 	LD [HL],#00h ; 0a8ed
+
 	JRS loc_0x00A8F1
-; ---------------------- ; 0a8ef
+
 loc_0x00A8F1:
-	LD BA,[1B12h] ; 0a8f1
-	CARL loc_0x007982 ; 0a8f4
+
+	LD BA, [pet_x]
+
+	CARL loc_0x007982
+
 	RET
-; ---------------------- ; 0a8f7
-	DB 0FEh, 0A8h, 25h, 0A9h ; 0a8f8
-	ASCII "L" ; 0a8fc
-	DB 0A9h, 0Ah, 1Ah, 80h, 05h, 0D2h, 80h, 05h ; 0a8fd
-	DB 26h, 81h ; 0a905
-	ASCII "L" ; 0a907
-	DB 8Ch, 86h, 0D5h, 24h, 87h ; 0a908
-	ASCII "n" ; 0a90d
-	DB 0CEh, 87h, 0C6h, 24h, 88h, 0D8h, 0D4h, 88h ; 0a90e
-	DB 24h, 0A4h, 8Ah, 5Eh, 0CCh, 89h ; 0a916
-	ASCII "NT" ; 0a91c
-	DB 8Bh, 05h, 0D2h, 80h, 05h, 26h, 81h, 0Ah ; 0a91e
-	DB 1Ah, 80h, 0Ah, 2Ah, 80h, 0Ah, 7Eh, 80h ; 0a926
-	ASCII "L" ; 0a92e
-	DB 8Ch, 86h, 0D5h, 24h, 87h ; 0a92f
-	ASCII "n" ; 0a934
-	DB 0CEh, 87h, 0Ah, 2Ah, 80h, 0Ah, 7Eh, 80h ; 0a935
-	DB 24h, 0A4h, 8Ah, 0Ah, 1Ah, 80h ; 0a93d
-	ASCII "NT" ; 0a943
-	DB 8Bh, 0Ah, 2Ah, 80h, 0Ah, 7Eh, 80h, 0Ah ; 0a945
-	DB 0D9h, 81h, 0Ah, 0D9h, 81h, 0Ah, 0D9h, 81h ; 0a94d
-	DB 0Ah, 0D9h, 81h, 0Ah, 0D9h, 81h, 0Ah, 0D9h ; 0a955
-	DB 81h, 0Ah, 0D9h, 81h, 0Ah, 0D9h, 81h, 0Ah ; 0a95d
-	DB 0D9h, 81h, 0Ah, 0D9h, 81h, 0Ah, 0D9h, 81h ; 0a965
-	DB 0Ah, 0D9h, 81h, 0Ah, 0D9h, 81h
+
+pool_00A8F8:
+	DW @DOFF(pool_00A8FE)
+	DW @DOFF(pool_00A925)
+	DW @DOFF(pool_00A94C)
+
+; playful
+pool_00A8FE:
+	; duration \ ???
+	DB 10, 1Ah, 80h
+	DB 5, 0D2h, 80h
+	DB 5, 26h, 81h
+	DB 76, 8Ch, 86h
+	DB 213, 24h, 87h
+	DB 110, 0CEh, 87h
+	DB 198, 24h, 88h
+	DB 216, 0D4h, 88h
+	DB 36, 0A4h, 8Ah
+	DB 94, 0CCh, 89h
+	DB 78, 54h, 8Bh
+	DB 5, 0D2h, 80h
+	DB 5, 26h, 81h
+
+; bored
+pool_00A925:
+	DB 10, 1Ah, 80h
+	DB 10, 2Ah, 80h
+	DB 10, 7Eh, 80h
+	DB 76, 8Ch, 86h
+	DB 213, 24h, 87h
+	DB 110, 0CEh, 87h
+	DB 10, 2Ah, 80h
+	DB 10, 7Eh, 80h
+	DB 36, 0A4h, 8Ah
+	DB 10, 1Ah, 80h
+	DB 78, 54h, 8Bh
+	DB 10, 2Ah, 80h
+	DB 10, 7Eh, 80h
+
+; angry
+pool_00A94C:
+	DB 10, 0D9h, 81h
+	DB 10, 0D9h, 81h
+	DB 10, 0D9h, 81h
+	DB 10, 0D9h, 81h
+	DB 10, 0D9h, 81h
+	DB 10, 0D9h, 81h
+	DB 10, 0D9h, 81h
+	DB 10, 0D9h, 81h
+	DB 10, 0D9h, 81h
+	DB 10, 0D9h, 81h
+	DB 10, 0D9h, 81h
+	DB 10, 0D9h, 81h
+	DB 10, 0D9h, 81h
+
 ; ---------------------- ; 0a96d
 loc_0x00A973:
 	LD [IX+1Ah],A ; 0a973
@@ -3758,31 +3862,49 @@ loc_0x00AA5F:
 	RET
 ; ---------------------- ; 0aa61
 loc_0x00AA62:
-	LD B,#18h ; 0aa62
-	LD L,#43h ; 0aa64
-	LD A,[1AD7h] ; 0aa66
-	CP A,#00h ; 0aa6a
-	JRS Z,loc_0x00AA7A ; 0aa6c
-	LD B,#10h ; 0aa6e
-	LD L,#40h ; 0aa70
-	CP A,#01h ; 0aa72
-	JRS Z,loc_0x00AA7A ; 0aa74
-	LD B,#18h ; 0aa76
-	LD L,#42h ; 0aa78
+
+	LD B, #18h ; y
+	LD L, #43h ; x
+
+	LD A, [pet_breed]
+
+	; torchick
+	CP A, #0
+	JRS Z, loc_0x00AA7A
+
+	LD B, #10h ; y
+	LD L, #40h ; x
+
+	; treecko
+	CP A, #1
+	JRS Z, loc_0x00AA7A
+
+	LD B, #18h ; y
+	LD L, #42h ; x
+
 loc_0x00AA7A:
-	LD A,[1B13h] ; 0aa7a
-	CP A,B ; 0aa7e
-	JRS NZ,loc_0x00AA8C ; 0aa7f
-	LD B,L ; 0aa81
-	LD A,[1B12h] ; 0aa82
-	CP A,B ; 0aa86
-	JRS C,loc_0x00AA8C ; 0aa87
-	AND SC,#0FEh ; 0aa89
+
+	LD A, [pet_y]
+	CP A, B
+	JRS NZ, loc_0x00AA8C
+
+	LD B, L
+
+	LD A, [pet_x]
+	CP A, B
+	JRS C, loc_0x00AA8C
+
+	; LT
+	AND SC, #11111110b
+
 	RET
-; ---------------------- ; 0aa8b
+
 loc_0x00AA8C:
-	OR SC,#01h ; 0aa8c
+
+	OR SC, #00000001b
+
 	RET
+
 ; ---------------------- ; 0aa8e
 loc_0x00AA8F:
 	LD A,[1AD8h] ; 0aa8f
@@ -3981,27 +4103,49 @@ loc_0x00ABD4:
 loc_0x00ABD7:
 	OR SC,#01h ; 0abd7
 	RET
-; ---------------------- ; 0abd9
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Calc pet walking speed
+;   Returns:
+;     A: delta
+	PET_WALK_SPEED equ 2
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 global loc_0x00ABDA
 loc_0x00ABDA:
-	LD B,#02h ; 0abda
-	LD A,[1671h] ; 0abdc
-	AND A,#03h ; 0abe0
-	JRS Z,loc_0x00ABE5 ; 0abe2
-	DEC B ; 0abe4
+
+	LD B, #PET_WALK_SPEED
+	
+	LD A, [1671h]
+
+	; halve speed for 3 out of 4 frames
+	AND A, #11b
+	JRS Z, loc_0x00ABE5
+
+	DEC B
+
 loc_0x00ABE5:
-	LD A,B ; 0abe5
+
+	LD A, B
+
 	RET
+
 ; ---------------------- ; 0abe6
 loc_0x00ABE7:
-	LD A,[1B15h] ; 0abe7
+
+	LD A,[pet_close_act] ; 0abe7
 	CP A,#07h ; 0abeb
+
 	JRS NZ,loc_0x00ABF5 ; 0abed
+
 	LD A,#0FFh ; 0abef
 	LD [1B21h],A ; 0abf1
+
 loc_0x00ABF5:
+
 	CARL loc_0x00A178 ; 0abf5
+
 	RET
+
 ; ---------------------- ; 0abf8
 loc_0x00ABF9:
 	LD HL,#1B21h ; 0abf9
@@ -5823,29 +5967,44 @@ loc_0x00BFBE:
 loc_0x00BFD3:
 	LD HL,#0B931h ; 0bfd3
 	JRL loc_0x00BC53
-; ---------------------- ; 0bfd6
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; Pet visit update
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 loc_0x00BFD9:
-	LD A,[1643h] ; 0bfd9
+	; end visit?
+	LD A,[keys_new_unpressed] ; 0bfd9
 	BIT A,#02h ; 0bfdd
 	JRS Z,loc_0x00C00B ; 0bfdf
-	LD A,[1AB6h] ; 0bfe1
+	
+	LD A,[sfx_vol] ; 0bfe1
 	AND A,A ; 0bfe5
 	JRS Z,loc_0x00BFEE ; 0bfe6
+	
 	LD A,#02h ; 0bfe8
-	LD [14FAh],A ; 0bfea
+	LD [mn_pending_sfx],A ; 0bfea
+
 loc_0x00BFEE:
+
 	XOR A,A ; 0bfee
-	LD [1B2Ah],A ; 0bfef
+	LD [pet_visitation],A ; 0bfef
+
 	LD A,#00h ; 0bff3
-	LD [1B14h],A ; 0bff5
-	LD NB,#03h ; 0bff9
+	LD [pet_close],A ; 0bff5
+
+	LD NB,#@CPAG(loc_0x01898C)
 	CARL loc_0x01898C ; 0bffc
+
 	LD A,#00h ; 0bfff
-	LD [1B15h],A ; 0c001
+	LD [pet_close_act],A ; 0c001
+
 	LD BA,#0B92Dh ; 0c005
 	CARL loc_0x00794F ; 0c008
+
 loc_0x00C00B:
+
 	RET
+
 ; ---------------------- ; 0c00b
 loc_0x00C00C:
 	LD A,[1642h] ; 0c00c
