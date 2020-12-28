@@ -9,182 +9,124 @@ SECT ".rom0"
 ; ---------------------- ; 2100
 reset_vector:
 
-	LD NB, #00h
-	JRL __START
+	farjump __START
 
 ; ---------------------- ; 2105
 prc_frame_copy_irq:
 
-	LD NB, #00h
-	JRL IRQ_FrameCopy
+	farjump IRQ_FrameCopy
 
 ; ---------------------- ; 210b
 prc_render_irq:
 
-	LD NB, #00h
-	JRL IRQ_Render
+	farjump IRQ_Render
 
 ; ---------------------- ; 2111
 timer_2h_underflow_irq:
 
-	LD NB, #00h
-	JRL IRQ_Timer2HI_Underflow
+	farjump IRQ_Timer2HI_Underflow
 
 ; ---------------------- ; 2117
 timer_2l_underflow_irq:
 
-	LD NB, #00h
-	JRL IRQ_Timer2LO_Underflow
+	farjump IRQ_Timer2LO_Underflow
 
 ; ---------------------- ; 211d
 timer_1h_underflow_irq:
 
-	LD NB, #00h
-	JRL IRQ_Timer1HI_Underflow
+	farjump IRQ_Timer1HI_Underflow
 
 ; ---------------------- ; 2123
 timer_1l_underflow_irq:
 
-	LD NB, #00h
-	JRL IRQ_Timer1LO_Underflow
+	farjump IRQ_Timer1LO_Underflow
 
 ; ---------------------- ; 2129
 timer_3h_underflow_irq:
 
-	LD NB, #00h
-	JRL IRQ_Timer3HI_Underflow
+	farjump IRQ_Timer3HI_Underflow
 
 ; ---------------------- ; 212f
 timer_3_cmp_irq:
 
-	LD NB, #00h
-	JRL IRQ_Timer3Cmp
+	farjump IRQ_Timer3Cmp
 
 ; ---------------------- ; 2135
 timer_32hz_irq:
 
-	LD NB, #00h
-	JRL IRQ_Timer_32hz
+	farjump IRQ_Timer_32hz
 
 ; ---------------------- ; 213b
 timer_8hz_irq:
 
-	LD NB, #00h
-	JRL IRQ_Timer_8hz
+	farjump IRQ_Timer_8hz
 
 ; ---------------------- ; 2141
 timer_2hz_irq:
 
-	LD NB, #00h
-	JRL IRQ_Timer_2hz
+	farjump IRQ_Timer_2hz
 
 ; ---------------------- ; 2147
 timer_1hz_irq:
 
-	LD NB, #00h
-	JRL IRQ_Timer_1hz
+	farjump IRQ_Timer_1hz
 
 ; ---------------------- ; 214d
 ir_rx_irq:
 
-	LD NB, #00h
-	JRL IRQ_IR
+	farjump IRQ_IR
 
 ; ---------------------- ; 2153
 shake_irq:
 
-	LD NB, #00h
-	JRL IRQ_Shake
+	farjump IRQ_Shake
 
 ; ---------------------- ; 2159
 key_power_irq:
 
-	LD NB, #00h
-	JRL loc_0x003571
+	farjump loc_0x003571
 
 ; ---------------------- ; 215f
 key_right_irq:
 
-	LD NB, #00h
-	JRL IRQ_KeyRight
+	farjump IRQ_KeyRight
 
 ; ---------------------- ; 2165
 key_left_irq:
 
-	LD NB, #00h
-	JRL IRQ_KeyLeft
+	farjump IRQ_KeyLeft
 
 ; ---------------------- ; 216b
 key_down_irq:
 
-	LD NB, #00h
-	JRL IRQ_KeyDown
+	farjump IRQ_KeyDown
 
 ; ---------------------- ; 2171
 key_up_irq:
 
-	LD NB, #00h
-	JRL IRQ_KeyUp
+	farjump IRQ_KeyUp
 
 ; ---------------------- ; 2177
 key_c_irq:
 
-	LD NB, #00h
-	JRL IRQ_KeyC
+	farjump IRQ_KeyC
 
 ; ---------------------- ; 217d
 key_b_irq:
 
-	LD NB, #00h
-	JRL IRQ_KeyB
+	farjump IRQ_KeyB
 
 ; ---------------------- ; 2183
 key_a_irq:
 
-	LD NB, #00h
-	JRL IRQ_KeyA
+	farjump IRQ_KeyA
 
 ; ---------------------- ; 2189
-unknown_irq0:
 
-	ADD A, A
-	ADD A, A
-	ADD A, A
-	ADD A, A
-	ADD A, A
-	ADD A, A
+    DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h
+    DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h
+    DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h
 
-; ---------------------- ; 2191
-unknown_irq1:
-
-	ADD A, A
-	ADD A, A
-	ADD A, A
-	ADD A, A
-	ADD A, A
-	ADD A, A
-
-; ---------------------- ; 2197
-unknown_irq2:
-
-	ADD A, A
-	ADD A, A
-	ADD A, A
-	ADD A, A
-	ADD A, A
-	ADD A, A
-
-; ---------------------- ; 219d
-cartridge_irq:
-
-	ADD A, A
-	ADD A, A
-	ADD A, A
-	ADD A, A
-	ADD A, A
-	ADD A, A
-
-; ---------------------- ; 21a3
 	ASCII "NINTENDO" ; 21a4
 game_id:
 	ASCII "MSDJ"
@@ -390,8 +332,7 @@ loc_0x00228F:
 	POP EP ; 229f
 
 	LD IY,#141Dh ; 22a0
-	LD NB,#02h ; 22a3
-	CARL loc_0x011B84 ; 22a6
+	farcall loc_0x011B84
 
 	POP SC ; 22a9
 
@@ -415,8 +356,7 @@ loc_0x0022AB:
 	POP EP ; 22bb
 
 	LD IY,#14E8h ; 22bc
-	LD NB,#02h ; 22bf
-	CARL loc_0x011B84 ; 22c2
+	farcall loc_0x011B84
 
 	POP SC ; 22c5
 
@@ -2131,8 +2071,7 @@ loc_0x002987:
 	LD HL,#166Ch ; 29a6
 	OR [HL],#01h ; 29a9
 
-	LD NB,#00h ; 29ac
-	JRL loc_0x002BE3
+	farjump loc_0x002BE3
 
 loc_0x0029B2:
 
@@ -2349,24 +2288,20 @@ loc_0x002ADD:
 	CP A, #04h
 	JRS NZ, loc_0x002B09
 
-	LD NB, #02h
-	CARL loc_0x012F7C
+	farcall loc_0x012F7C
 
-	LD NB, #02h
-	CARL loc_0x013612
+	farcall loc_0x013612
 
 loc_0x002B09:
 
-	LD NB, #02h
-	CARL loc_0x012FE8
+	farcall loc_0x012FE8
 
 loc_0x002B0F:
 
 	XOR A, A
 	LD [1B2Bh],A
 
-	LD NB, #03h
-	CARL loc_0x018BC5
+	farcall loc_0x018BC5
 	CARL loc_0x00287D
 
 	LD EP, #00h
@@ -2420,8 +2355,7 @@ loc_0x002B22:
 	OR A, A ; 2b7e
 	JRS Z,loc_0x002BA1 ; 2b7f
 
-	LD NB,#@CPAG(loc_0x018A86)
-	CARL loc_0x018A86 ; 2b84
+	farcall loc_0x018A86
 
 	LD [1B2Bh],A ; 2b87
 	OR A,A ; 2b8b
@@ -2448,8 +2382,7 @@ loc_0x002BA1:
 loc_0x002BA6:
 	; load new stage
 
-	LD NB,#@CPAG(loc_0x018DBB) ; 2ba6
-	CARL loc_0x018DBB ; 2ba9
+	farcall loc_0x018DBB
 
 	LD BA,#5190h ; 2bac
 	LD [1667h],BA ; 2baf
@@ -2986,14 +2919,11 @@ __START:
 	CARL loc_0x00267F
 
 	LD [1B0Fh], A
-	LD NB, #03h
-	CARL loc_0x018000
+	farcall loc_0x018000
 
-	LD NB, #03h
-	CARL loc_0x01801C
+	farcall loc_0x01801C
 
-	LD NB, #03h
-	CARL loc_0x018035
+	farcall loc_0x018035
 
 	AND SC, #3Fh
 
@@ -3002,8 +2932,7 @@ __START:
 	LD [161Fh], HL
 	LD [1621h], B
 
-	LD NB, #00h
-	JRL MainLoop
+	farjump MainLoop
 
 ; ---------------------- ; 2f0e
 loc_0x002F11:
@@ -3021,11 +2950,9 @@ loc_0x002F16:
 	JRL Z,loc_0x002F11 ; 2f1b
 
 	LD [HL],#00h ; 2f1e
-	LD NB,#07h ; 2f20
-	CARL loc_0x03852E ; 2f23
+	farcall loc_0x03852E
 
-	LD NB,#02h ; 2f26
-	CARL loc_0x011D05 ; 2f29
+	farcall loc_0x011D05
 	CARL loc_0x002E65 ; 2f2c
 
 	AND SC,#3Fh ; 2f2f
@@ -3042,23 +2969,17 @@ loc_0x002F16:
 	LD HL,#15B1h ; 2f42
 	LD [190Fh],HL ; 2f45
 
-	LD NB,#00h ; 2f48
-	CARL loc_0x00235D ; 2f4b
+	farcall loc_0x00235D
 
-	LD NB,#02h ; 2f4e
-	CARL loc_0x011BA5 ; 2f51
+	farcall loc_0x011BA5
 
-	LD NB,#02h ; 2f54
-	CARL loc_0x011C7B ; 2f57
+	farcall loc_0x011C7B
 
-	LD NB,#02h ; 2f5a
-	CARL loc_0x011CF5 ; 2f5d
+	farcall loc_0x011CF5
 
-	LD NB,#07h ; 2f60
-	CARL loc_0x0383C6 ; 2f63
+	farcall loc_0x0383C6
 
-	LD NB,#07h ; 2f66
-	CARL loc_0x03842F ; 2f69
+	farcall loc_0x03842F
 
 	RET
 
@@ -3071,11 +2992,9 @@ loc_0x002F6D:
 
 	LD [HL],#00h ; 2f75
 
-	LD NB,#07h ; 2f77
-	CARL loc_0x03852E ; 2f7a
+	farcall loc_0x03852E
 
-	LD NB,#02h ; 2f7d
-	CARL loc_0x011D05 ; 2f80
+	farcall loc_0x011D05
 	CARL loc_0x002E65 ; 2f83
 
 	AND SC,#3Fh ; 2f86
@@ -3093,26 +3012,19 @@ loc_0x002F6D:
 	LD HL, #15B1h
 	LD [190Fh], HL
 
-	LD NB, #@CPAG(loc_0x00235D)
-	CARL loc_0x00235D
+	farcall loc_0x00235D
 
-	LD NB, #@CPAG(loc_0x038EDF)
-	CARL loc_0x038EDF
+	farcall loc_0x038EDF
 
-	LD NB, #@CPAG(loc_0x011BA5)
-	CARL loc_0x011BA5
+	farcall loc_0x011BA5
 
-	LD NB, #@CPAG(loc_0x011C7B)
-	CARL loc_0x011C7B
+	farcall loc_0x011C7B
 
-	LD NB, #@CPAG(loc_0x011CF5)
-	CARL loc_0x011CF5
+	farcall loc_0x011CF5
 
-	LD NB, #@CPAG(loc_0x0383C6)
-	CARL loc_0x0383C6
+	farcall loc_0x0383C6
 
-	LD NB, #@CPAG(loc_0x03842F)
-	CARL loc_0x03842F
+	farcall loc_0x03842F
 
 	RET
 
@@ -3125,11 +3037,9 @@ Module_Gameplay:
 
 	; 3852E
 	LD [HL], #00h
-	LD NB, #@CPAG(loc_0x03852E)
-	CARL loc_0x03852E
+	farcall loc_0x03852E
 
-	LD NB, #@CPAG(loc_0x011D05)
-	CARL loc_0x011D05
+	farcall loc_0x011D05
 	CARL loc_0x002E65
 
 	AND SC, #3Fh
@@ -3146,26 +3056,19 @@ Module_Gameplay:
 	LD HL, #15B1h
 	LD [190Fh], HL
 
-	LD NB, #@CPAG(loc_0x00235D)
-	CARL loc_0x00235D
+	farcall loc_0x00235D
 
-	LD NB, #@CPAG(loc_0x038EDF)
-	CARL loc_0x038EDF
+	farcall loc_0x038EDF
 
-	LD NB, #@CPAG(loc_0x011ECF)
-	CARL loc_0x011ECF
+	farcall loc_0x011ECF
 
-	LD NB, #@CPAG(loc_0x011C7B)
-	CARL loc_0x011C7B
+	farcall loc_0x011C7B
 
-	LD NB, #@CPAG(loc_0x011CF5)
-	CARL loc_0x011CF5
+	farcall loc_0x011CF5
 
-	LD NB, #@CPAG(loc_0x0383C6)
-	CARL loc_0x0383C6
+	farcall loc_0x0383C6
 
-	LD NB, #@CPAG(loc_0x03842F)
-	CARL loc_0x03842F
+	farcall loc_0x03842F
 
 	RET
 
@@ -3175,10 +3078,8 @@ loc_0x003027:
 	BIT [HL],#0FFh ; 302a
 	JRL Z,loc_0x002F11 ; 302c
 	LD [HL],#00h ; 302f
-	LD NB,#07h ; 3031
-	CARL loc_0x03852E ; 3034
-	LD NB,#02h ; 3037
-	CARL loc_0x011D05 ; 303a
+	farcall loc_0x03852E
+	farcall loc_0x011D05
 	CARL loc_0x002E65 ; 303d
 	AND SC,#3Fh ; 3040
 	LD EP,#00h ; 3042
@@ -3190,28 +3091,19 @@ loc_0x003027:
 	LD [HL],#00h ; 3051
 	LD HL,#15B1h ; 3053
 	LD [190Fh],HL ; 3056
-	LD NB,#00h ; 3059
-	CARL loc_0x00235D ; 305c
-	LD NB,#07h ; 305f
-	CARL loc_0x038EDF ; 3062
-	LD NB,#02h ; 3065
-	CARL loc_0x011ECF ; 3068
-	LD NB,#02h ; 306b
-	CARL loc_0x011909 ; 306e
-	LD NB,#02h ; 3071
-	CARL loc_0x011CF5 ; 3074
-	LD NB,#07h ; 3077
-	CARL loc_0x0383C6 ; 307a
-	LD NB,#07h ; 307d
-	CARL loc_0x03842F ; 3080
+	farcall loc_0x00235D
+	farcall loc_0x038EDF
+	farcall loc_0x011ECF
+	farcall loc_0x011909
+	farcall loc_0x011CF5
+	farcall loc_0x0383C6
+	farcall loc_0x03842F
 	LD HL,#1672h ; 3083
 	BIT [HL],#0FFh ; 3086
 	JRL Z,loc_0x002F11 ; 3088
 	LD [HL],#00h ; 308b
-	LD NB,#07h ; 308d
-	CARL loc_0x03852E ; 3090
-	LD NB,#02h ; 3093
-	CARL loc_0x011D05 ; 3096
+	farcall loc_0x03852E
+	farcall loc_0x011D05
 	CARL loc_0x002E65 ; 3099
 	AND SC,#3Fh ; 309c
 	LD EP,#00h ; 309e
@@ -3223,20 +3115,13 @@ loc_0x003027:
 	LD [HL],#00h ; 30ad
 	LD HL,#15B1h ; 30af
 	LD [190Fh],HL ; 30b2
-	LD NB,#00h ; 30b5
-	CARL loc_0x00235D ; 30b8
-	LD NB,#07h ; 30bb
-	CARL loc_0x038EDF ; 30be
-	LD NB,#02h ; 30c1
-	CARL loc_0x011ECF ; 30c4
-	LD NB,#02h ; 30c7
-	CARL loc_0x011875 ; 30ca
-	LD NB,#02h ; 30cd
-	CARL loc_0x011CF5 ; 30d0
-	LD NB,#07h ; 30d3
-	CARL loc_0x0383C6 ; 30d6
-	LD NB,#07h ; 30d9
-	CARL loc_0x03842F ; 30dc
+	farcall loc_0x00235D
+	farcall loc_0x038EDF
+	farcall loc_0x011ECF
+	farcall loc_0x011875
+	farcall loc_0x011CF5
+	farcall loc_0x0383C6
+	farcall loc_0x03842F
 	RET
 ; ---------------------- ; 30df
 loc_0x0030E0:
@@ -3244,12 +3129,9 @@ loc_0x0030E0:
 	BIT [HL],#0FFh ; 30e3
 	JRL Z,loc_0x002F11 ; 30e5
 	LD [HL],#00h ; 30e8
-	LD NB,#00h ; 30ea
-	CARL loc_0x002D17 ; 30ed
-	LD NB,#07h ; 30f0
-	CARL loc_0x03852E ; 30f3
-	LD NB,#02h ; 30f6
-	CARL loc_0x011D05 ; 30f9
+	farcall loc_0x002D17
+	farcall loc_0x03852E
+	farcall loc_0x011D05
 	CARL loc_0x002E65 ; 30fc
 	AND SC,#3Fh ; 30ff
 	LD EP,#00h ; 3101
@@ -3261,20 +3143,13 @@ loc_0x0030E0:
 	LD [HL],#00h ; 3110
 	LD HL,#15B1h ; 3112
 	LD [190Fh],HL ; 3115
-	LD NB,#00h ; 3118
-	CARL loc_0x00235D ; 311b
-	LD NB,#02h ; 311e
-	CARL loc_0x011BA5 ; 3121
-	LD NB,#02h ; 3124
-	CARL loc_0x011C7B ; 3127
-	LD NB,#02h ; 312a
-	CARL loc_0x011CF5 ; 312d
-	LD NB,#00h ; 3130
-	CARL loc_0x002CC6 ; 3133
-	LD NB,#07h ; 3136
-	CARL loc_0x0383C6 ; 3139
-	LD NB,#07h ; 313c
-	CARL loc_0x03842F ; 313f
+	farcall loc_0x00235D
+	farcall loc_0x011BA5
+	farcall loc_0x011C7B
+	farcall loc_0x011CF5
+	farcall loc_0x002CC6
+	farcall loc_0x0383C6
+	farcall loc_0x03842F
 	RET
 ; ---------------------- ; 3142
 loc_0x003143:
@@ -3282,10 +3157,8 @@ loc_0x003143:
 	BIT [HL],#0FFh ; 3146
 	JRL Z,loc_0x002F11 ; 3148
 	LD [HL],#00h ; 314b
-	LD NB,#07h ; 314d
-	CARL loc_0x03852E ; 3150
-	LD NB,#02h ; 3153
-	CARL loc_0x011D05 ; 3156
+	farcall loc_0x03852E
+	farcall loc_0x011D05
 	CARL loc_0x002E65 ; 3159
 	AND SC,#3Fh ; 315c
 	LD EP,#00h ; 315e
@@ -3297,22 +3170,14 @@ loc_0x003143:
 	LD [HL],#00h ; 316d
 	LD HL,[166Dh] ; 316f
 	LD [190Fh],HL ; 3172
-	LD NB,#00h ; 3175
-	CARL loc_0x00235D ; 3178
-	LD NB,#02h ; 317b
-	CARL loc_0x011BA5 ; 317e
-	LD NB,#02h ; 3181
-	CARL loc_0x01168D ; 3184
-	LD NB,#02h ; 3187
-	CARL loc_0x0116D0 ; 318a
-	LD NB,#02h ; 318d
-	CARL loc_0x01172F ; 3190
-	LD NB,#02h ; 3193
-	CARL loc_0x011CF5 ; 3196
-	LD NB,#07h ; 3199
-	CARL loc_0x0383C6 ; 319c
-	LD NB,#07h ; 319f
-	CARL loc_0x03842F ; 31a2
+	farcall loc_0x00235D
+	farcall loc_0x011BA5
+	farcall loc_0x01168D
+	farcall loc_0x0116D0
+	farcall loc_0x01172F
+	farcall loc_0x011CF5
+	farcall loc_0x0383C6
+	farcall loc_0x03842F
 	RET
 ; ---------------------- ; 31a5
 loc_0x0031A6:
@@ -3990,8 +3855,7 @@ loc_0x003647:
 	LD A,#0FFh ; 3647
 	LD [168Ch],A ; 3649
 
-	LD NB,#@CPAG(loc_0x018035) ; 364d
-	CARL loc_0x018035 ; 3650
+	farcall loc_0x018035
 
 	LD HL,#@COFF(loc_0x0036AC) ; 3653
 	LD B,#@CPAG(loc_0x0036AC) ; 3656
@@ -4047,26 +3911,20 @@ loc_0x0036AC:
 	CARL loc_0x0021F4 ; 36ac
 	CARL loc_0x002338 ; 36af
 
-	LD NB,#02h ; 36b2
-	CARL loc_0x011ADC ; 36b5
+	farcall loc_0x011ADC
 
-	LD NB,#00h ; 36b8
-	CARL loc_0x002BF9 ; 36bb
+	farcall loc_0x002BF9
 
-	LD NB,#07h ; 36be
-	CARL loc_0x0382F4 ; 36c1
+	farcall loc_0x0382F4
 
 	LD IY,#@DOFF(data_3686) ; 36c4
 	LD YP,#@DPAG(data_3686) ; 36c7
 	CARL loc_0x002D72 ; 36ca
 
 	LD IY,#0012h ; 36cd
-	LD NB,#02h ; 36d0
-
-	CARL loc_0x011B84 ; 36d3
+	farcall loc_0x011B84
 	LD IY,#13AEh ; 36d6
-	LD NB,#02h ; 36d9
-	CARL loc_0x011B84 ; 36dc
+	farcall loc_0x011B84
 
 	CARL loc_0x00233F ; 36df
 	CARL loc_0x0021FB ; 36e2
@@ -4101,26 +3959,21 @@ loc_0x003718:
 	CARL loc_0x0021F4 ; 3718
 	CARL loc_0x002338 ; 371b
 
-	LD NB,#02h ; 371e
-	CARL loc_0x011ADC ; 3721
+	farcall loc_0x011ADC
 
-	LD NB,#00h ; 3724
-	CARL loc_0x002BF9 ; 3727
+	farcall loc_0x002BF9
 
-	LD NB,#07h ; 372a
-	CARL loc_0x0382F4 ; 372d
+	farcall loc_0x0382F4
 
 	LD IY,#@DOFF(data_36f2) ; 3730
 	LD YP,#@DPAG(data_36f2) ; 3733
 	CARL loc_0x002D72 ; 3736
 
 	LD IY,#0012h ; 3739
-	LD NB,#02h ; 373c
-	CARL loc_0x011B84 ; 373f
+	farcall loc_0x011B84
 
 	LD IY,#13AEh ; 3742
-	LD NB,#02h ; 3745
-	CARL loc_0x011B84 ; 3748
+	farcall loc_0x011B84
 
 	CARL loc_0x00233F ; 374b
 	CARL loc_0x0021FB ; 374e
