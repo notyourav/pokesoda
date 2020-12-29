@@ -82,3 +82,8 @@ farcall MACRO function
     LD NB, #@CPAG(function)
     CARL function
 ENDM
+
+farjump MACRO line
+    LD NB, #@CPAG(line)
+    JRL line
+ENDM
