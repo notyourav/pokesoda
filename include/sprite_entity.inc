@@ -5,9 +5,10 @@ ENT_1 equ 1h
 ENT_NEXT_STATE_LO equ 2h
 ENT_NEXT_STATE_HI equ 3h
 
-ENT_4 equ 4h
+ENT_4 equ 4h ; offset
 ENT_5 equ 5h
-ENT_6 equ 6h
+ENT_6 equ 6h ; page
+
 ENT_7 equ 7h
 ENT_8 equ 8h
 ENT_9 equ 9h

@@ -137,12 +137,37 @@ global eeprom_buffer ; 150D
 eeprom_buffer: DS 12h
 
 global filler151F ; 151F
-filler151F: DS 122h
+filler151F: DS 10Dh
 
-; 162C: tilemap frame 1 offset
-; 162E: tilemap frame 1 page
-; 162F: tilemap frame 2 offset
-; 1631: tilemap frame 2 page
+global tilemap_frame0_offset ; 162C
+tilemap_frame0_offset: DS 2
+
+global tilemap_frame0_page ; 162E
+tilemap_frame0_page: DS 1
+
+global tilemap_frame1_offset ; 162F
+tilemap_frame1_offset: DS 2
+
+global tilemap_frame1_page ; 1631
+tilemap_frame1_page: DS 1
+
+global filler1632
+filler1632: DS 2
+
+global pet_gfx_frame0_offset ; 1634
+pet_gfx_frame0_offset: DS 2
+
+global pet_gfx_frame0_page ; 1636
+pet_gfx_frame0_page: DS 1
+
+global pet_gfx_frame1_offset ; 1637
+pet_gfx_frame1_offset: DS 2
+
+global pet_gfx_frame1_page ; 1639
+pet_gfx_frame1_page: DS 1
+
+global filler163A
+filler163A: DS 7
 
 ; two frames ago
 global keys_old2 ; 1641
@@ -164,11 +189,14 @@ unk1645: DS 1
 global filler1646 ; 1646
 filler1646: DS 49h
 
-global entities ; 168F
-entities: DS 20 * MAX_SPRITES
+global objects; 168F
+objects: DS 20 * MAX_OBJECTS
 
 global filler181F ; 181F
-filler1A8F: DS 297h
+filler1A8F: DS 0F7h
+
+global unk1916 ; 1916
+unk1916: DS 1A0h
 
 global sfx_vol ; 1AB6
 sfx_vol: DS 1
@@ -227,6 +255,7 @@ pet_beauty_frac: DS 1
 global filler1AE5 ; 1AE5
 filler1AE5: DS 2Dh
 
+; 1B01: time
 ; 1B0F: brightness level
 
 global pet_x ; 1B12
