@@ -874,7 +874,7 @@ loc_0x004072:
     
 	RET
 ; ---------------------- ; 4083
-IRQ_Timer3HI_Underflow:
+do_irq_timer3hi_underflow:
 
 	PUSH A ; 4085
 	PUSH BR ; 4087
@@ -2111,8 +2111,7 @@ loc_0x0046B6:
 	LD YP,#00h ; 46c5
 	LD IY,#1525h ; 46c8
 	LD HL,#000Ah ; 46cb
-	LD NB,#00h ; 46ce
-	CARL loc_0x0040AA ; 46d1
+	farcall loc_0x0040AA ; 46d1
 	JRL NZ,loc_0x004B01 ; 46d4
 
 	CARL loc_0x004AA7 ; 46d7
@@ -2131,8 +2130,7 @@ loc_0x0046B6:
 	LD YP,#00h ; 46f1
 	LD IY,#1525h ; 46f4
 	LD HL,#000Ah ; 46f7
-	LD NB,#00h ; 46fa
-	CARL loc_0x0040FF ; 46fd
+	farcall loc_0x0040FF ; 46fd
 	JRL NZ,loc_0x004B01 ; 4700
 
 	JRL loc_0x004AFF
@@ -2165,8 +2163,7 @@ loc_0x004706:
 	LD YP,#00h ; 472a
 	LD IY,#1525h ; 472d
 	LD HL,#000Ah ; 4730
-	LD NB,#00h ; 4733
-	CARL loc_0x0040FF ; 4736
+	farcall loc_0x0040FF ; 4736
 	JRL NZ,loc_0x004B0D ; 4739
 
 loc_0x00473C:
@@ -2700,8 +2697,7 @@ loc_0x004A54:
     
 	LD HL,#000Ah ; 4a95
     
-	LD NB,#00h ; 4a98
-	CARL loc_0x0040FF ; 4a9b
+	farcall loc_0x0040FF ; 4a9b
     
 	JRL NZ,loc_0x004B01 ; 4a9e
     
