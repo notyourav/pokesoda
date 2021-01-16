@@ -72,6 +72,8 @@ OFF_I1 EQU 0FFh^128
 PRC_MODE_INVERT equ 0h
 PRC_MODE_COPY equ 8h
 
+; Macros
+
 assert MACRO condition
     IF condition == 0
         FAIL 'ASSERTION FAILED'
@@ -81,4 +83,19 @@ ENDM
 farcall MACRO function
     LD NB, #@CPAG(function)
     CARL function
+ENDM
+
+farjump MACRO line
+    LD NB, #@CPAG(line)
+    JRL line
+ENDM
+
+farloadx MACRO address
+    LD IX, #@DOFF(address)
+    LD XP, #@DPAG(address)
+ENDM
+
+farloady MACRO address
+    LD IY, #@DOFF(address)
+    LD YP, #@DPAG(address)
 ENDM
