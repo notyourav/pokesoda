@@ -72,6 +72,28 @@ OFF_I1 EQU 0FFh^128
 PRC_MODE_INVERT equ 0h
 PRC_MODE_COPY equ 8h
 
+; Key flags
+
+KEY_A EQU 1
+KEY_B EQU 2
+KEY_C EQU 4
+KEY_UP EQU 8
+KEY_DOWN EQU 16
+KEY_LEFT EQU 32
+KEY_RIGHT EQU 64
+KEY_POWER EQU 128
+
+; IO flags
+
+IR_RX EQU 1
+IR_TX EQU 2
+EEPROM_DATA EQU 4
+EEPROM_CLK EQU 8
+RUMBLE EQU 16
+IR_DIS EQU 32
+PULLUP EQU 64
+IR_TX_2 EQU 128
+
 ; Macros
 
 assert MACRO condition
@@ -90,12 +112,12 @@ farjump MACRO line
     JRL line
 ENDM
 
-farloadx MACRO address
-    LD IX, #@DOFF(address)
-    LD XP, #@DPAG(address)
-ENDM
-
-farloady MACRO address
-    LD IY, #@DOFF(address)
-    LD YP, #@DPAG(address)
+farload MACRO reg, address
+    IF @SCP("reg",'HL') || @SCP("reg",'hl')
+        LD HL, #@DOFF(address)
+        LD EP, #@DPAG(address)
+    ELSE
+        LD I\reg, #@DOFF(address)
+        LD reg\P, #@DPAG(address)
+    ENDIF
 ENDM

@@ -203,8 +203,7 @@ loc_0x0382F4:
 
 	LD IY, #0000h
 
-	LD HL, #@DOFF(unk1916)
-	LD EP, #00h
+	farload hl, unk1916
 
 	LD B, #10h
 	LD IX, #18h
@@ -283,7 +282,7 @@ loc_0x03836A:
 
 	LD YP,#03h ; 3836d
 
-	farloadx unk1916
+	farload x, unk1916
 
 	LD EP,#00h ; 38376
 	LD B,#10h ; 38379
@@ -313,7 +312,7 @@ loc_0x03838A:
 
 	LD YP,#03h ; 3838d
 
-	farloadx unk1916
+	farload x, unk1916
 
 	LD EP,#00h ; 38396
 	LD B,#10h ; 38399
@@ -364,8 +363,7 @@ loc_0x0383C6:
 
 	LD YP,#03h ; 383c6
 
-	LD IX,#1916h ; 383c9
-	LD XP,#00h ; 383cc
+	farload x, unk1916
 
 	LD EP,#00h ; 383cf
 
@@ -451,7 +449,7 @@ loc_0x03842F:
 
 loc_0x03843A:
 
-	farloadx unk1916
+	farload x, unk1916
 
 	LD EP,#00h ; 38440
 	LD B,#10h ; 38443
@@ -608,7 +606,7 @@ loc_0x03852E:
 
 loc_0x038539:
 
-	farloadx unk1916
+	farload x, unk1916
 
 	LD EP,#00h ; 3853f
 	LD B,#10h ; 38542
@@ -652,7 +650,7 @@ loc_0x038544:
 	LD B,#00h ; 38580
 
 	ADD HL,BA ; 38582
-	ADD HL,#1360h ; 38584
+	ADD HL,#tilemap ; 38584
 
 	LD A,[IX+12h] ; 38587
 	AND A,#0Fh ; 3858a
@@ -696,7 +694,7 @@ loc_0x0385A6:
 ; ---------------------- ; 385ad
 loc_0x0385AE:
 
-	farloadx unk1916
+	farload x, unk1916
 
 	LD EP,#00h ; 385b4
 	LD B,#10h ; 385b7
@@ -728,7 +726,7 @@ loc_0x0385B9:
 	LD B,#00h ; 385e0
 
 	ADD HL,BA ; 385e2
-	ADD HL,#1360h ; 385e4
+	ADD HL,#tilemap ; 385e4
 
 	LD A,[IX+0Bh] ; 385e7
 	AND A,#0Fh ; 385ea
@@ -1026,7 +1024,7 @@ loc_0x0387ED:
 
 	LD A,B ; 387ed
 
-	farloady pool_0387F9
+	farload y, pool_0387F9
 
 	LD B,#00h ; 387f4
 	ADD IY,BA ; 387f6
@@ -1049,7 +1047,7 @@ loc_0x03880A:
 	LD A,[1ABAh] ; 3880a
 	LD B,#00h ; 3880e
 
-	farloadx pool_03884A
+	farload x, pool_03884A
 
 	ADD IX,BA ; 38816
 	LD A,[IY] ; 38818
@@ -1107,7 +1105,7 @@ loc_0x038855:
 	LD A,[1ABAh] ; 38857
 	LD B,#00h ; 3885b
 
-	farloadx pool_03887E
+	farload x, pool_03887E
 
 	ADD IX,BA ; 38863
 	LD A,[IY] ; 38865
@@ -1156,11 +1154,11 @@ loc_0x03888A:
 	LD YP,#00h ; 38898
 
 	ADD IY,BA ; 3889b
-	LD HL,#1645h ; 3889d
+	LD HL,#unk1645 ; 3889d
 	BIT [HL],#08h ; 388a0
 	CARL NZ,loc_0x038808 ; 388a2
 
-	LD HL,#1645h ; 388a5
+	LD HL,#unk1645 ; 388a5
 	BIT [HL],#10h ; 388a8
 	CARL NZ,loc_0x038855 ; 388aa
 
@@ -1264,7 +1262,7 @@ pool_04897D:
 ; ---------------------- ; 38991
 loc_0x038993:
 	LD EP,#00h ; 38993
-	LD HL,#1645h ; 38996
+	LD HL,#unk1645 ; 38996
 	LD A,[1AB1h] ; 38999
 	BIT [HL],#20h ; 3899d
 	JRS Z,loc_0x0389A2 ; 3899f
@@ -1322,7 +1320,7 @@ loc_0x0389BD:
 ; ---------------------- ; 38a18
 loc_0x038A1C:
 	LD EP,#00h ; 38a1c
-	LD HL,#1645h ; 38a1f
+	LD HL,#unk1645 ; 38a1f
 	LD A,[1AB1h] ; 38a22
 	BIT [HL],#20h ; 38a26
 	JRS Z,loc_0x038A2B ; 38a28
@@ -1382,14 +1380,14 @@ loc_0x038A66:
 ; ---------------------- ; 38a8d
 loc_0x038A92:
 
-	LD A,[1643h] ; 38a92
-	BIT A,#01h ; 38a96
+	LD A,[keys_new_unpressed] ; 38a92
+	BIT A,#KEY_A ; 38a96
 	JRS NZ,loc_0x038AAE ; 38a98
 
-	BIT A,#40h ; 38a9a
+	BIT A,#KEY_RIGHT ; 38a9a
 	JRS NZ,loc_0x038AA6 ; 38a9c
 
-	BIT A,#20h ; 38a9e
+	BIT A,#KEY_LEFT ; 38a9e
 	JRS Z,loc_0x038AE0 ; 38aa0
 
 	LD A,#00h ; 38aa2
@@ -1845,7 +1843,7 @@ loc_0x038EBA:
 	LD A,[1AD7h] ; 38ebc
 	ADD A,A ; 38ec0
 	LD B,#00h ; 38ec1
-	farloady pool_038ED3
+	farload y, pool_038ED3
 	ADD IY,BA ; 38ec9
 	LD BA,[IY] ; 38ecb
 	POP IY ; 38ecd
@@ -1863,8 +1861,8 @@ global loc_0x038EDF
 loc_0x038EDF:
 
 	LD HL,#1B81h ; 38edf
-	LD A,[1642h] ; 38ee2
-	BIT A,#04h ; 38ee6
+	LD A,[keys_old] ; 38ee2
+	BIT A,#KEY_C ; 38ee6
 	JRS Z,loc_0x038F07 ; 38ee8
 
 	INC [HL] ; 38eea
@@ -1890,8 +1888,8 @@ loc_0x038F07:
 
 	LD [HL],#00h ; 38f07
 
-	LD A,[1644h] ; 38f09
-	BIT A,#04h ; 38f0d
+	LD A,[keys_new_pressed] ; 38f09
+	BIT A,#KEY_C ; 38f0d
 	JRS NZ,loc_0x038F16 ; 38f0f
 
 	XOR A,A ; 38f11
@@ -2216,8 +2214,8 @@ loc_0x0394C4:
 	LD A,[1B80h] ; 394c4
 	OR A,A ; 394c8
 	JRS NZ,loc_0x0394F1 ; 394c9
-	LD A,[1643h] ; 394cb
-	BIT A,#7Bh ; 394cf
+	LD A,[keys_new_unpressed] ; 394cb
+	BIT A,#0FFh^(KEY_C | KEY_POWER) ; 394cf
 	JRS Z,loc_0x0394F1 ; 394d1
 	LD A,[sfx_vol] ; 394d3
 	AND A,A ; 394d7

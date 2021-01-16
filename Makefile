@@ -111,18 +111,19 @@ ASFLAGS += -Iinclude #-v
 
 .SUFFIXES:
 
-.PHONY: all, run, assembly
-all: $(TARGET).min
+.PHONY: all, run
+all: $(TARGET).min syms.txt
 	$(shell dd conv=notrunc if=baserom.min of=$(TARGET).min count=1 bs=8448)
 	@$(SHA1) pokesoda.sha1
-
-assembly: $(COMPILED_ASM)
 
 run: $(TARGET).min
 	$(POKEMINID) $<
 
 flash: $(TARGET).min
 	$(POKEFLASH) /w $<
+
+%.txt: $(TARGET).min
+	$(PY) tools/symbols.py
 
 %.min: %.hex
 	$(SREC_CAT) $< -o $@ -binary
@@ -148,10 +149,16 @@ src/splash.asm: src/splash.png
 %.sprites: %.png
 	$(PY) tools/graphics.py s $< $@
 
-.PHONY: clean
+.PHONY: clean, clobber
 clean:
 	rm -f $(OBJS)
 	rm -f $(TARGET).out $(TARGET).abs $(TARGET).map $(TARGET).hex
 	rm -f $(TARGET).min
-	rm -f $(COMPILED_ASM)
+	rm -f syms.txt
 	rm -f $(CONVERTED_IMGS) $(CONVERTED_TILES) $(CONVERTED_SPRITES)
+
+clobber:
+	rm -f $(OBJS)
+	rm -f $(TARGET).out $(TARGET).abs $(TARGET).map $(TARGET).hex
+	rm -f $(TARGET).min
+	rm -f syms.txt

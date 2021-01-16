@@ -253,10 +253,16 @@ global pet_beauty_frac ; 1AE4
 pet_beauty_frac: DS 1
 
 global filler1AE5 ; 1AE5
-filler1AE5: DS 2Dh
+filler1AE5: DS 2Bh
 
 ; 1B01: time
 ; 1B0F: brightness level
+
+global hand_x
+hand_x: DS 1
+
+global hand_y
+hand_y: DS 1
 
 global pet_x ; 1B12
 pet_x: DS 1

@@ -1935,8 +1935,7 @@ loc_0x011874:
 ; ---------------------- ; 11874
 global loc_0x011875
 loc_0x011875:
-	LD IX,#@DOFF(objects)
-	LD XP,#@DPAG(objects)
+	farload x, objects
 
 	LD HL,[190Fh] ; 1187b
 	LD EP,#00h ; 1187e
@@ -2043,8 +2042,7 @@ loc_0x011908:
 global loc_0x011909
 loc_0x011909:
 
-	LD IX,#@DOFF(objects)
-	LD XP,#@DPAG(objects)
+	farload x, objects
 
 	LD HL,[190Fh] ; 1190f
 	LD EP,#00h ; 11912
@@ -2249,8 +2247,7 @@ loc_0x011A7A:
 global loc_0x011ADC
 loc_0x011ADC:
 
-	LD HL,#@DOFF(objects)
-	LD EP,#@DPAG(objects)
+	farload hl, objects
 
 	LD IY,#0000h ; 11ae2
 
@@ -2356,7 +2353,7 @@ loc_0x011B84:
 
 	LD YP,#01h ; 11b87
 
-	farloadx objects
+	farload x, objects
 
 	LD EP,#00h ; 11b90
 	LD B, #MAX_OBJECTS
@@ -2383,8 +2380,7 @@ loc_0x011BA5:
 
 	LD YP,#01h ; 11ba5
 
-	LD IX,#@DOFF(objects)
-	LD XP,#@DPAG(objects)
+	farload x, objects
 
 	LD EP,#00h ; 11bae
 
@@ -2464,8 +2460,7 @@ loc_0x011C0E:
 
 	LD YP,#01h ; 11c0e
 
-	LD IX,#@DOFF(objects)
-	LD XP,#@DPAG(objects)
+	farload x, objects
 
 	LD EP,#00h ; 11c17
 	LD B, #MAX_OBJECTS
@@ -2572,7 +2567,7 @@ loc_0x011C75:
 global object_ui_update_loop
 object_ui_update_loop:
 
-	farloadx objects
+	farload x, objects
 
 	LD HL,[190Fh] ; 11c81
 	LD EP,#00h ; 11c84
@@ -2764,8 +2759,7 @@ loc_0x011EB1:
 	PUSH IX
 	PUSH BA
 
-	LD IX, #@DOFF(objects)
-	LD XP, #@DPAG(objects)
+	farload x, objects
 
 	LD EP, #0
 	LD B, #MAX_OBJECTS
@@ -2792,7 +2786,7 @@ global object_update_loop
 object_update_loop:
 
 	; sprite array base address
-	farloadx objects
+	farload x, objects
 
 	LD EP, #0
 	LD B, #MAX_OBJECTS
@@ -3271,8 +3265,7 @@ loc_0x012476:
 
 	LD B,#00h ; 1247f
 
-	LD IY,#24BAh ; 12481
-	LD YP,#01h ; 12484
+	farload y, pool_0124ba
 
 	ADD IY,BA ; 12487
 	LD IY,[IY] ; 12489
@@ -3302,8 +3295,7 @@ loc_0x012495:
 
 	LD B,#00h ; 1249e
 
-	LD IY,#24BAh ; 124a0
-	LD YP,#01h ; 124a3
+	farload y, pool_0124ba
 
 	ADD IY,BA ; 124a6
 	LD IY,[IY] ; 124a8
@@ -3332,10 +3324,18 @@ loc_0x0124B4:
 	RET
 
 ; ---------------------- ; 124b9
-	DB 0C0h, 24h, 0C8h, 24h, 0D0h, 24h, 00h, 01h ; 124ba
-	DB 02h, 03h, 04h, 05h, 06h, 07h, 00h, 04h ; 124c2
-	DB 03h, 05h, 02h, 01h, 06h, 07h, 00h, 03h ; 124ca
-	DB 01h, 07h, 02h, 05h, 04h, 06h, 0CEh, 0D0h ; 124d2
+pool_0124ba:
+	DW pool_124c0, pool_124c8, pool_124d0
+
+pool_124c0:
+    DB 00h, 01h, 02h, 03h, 04h, 05h, 06h, 07h
+pool_124c8:
+    DB 00h, 04h, 03h, 05h, 02h, 01h, 06h, 07h
+pool_124d0:
+    DB 00h, 03h, 01h, 07h, 02h, 05h, 04h, 06h
+    
+    
+    DB 0CEh, 0D0h ; 124d2
 	DB 0E9h, 1Ah, 80h ; 124da
 	ASCII "2" ; 124dd
 	DB 08h, 0E4h, 02h ; 124de
@@ -7145,12 +7145,12 @@ loc_0x014C82:
 	LD A,[1671h] ; 14c82
 	AND A,#0Fh ; 14c86
 	JRS NZ,loc_0x014C95 ; 14c88
-	LD A,[1642h] ; 14c8a
+	LD A,[keys_old] ; 14c8a
 	AND A,#09h ; 14c8e
 	JRS Z,loc_0x014C95 ; 14c90
 	CARL loc_0x014C10 ; 14c92
 loc_0x014C95:
-	LD A,[1642h] ; 14c95
+	LD A,[keys_old] ; 14c95
 	BIT A,#09h ; 14c99
 	JRS Z,loc_0x014CB2 ; 14c9b
 	LD A,[sfx_vol] ; 14c9d
@@ -7180,12 +7180,12 @@ loc_0x014CC6:
 ; ------------
 loc_0x014CCA:
 
-	LD A,[1642h] ; 14cca
+	LD A,[keys_old] ; 14cca
 
-	BIT A,#20h ; 14cce
+	BIT A,#KEY_LEFT ; 14cce
 	JRS NZ,loc_0x014CE4 ; 14cd0
 
-	BIT A,#40h ; 14cd2
+	BIT A,#KEY_RIGHT ; 14cd2
 	JRS Z,loc_0x014CF6 ; 14cd4
 
 	LD HL,#4B3Eh ; 14cd6
@@ -7506,14 +7506,14 @@ loc_0x015013:
 	LD B,#00h ; 15031
 	PUSH IP ; 15033
 	PUSH IX ; 15034
-	LD IX,#5042h ; 15035
-	LD XP,#01h ; 15038
+	farload x, pool_015042
 	ADD IX,BA ; 1503b
 	LD IY,[IX] ; 1503d
 	POP IX ; 1503f
 	POP IP ; 15040
 	RET
 ; ---------------------- ; 15041
+pool_015042:
 	DB 7Ah ; 15042
 	DB 50h ; 15043
 	DB 7Ah ; 15044
@@ -8043,8 +8043,8 @@ loc_0x0156AD:
 	RET
 ; ---------------------- ; 156af
 loc_0x0156B0:
-	LD A,[1643h] ; 156b0
-	BIT A,#01h ; 156b4
+	LD A,[keys_new_unpressed] ; 156b0
+	BIT A,#KEY_A ; 156b4
 	JRS Z,loc_0x0156D5 ; 156b6
 	CARL loc_0x0157BC ; 156b8
 	LD A,[sfx_vol] ; 156bb
@@ -8053,7 +8053,7 @@ loc_0x0156B0:
 	LD A,#01h ; 156c2
 	LD [mn_pending_sfx],A ; 156c4
 loc_0x0156C8:
-	LD BA,[1B10h] ; 156c8
+	LD BA,[hand_x] ; 156c8
 	LD [1B1Eh],BA ; 156cb
 	LD BA,#4FA5h ; 156ce
 	CARL loc_0x00794F ; 156d1
@@ -8067,8 +8067,8 @@ loc_0x0156E0:
 	RET
 ; ---------------------- ; 156e0
 loc_0x0156E1:
-	LD A,[1643h] ; 156e1
-	BIT A,#01h ; 156e5
+	LD A,[keys_new_unpressed] ; 156e1
+	BIT A,#KEY_A ; 156e5
 	JRS Z,loc_0x015705 ; 156e7
 	CARL loc_0x0157BC ; 156e9
 	LD A,[sfx_vol] ; 156ec
@@ -8156,8 +8156,8 @@ loc_0x01578C:
 	RET
 ; ---------------------- ; 1578c
 loc_0x01578D:
-	LD A,[1643h] ; 1578d
-	BIT A,#01h ; 15791
+	LD A,[keys_new_unpressed] ; 1578d
+	BIT A,#KEY_A ; 15791
 	JRS Z,loc_0x01579B ; 15793
 	LD BA,#5384h ; 15795
 	CARL loc_0x00794F ; 15798
@@ -8165,7 +8165,7 @@ loc_0x01579B:
 	RET
 ; ---------------------- ; 1579b
 loc_0x01579C:
-	LD A,[1B11h] ; 1579c
+	LD A,[hand_y] ; 1579c
 	ADD A,#04h ; 157a0
 	CP A,[IX+0Eh] ; 157a2
 	JRS C,loc_0x0157AD ; 157a5
@@ -8210,25 +8210,25 @@ loc_0x0157E7:
 	LD B,#00h ; 157eb
 	PUSH IP ; 157ed
 	PUSH IY ; 157ee
-	LD IY,#57FBh ; 157ef
-	LD YP,#01h ; 157f2
+	farload y, pool_157fb
 	ADD IY,BA ; 157f5
 	LD A,[IY] ; 157f7
 	POP IY ; 157f8
 	POP IP ; 157f9
 	RET
 ; ---------------------- ; 157fa
+pool_157fb:
 	DB 0Ch, 0Fh, 0Dh
 ; ---------------------- ; 157fb
 loc_0x0157FE:
-	LD A,[1B11h] ; 157fe
+	LD A,[hand_y] ; 157fe
 	CP A,#24h ; 15802
 	JRS C,loc_0x01581A ; 15804
 	CARL loc_0x0157E7 ; 15806
 	LD B,[pet_x] ; 15809
 	ADD A,B ; 1580d
 	LD B,A ; 1580e
-	LD A,[1B10h] ; 1580f
+	LD A,[hand_x] ; 1580f
 	CP A,B ; 15813
 	JRS C,loc_0x01581A ; 15814
 	CARL loc_0x0158DC ; 15816
@@ -8239,10 +8239,10 @@ loc_0x01581A:
 	RET
 ; ---------------------- ; 1581d
 loc_0x01581E:
-	LD A,[1B11h] ; 1581e
+	LD A,[hand_y] ; 1581e
 	CP A,#24h ; 15822
 	JRS C,loc_0x015837 ; 15824
-	LD A,[1B10h] ; 15826
+	LD A,[hand_x] ; 15826
 	ADD A,#09h ; 1582a
 	LD B,[pet_x] ; 1582c
 	CP A,B ; 15830
@@ -8255,7 +8255,7 @@ loc_0x015837:
 	RET
 ; ---------------------- ; 1583a
 loc_0x01583B:
-	LD A,[1B10h] ; 1583b
+	LD A,[hand_x] ; 1583b
 	ADD A,#09h ; 1583f
 	LD B,A ; 15841
 	LD A,[pet_x] ; 15842
@@ -8267,7 +8267,7 @@ loc_0x01583B:
 loc_0x01584E:
 	CP A,B ; 1584e
 	JRS NC,loc_0x0158C2 ; 1584f
-	LD A,[1B11h] ; 15851
+	LD A,[hand_y] ; 15851
 	ADD A,#04h ; 15855
 	CP A,#24h ; 15857
 	JRS C,loc_0x0158C2 ; 15859
@@ -8284,13 +8284,13 @@ loc_0x01586E:
 	CARL loc_0x0157E7 ; 1586e
 	LD B,[pet_x] ; 15871
 	ADD A,B ; 15875
-	LD B,[1B10h] ; 15876
+	LD B,[hand_x] ; 15876
 	CP A,B ; 1587a
 	JRS NC,loc_0x01589F ; 1587b
 	ADD A,#03h ; 1587d
 	CP A,B ; 1587f
 	JRS C,loc_0x0158C2 ; 15880
-	LD A,[1B11h] ; 15882
+	LD A,[hand_y] ; 15882
 	ADD A,#04h ; 15886
 	CP A,#24h ; 15888
 	JRS C,loc_0x0158C2 ; 1588a
@@ -8304,7 +8304,7 @@ loc_0x01586E:
 	JRS loc_0x0158B6
 ; ---------------------- ; 1589d
 loc_0x01589F:
-	LD A,[1B11h] ; 1589f
+	LD A,[hand_y] ; 1589f
 	ADD A,#04h ; 158a3
 	LD HL,#5638h ; 158a5
 	CP A,#24h ; 158a8
@@ -8349,8 +8349,8 @@ loc_0x0158F1:
 	RET
 ; ---------------------- ; 158f1
 loc_0x0158F2:
-	LD A,[1643h] ; 158f2
-	BIT A,#01h ; 158f6
+	LD A,[keys_new_unpressed] ; 158f2
+	BIT A,#KEY_A ; 158f6
 	JRS NZ,loc_0x0158FB ; 158f8
 	RETS
 ; ---------------------- ; 158fa
@@ -8434,8 +8434,8 @@ loc_0x0159B3:
 	RET
 ; ---------------------- ; 159b5
 loc_0x0159B6:
-	LD A,[1643h] ; 159b6
-	BIT A,#01h ; 159ba
+	LD A,[keys_new_unpressed] ; 159b6
+	BIT A,#KEY_A ; 159ba
 	JRS Z,loc_0x0159D8 ; 159bc
 	LD A,[sfx_vol] ; 159be
 	AND A,A ; 159c2
@@ -8450,10 +8450,10 @@ loc_0x0159CB:
 	RET
 ; ---------------------- ; 159d7
 loc_0x0159D8:
-	LD A,[1642h] ; 159d8
-	BIT A,#10h ; 159dc
+	LD A,[keys_old] ; 159d8
+	BIT A,#KEY_DOWN ; 159dc
 	JRS NZ,loc_0x0159ED ; 159de
-	BIT A,#08h ; 159e0
+	BIT A,#KEY_UP ; 159e0
 	JRS Z,loc_0x0159F8 ; 159e2
 	LD A,[IX+0Eh] ; 159e4
 	OR A,A ; 159e7
@@ -8469,10 +8469,10 @@ loc_0x0159ED:
 loc_0x0159F5:
 	LD [IX+0Eh],A ; 159f5
 loc_0x0159F8:
-	LD A,[1642h] ; 159f8
-	BIT A,#40h ; 159fc
+	LD A,[keys_old] ; 159f8
+	BIT A,#KEY_RIGHT ; 159fc
 	JRS NZ,loc_0x015A0D ; 159fe
-	BIT A,#20h ; 15a00
+	BIT A,#KEY_LEFT ; 15a00
 	JRS Z,loc_0x015A18 ; 15a02
 	LD A,[IX+0Ah] ; 15a04
 	OR A,A ; 15a07
@@ -8512,28 +8512,28 @@ loc_0x015A33:
 	LD B,#00h ; 15a42
 	PUSH IP ; 15a44
 	PUSH IX ; 15a45
-	LD IX,#5A53h ; 15a46
-	LD XP,#01h ; 15a49
+	farload x, pool_15a53
 	ADD IX,BA ; 15a4c
 	LD IY,[IX] ; 15a4e
 	POP IX ; 15a50
 	POP IP ; 15a51
 	RET
 ; ---------------------- ; 15a52
-loc_0x015A53:
-	LD [BR:50h],[IX] ; 15a53
-	LD [BR:50h],[IX] ; 15a55
-	DEC A ; 15a57
-	LD L,H ; 15a58
-	DEC A ; 15a59
-	LD L,H ; 15a5a
-	DEC BR ; 15a5b
-	LD L,A ; 15a5c
-	LD BR,#50h ; 15a5d
-	AND A,[HL] ; 15a5f
-	LD H,L ; 15a60
-	OR A,[HL] ; 15a61
-	LD H,L ; 15a62
+pool_15a53:
+	DB 7Eh ; 15a53
+	ASCII "P~P" ; 15a54
+	DB 88h ; 15a57
+	ASCII "S" ; 15a58
+	DB 88h ; 15a59
+	ASCII "S" ; 15a5a
+	DB 8Ch ; 15a5b
+	ASCII "P" ; 15a5c
+	DB 0B4h ; 15a5d
+    ASCII "P#Z+Z"
+
+
+
+loc_0x015A63:
 	LD A,[IX+06h] ; 15a63
 	PUSH A ; 15a66
 	CARL loc_0x015A8D ; 15a68
@@ -8602,8 +8602,7 @@ loc_0x015AEE:
 	LD A,[1AD7h] ; 15aee
 	ADD A,A ; 15af2
 	LD B,#00h ; 15af3
-	LD IY,#5B83h ; 15af5
-	LD YP,#01h ; 15af8
+	farload y, pool_015b83
 	ADD IY,BA ; 15afb
 	LD IY,[IY] ; 15afd
 	LD A,[1B3Eh] ; 15aff
@@ -8672,6 +8671,7 @@ loc_0x015B77:
 	POP IP ; 15b81
 	RET
 ; ---------------------- ; 15b82
+pool_015b83:
 	DB 89h, 5Bh, 89h, 5Bh, 89h, 5Bh, 00h, 02h ; 15b83
 	DB 04h, 05h, 07h, 09h, 0Bh, 0Ch, 0FFh, 9Dh ; 15b8b
 	DB 99h ; 15b93
@@ -8688,8 +8688,8 @@ loc_0x015B77:
 ; ---------------------- ; 15bcd
 loc_0x015BD3:
 	LD [BR:8Eh],#99h ; 15bd3
-	LD A,[1643h] ; 15bd6
-	BIT A,#01h ; 15bda
+	LD A,[keys_new_unpressed] ; 15bd6
+	BIT A,#KEY_A ; 15bda
 	JRS Z,loc_0x015BE4 ; 15bdc
 	LD BA,#5B92h ; 15bde
 	CARL loc_0x00794F ; 15be1
@@ -8756,18 +8756,18 @@ loc_0x015BE4:
 	DB 5Ch, 0F2h, 0A5h, 00h
 ; ---------------------- ; 15ce1
 loc_0x015CE5:
-	LD A,[1643h] ; 15ce5
-	BIT A,#01h ; 15ce9
+	LD A,[keys_new_unpressed] ; 15ce5
+	BIT A,#KEY_A ; 15ce9
 	JRS Z,loc_0x015CF5 ; 15ceb
 	CARL loc_0x015DE0 ; 15ced
 	LD BA,#5C4Ch ; 15cf0
 	JRS loc_0x015D33
 ; ---------------------- ; 15cf3
 loc_0x015CF5:
-	LD A,[1642h] ; 15cf5
-	BIT A,#38h ; 15cf9
+	LD A,[keys_old] ; 15cf5
+	BIT A,#(KEY_UP | KEY_DOWN | KEY_LEFT) ; 15cf9
 	JRS NZ,loc_0x015D06 ; 15cfb
-	BIT A,#40h ; 15cfd
+	BIT A,#KEY_RIGHT ; 15cfd
 	JRS Z,loc_0x015D20 ; 15cff
 	LD BA,#5C91h ; 15d01
 	JRS loc_0x015D33
@@ -8802,18 +8802,18 @@ loc_0x015D37:
 ; ---------------------- ; 15d37
 loc_0x015D38:
 	CARL loc_0x015D89 ; 15d38
-	LD A,[1643h] ; 15d3b
-	BIT A,#01h ; 15d3f
+	LD A,[keys_new_unpressed] ; 15d3b
+	BIT A,#KEY_A ; 15d3f
 	JRS Z,loc_0x015D4B ; 15d41
 	CARL loc_0x015E1E ; 15d43
 	LD BA,#5C9Dh ; 15d46
 	JRS loc_0x015D84
 ; ---------------------- ; 15d49
 loc_0x015D4B:
-	LD A,[1642h] ; 15d4b
-	BIT A,#58h ; 15d4f
+	LD A,[keys_old] ; 15d4b
+	BIT A,#(KEY_UP | KEY_DOWN | KEY_RIGHT) ; 15d4f
 	JRS NZ,loc_0x015D5C ; 15d51
-	BIT A,#20h ; 15d53
+	BIT A,#KEY_LEFT ; 15d53
 	JRS Z,loc_0x015D71 ; 15d55
 	LD BA,#5C40h ; 15d57
 	JRS loc_0x015D84
@@ -8845,45 +8845,45 @@ loc_0x015D88:
 	RET
 ; ---------------------- ; 15d88
 loc_0x015D89:
-	LD A,[1642h] ; 15d89
-	BIT A,#10h ; 15d8d
+	LD A,[keys_old] ; 15d89
+	BIT A,#KEY_DOWN ; 15d8d
 	JRS NZ,loc_0x015D9F ; 15d8f
-	BIT A,#08h ; 15d91
+	BIT A,#KEY_UP ; 15d91
 	JRS Z,loc_0x015DAC ; 15d93
-	LD A,[1B11h] ; 15d95
+	LD A,[hand_y] ; 15d95
 	OR A,A ; 15d99
 	JRS Z,loc_0x015DAC ; 15d9a
 	DEC A ; 15d9c
 	JRS loc_0x015DA8
 ; ---------------------- ; 15d9d
 loc_0x015D9F:
-	LD A,[1B11h] ; 15d9f
+	LD A,[hand_y] ; 15d9f
 	CP A,#2Dh ; 15da3
 	JRS Z,loc_0x015DAC ; 15da5
 	INC A ; 15da7
 loc_0x015DA8:
-	LD [1B11h],A ; 15da8
+	LD [hand_y],A ; 15da8
 loc_0x015DAC:
-	LD A,[1642h] ; 15dac
-	BIT A,#40h ; 15db0
+	LD A,[keys_old] ; 15dac
+	BIT A,#KEY_RIGHT ; 15db0
 	JRS NZ,loc_0x015DC2 ; 15db2
-	BIT A,#20h ; 15db4
+	BIT A,#KEY_LEFT ; 15db4
 	JRS Z,loc_0x015DCF ; 15db6
-	LD A,[1B10h] ; 15db8
+	LD A,[hand_x] ; 15db8
 	OR A,A ; 15dbc
 	JRS Z,loc_0x015DCF ; 15dbd
 	DEC A ; 15dbf
 	JRS loc_0x015DCB
 ; ---------------------- ; 15dc0
 loc_0x015DC2:
-	LD A,[1B10h] ; 15dc2
+	LD A,[hand_x] ; 15dc2
 	CP A,#4Fh ; 15dc6
 	JRS Z,loc_0x015DCF ; 15dc8
 	INC A ; 15dca
 loc_0x015DCB:
-	LD [1B10h],A ; 15dcb
+	LD [hand_x],A ; 15dcb
 loc_0x015DCF:
-	LD BA,[1B10h] ; 15dcf
+	LD BA,[hand_x] ; 15dcf
 	CARL loc_0x007982 ; 15dd2
 	RET
 ; ---------------------- ; 15dd5
@@ -8900,7 +8900,7 @@ loc_0x015DE0:
 	CARL loc_0x012F7C ; 15dea
 	LD A,#01h ; 15ded
 	LD [1B41h],A ; 15def
-	LD A,[1B10h] ; 15df3
+	LD A,[hand_x] ; 15df3
 	SUB A,#27h ; 15df7
 	JRS NC,loc_0x015DFC ; 15df9
 	XOR A,A ; 15dfb
@@ -8909,7 +8909,7 @@ loc_0x015DFC:
 	CP A,B ; 15e00
 	JRS Z,loc_0x015E0E ; 15e01
 	JRS NC,loc_0x015E1D ; 15e03
-	LD A,[1B10h] ; 15e05
+	LD A,[hand_x] ; 15e05
 	ADD A,#08h ; 15e09
 	CP A,B ; 15e0b
 	JRS C,loc_0x015E1D ; 15e0c
@@ -8929,7 +8929,7 @@ loc_0x015E1E:
 	CARL loc_0x012F7C ; 15e28
 	LD A,#01h ; 15e2b
 	LD [1B41h],A ; 15e2d
-	LD A,[1B10h] ; 15e31
+	LD A,[hand_x] ; 15e31
 	SUB A,#08h ; 15e35
 	JRS NC,loc_0x015E3A ; 15e37
 	XOR A,A ; 15e39
@@ -8938,7 +8938,7 @@ loc_0x015E3A:
 	CP A,B ; 15e3e
 	JRS Z,loc_0x015E4C ; 15e3f
 	JRS NC,loc_0x015E5B ; 15e41
-	LD A,[1B10h] ; 15e43
+	LD A,[hand_x] ; 15e43
 	ADD A,#27h ; 15e47
 	CP A,B ; 15e49
 	JRS C,loc_0x015E5B ; 15e4a
@@ -9058,7 +9058,7 @@ loc_0x016011:
 	JRS NZ,loc_0x01601D ; 16019
 	LD B,#27h ; 1601b
 loc_0x01601D:
-	LD A,[1B10h] ; 1601d
+	LD A,[hand_x] ; 1601d
 	SUB A,B ; 16021
 	JRS NC,loc_0x016025 ; 16022
 	XOR A,A ; 16024
@@ -9103,7 +9103,7 @@ loc_0x016064:
 	JRS NZ,loc_0x016070 ; 1606c
 	LD B,#27h ; 1606e
 loc_0x016070:
-	LD A,[1B10h] ; 16070
+	LD A,[hand_x] ; 16070
 	ADD A,B ; 16074
 	LD B,[pet_x] ; 16075
 	CP A,B ; 16079
@@ -9154,7 +9154,7 @@ loc_0x0160C8:
 	RET
 ; ---------------------- ; 160cb
 loc_0x0160CC:
-	LD A,[1B10h] ; 160cc
+	LD A,[hand_x] ; 160cc
 	ADD A,#1Fh ; 160d0
 	LD B,[pet_x] ; 160d2
 	CP A,B ; 160d6
@@ -9180,7 +9180,7 @@ loc_0x0160F3:
 	RET
 ; ---------------------- ; 160f6
 loc_0x0160F7:
-	LD A,[1B10h] ; 160f7
+	LD A,[hand_x] ; 160f7
 	SUB A,#1Fh ; 160fb
 	JRS NC,loc_0x016100 ; 160fd
 	XOR A,A ; 160ff
@@ -9388,14 +9388,14 @@ loc_0x016398:
 	LD B,#00h ; 16399
 	PUSH IP ; 1639b
 	PUSH IX ; 1639c
-	LD IX,#63AAh ; 1639d
-	LD XP,#01h ; 163a0
+	farload x, pool_0163aa
 	ADD IX,BA ; 163a3
 	LD IY,[IX] ; 163a5
 	POP IX ; 163a7
 	POP IP ; 163a8
 	RET
 ; ---------------------- ; 163a9
+pool_0163aa:
 	DB 7Eh ; 163aa
 	DB 50h, 8Ch ; 163ab
 	ASCII "P" ; 163ad
@@ -9437,7 +9437,7 @@ loc_0x0163E0:
 	RET
 ; ---------------------- ; 163ec
 loc_0x0163ED:
-	LD A,[1B11h] ; 163ed
+	LD A,[hand_y] ; 163ed
 	CP A,#2Ah ; 163f1
 	JRS C,loc_0x0163FB ; 163f3
 	LD BA,#61DDh ; 163f5
@@ -9451,7 +9451,7 @@ loc_0x0163FC:
 	LD HL,[HL] ; 16402
 	CP HL,#0E590h ; 16404
 	JRS NZ,loc_0x01641C ; 16407
-	LD A,[1B11h] ; 16409
+	LD A,[hand_y] ; 16409
 	CP A,#1Ch ; 1640d
 	JRS NZ,loc_0x01641C ; 1640f
 	CARL loc_0x0164B7 ; 16411
@@ -9495,7 +9495,7 @@ loc_0x01641C:
 	DB 0DBh, 0E5h, 01h, 00h, 0D4h, 0CFh, 8Eh, 99h
 ; ---------------------- ; 164af
 loc_0x0164B7:
-	LD A,[1B10h] ; 164b7
+	LD A,[hand_x] ; 164b7
 	SUB A,#04h ; 164bb
 	JRS NC,loc_0x0164C0 ; 164bd
 	XOR A,A ; 164bf
@@ -9504,7 +9504,7 @@ loc_0x0164C0:
 	LD A,[pet_x] ; 164c1
 	CP A,B ; 164c5
 	JRS C,loc_0x0164D9 ; 164c6
-	LD A,[1B10h] ; 164c8
+	LD A,[hand_x] ; 164c8
 	ADD A,#05h ; 164cc
 	LD B,A ; 164ce
 	LD A,[pet_x] ; 164cf
@@ -9518,10 +9518,10 @@ loc_0x0164D9:
 	RET
 ; ---------------------- ; 164db
 loc_0x0164DC:
-	LD A,[1B10h] ; 164dc
+	LD A,[hand_x] ; 164dc
 	OR A,A ; 164e0
 	JRS Z,loc_0x0164F2 ; 164e1
-	LD A,[1B11h] ; 164e3
+	LD A,[hand_y] ; 164e3
 	CP A,#2Ch ; 164e7
 	JRS NZ,loc_0x0164F2 ; 164e9
 	LD BA,#6492h ; 164eb
@@ -9529,36 +9529,36 @@ loc_0x0164DC:
 	RET
 ; ---------------------- ; 164f1
 loc_0x0164F2:
-	LD A,[1B10h] ; 164f2
+	LD A,[hand_x] ; 164f2
 	INC A ; 164f6
 	INC A ; 164f7
-	LD [1B10h],A ; 164f8
+	LD [hand_x],A ; 164f8
 	CP A,#28h ; 164fc
 	JRS C,loc_0x016512 ; 164fe
-	LD A,[1B11h] ; 16500
+	LD A,[hand_y] ; 16500
 	INC A ; 16504
 	INC A ; 16505
 	CP A,#2Ch ; 16506
 	JRS C,loc_0x01650C ; 16508
 	LD A,#2Ch ; 1650a
 loc_0x01650C:
-	LD [1B11h],A ; 1650c
+	LD [hand_y],A ; 1650c
 	JRS loc_0x01651B
 ; ---------------------- ; 16510
 loc_0x016512:
-	LD A,[1B11h] ; 16512
+	LD A,[hand_y] ; 16512
 	DEC A ; 16516
-	LD [1B11h],A ; 16517
+	LD [hand_y],A ; 16517
 loc_0x01651B:
-	LD BA,[1B10h] ; 1651b
+	LD BA,[hand_x] ; 1651b
 	CARL loc_0x007982 ; 1651e
 	RET
 ; ---------------------- ; 16521
 loc_0x016522:
-	LD A,[1B10h] ; 16522
+	LD A,[hand_x] ; 16522
 	CP A,#50h ; 16526
 	JRS Z,loc_0x016539 ; 16528
-	LD A,[1B11h] ; 1652a
+	LD A,[hand_y] ; 1652a
 	CP A,#2Ch ; 1652e
 	JRS NZ,loc_0x016539 ; 16530
 	LD BA,#6492h ; 16532
@@ -9566,28 +9566,28 @@ loc_0x016522:
 	RET
 ; ---------------------- ; 16538
 loc_0x016539:
-	LD A,[1B10h] ; 16539
+	LD A,[hand_x] ; 16539
 	DEC A ; 1653d
 	DEC A ; 1653e
-	LD [1B10h],A ; 1653f
+	LD [hand_x],A ; 1653f
 	CP A,#28h ; 16543
 	JRS NC,loc_0x016559 ; 16545
-	LD A,[1B11h] ; 16547
+	LD A,[hand_y] ; 16547
 	INC A ; 1654b
 	INC A ; 1654c
 	CP A,#2Ch ; 1654d
 	JRS C,loc_0x016553 ; 1654f
 	LD A,#2Ch ; 16551
 loc_0x016553:
-	LD [1B11h],A ; 16553
+	LD [hand_y],A ; 16553
 	JRS loc_0x016562
 ; ---------------------- ; 16557
 loc_0x016559:
-	LD A,[1B11h] ; 16559
+	LD A,[hand_y] ; 16559
 	DEC A ; 1655d
-	LD [1B11h],A ; 1655e
+	LD [hand_y],A ; 1655e
 loc_0x016562:
-	LD BA,[1B10h] ; 16562
+	LD BA,[hand_x] ; 16562
 	CARL loc_0x007982 ; 16565
 	RET
 ; ---------------------- ; 16568
@@ -9607,7 +9607,7 @@ loc_0x016580:
 loc_0x016583:
 	CARL loc_0x00794F ; 16583
 	LD BA,[pet_x] ; 16586
-	LD [1B10h],BA ; 16589
+	LD [hand_x],BA ; 16589
 	CARL loc_0x007982 ; 1658c
 loc_0x01658F:
 	RET
@@ -9619,7 +9619,7 @@ loc_0x016590:
 	LD BA,#0E5E9h ; 16597
 	CARL loc_0x007948 ; 1659a
 loc_0x01659D:
-	LD A,[1B11h] ; 1659d
+	LD A,[hand_y] ; 1659d
 	CP A,#2Ch ; 165a1
 	JRS C,loc_0x0165AC ; 165a3
 	LD BA,#6427h ; 165a5
@@ -9628,10 +9628,10 @@ loc_0x01659D:
 ; ---------------------- ; 165ab
 loc_0x0165AC:
 	INC A ; 165ac
-	LD [1B11h],A ; 165ad
-	LD BA,[1B10h] ; 165b1
+	LD [hand_y],A ; 165ad
+	LD BA,[hand_x] ; 165b1
 	CARL loc_0x007982 ; 165b4
-	LD A,[1B11h] ; 165b7
+	LD A,[hand_y] ; 165b7
 	CP A,#2Ah ; 165bb
 	JRS NZ,loc_0x0165DA ; 165bd
 	LD HL,[1B37h] ; 165bf
@@ -9660,10 +9660,10 @@ loc_0x0165E9:
 	LD A,[1B42h] ; 165e9
 	OR A,A ; 165ed
 	JRS NZ,loc_0x01661A ; 165ee
-	LD A,[1B11h] ; 165f0
+	LD A,[hand_y] ; 165f0
 	CP A,#2Ch ; 165f4
 	JRS NC,loc_0x016613 ; 165f6
-	LD A,[1B11h] ; 165f8
+	LD A,[hand_y] ; 165f8
 	LD [IX+18h],A ; 165fc
 	LD A,[sfx_vol] ; 165ff
 	AND A,A ; 16603
@@ -9681,7 +9681,7 @@ loc_0x016613:
 	RET
 ; ---------------------- ; 16619
 loc_0x01661A:
-	LD BA,[1B10h] ; 1661a
+	LD BA,[hand_x] ; 1661a
 	CARL loc_0x007982 ; 1661d
 	RET
 ; ---------------------- ; 16620
@@ -9809,10 +9809,10 @@ loc_0x01661A:
 	DB 91h
 ; ---------------------- ; 167d8
 loc_0x0167D9:
-	LD A,[1642h] ; 167d9
-	BIT A,#08h ; 167dd
+	LD A,[keys_old] ; 167d9
+	BIT A,#KEY_UP ; 167dd
 	JRS NZ,loc_0x0167EF ; 167df
-	BIT A,#10h ; 167e1
+	BIT A,#KEY_DOWN ; 167e1
 	JRS Z,loc_0x0167F9 ; 167e3
 	LD A,[IX+0Eh] ; 167e5
 	CP A,#1Ah ; 167e8
@@ -9983,8 +9983,8 @@ loc_0x0167F9:
 	DB 9Eh ; 16b45
 	ASCII "j" ; 16b46
 loc_0x016B47:
-	LD A,[1642h] ; 16b47
-	BIT A,#01h ; 16b4b
+	LD A,[keys_old] ; 16b47
+	BIT A,#KEY_A ; 16b4b
 	JRS NZ,loc_0x016BB3 ; 16b4d
 	CARL loc_0x014D3D ; 16b4f
 	CARL loc_0x012F7C ; 16b52
@@ -10010,8 +10010,7 @@ loc_0x016B80:
 	LD A,[IX+18h] ; 16b82
 	ADD A,A ; 16b85
 	LD B,#00h ; 16b86
-	LD IY,#6BC4h ; 16b88
-	LD YP,#01h ; 16b8b
+	farload y, pool_016bc4
 	ADD IY,BA ; 16b8e
 	LD BA,[IY] ; 16b90
 	POP IY ; 16b92
@@ -10040,6 +10039,7 @@ loc_0x016BC0:
 	CARL loc_0x0167D9 ; 16bc0
 	RET
 ; ---------------------- ; 16bc3
+pool_016bc4:
 	DB 0DEh ; 16bc4
 	ASCII "j" ; 16bc5
 	DB 06h ; 16bc6
@@ -10054,28 +10054,28 @@ loc_0x016BD0:
 	PUSH IP ; 16bd0
 	PUSH IY ; 16bd1
 	LD B,#00h ; 16bd2
-	LD IY,#6BE0h ; 16bd4
-	LD YP,#01h ; 16bd7
+	farload y, pool_016be0
 	ADD IY,BA ; 16bda
 	LD A,[IY] ; 16bdc
 	POP IY ; 16bdd
 	POP IP ; 16bde
 	RET
 ; ---------------------- ; 16bdf
+pool_016be0:
 	DB 00h, 05h, 07h, 09h, 0Bh, 0Dh
 ; ---------------------- ; 16be0
 loc_0x016BE6:
 	PUSH IP ; 16be6
 	PUSH IY ; 16be7
 	LD B,#00h ; 16be8
-	LD IY,#6BF6h ; 16bea
-	LD YP,#01h ; 16bed
+	farload y, pool_016bf6
 	ADD IY,BA ; 16bf0
 	LD A,[IY] ; 16bf2
 	POP IY ; 16bf3
 	POP IP ; 16bf4
 	RET
 ; ---------------------- ; 16bf5
+pool_016bf6:
 	DB 00h, 07h, 09h, 0Bh, 0Dh, 0Fh ; 16bf6
 	ASCII "8" ; 16bfc
 	DB 0CEh ; 16bfd
@@ -10529,8 +10529,7 @@ loc_0x017199:
 	LD A,[1AD7h] ; 1719b
 	ADD A,A ; 1719f
 	LD B,#00h ; 171a0
-	LD IY,#71B2h ; 171a2
-	LD YP,#01h ; 171a5
+	farload y, pool_0171b2
 	ADD IY,BA ; 171a8
 	LD BA,[IY] ; 171aa
 	CARL loc_0x00794F ; 171ac
@@ -10538,6 +10537,7 @@ loc_0x017199:
 	POP IP ; 171b0
 	RET
 ; ---------------------- ; 171b1
+pool_0171b2:
 	DB 0B9h ; 171b2
 	ASCII "p" ; 171b3
 	DB 0F2h ; 171b4
@@ -10549,10 +10549,10 @@ loc_0x017199:
 	DB 1Ah, 01h, 00h, 0DCh, 0E0h, 8Eh, 99h
 ; ---------------------- ; 171bd
 loc_0x0171C4:
-	LD A,[1645h] ; 171c4
-	BIT A,#20h ; 171c8
+	LD A,[unk1645] ; 171c4
+	BIT A,#KEY_LEFT ; 171c8
 	JRS NZ,loc_0x0171DF ; 171ca
-	BIT A,#40h ; 171cc
+	BIT A,#KEY_RIGHT ; 171cc
 	JRS NZ,loc_0x0171D2 ; 171ce
 	JRS loc_0x0171FA
 ; ---------------------- ; 171d0
@@ -10652,8 +10652,7 @@ loc_0x01724C:
 	ADD A,B ; 17287
 	ADD A,A ; 17288
 	LD B,#00h ; 17289
-	LD IY,#72B2h ; 1728b
-	LD YP,#01h ; 1728e
+	farload y, pool_0172b2
 	ADD IY,BA ; 17291
 	LD BA,[IY] ; 17293
 	LD [162Ch],BA ; 17295
@@ -10668,6 +10667,7 @@ loc_0x01724C:
 	POP IP ; 172b0
 	RET
 ; ---------------------- ; 172b1
+pool_0172b2:
 	DB 00h ; 172b2
 	ASCII "s" ; 172b3
 	DB 06h, 00h ; 172b4
@@ -10859,8 +10859,8 @@ loc_0x017387:
 	DB 84h, 0F8h
 ; ---------------------- ; 1750e
 loc_0x017510:
-	LD A,[1642h] ; 17510
-	BIT A,#01h ; 17514
+	LD A,[keys_old] ; 17510
+	BIT A,#KEY_A ; 17514
 	JRS Z,loc_0x017523 ; 17516
 	CARL loc_0x017586 ; 17518
 	JRS Z,loc_0x017523 ; 1751b
@@ -10893,7 +10893,7 @@ loc_0x01753F:
 	LD XP,#01h ; 1754d
 	LD A,[IY] ; 17550
 	ADD A,[IX] ; 17551
-	LD B,[1B10h] ; 17552
+	LD B,[hand_x] ; 17552
 	CP A,B ; 17556
 	JRS NC,loc_0x017574 ; 17557
 	INC IX ; 17559
@@ -10905,7 +10905,7 @@ loc_0x01753F:
 	INC IX ; 17560
 	LD A,[IY] ; 17561
 	ADD A,[IX] ; 17562
-	LD B,[1B11h] ; 17563
+	LD B,[hand_y] ; 17563
 	CP A,B ; 17567
 	JRS NC,loc_0x017574 ; 17568
 	INC IX ; 1756a
@@ -10945,7 +10945,7 @@ loc_0x017586:
 	LD XP,#01h ; 175a3
 	LD A,[IY] ; 175a6
 	ADD A,[IX] ; 175a7
-	LD B,[1B10h] ; 175a8
+	LD B,[hand_x] ; 175a8
 	CP A,B ; 175ac
 	JRS NC,loc_0x0175CA ; 175ad
 	INC IX ; 175af
@@ -10957,7 +10957,7 @@ loc_0x017586:
 	INC IX ; 175b6
 	LD A,[IY] ; 175b7
 	ADD A,[IX] ; 175b8
-	LD B,[1B11h] ; 175b9
+	LD B,[hand_y] ; 175b9
 	CP A,B ; 175bd
 	JRS NC,loc_0x0175CA ; 175be
 	INC IX ; 175c0
@@ -10992,10 +10992,10 @@ loc_0x0175CC:
 	DB 0CAh, 8Eh, 99h
 ; ---------------------- ; 17609
 loc_0x01760C:
-	LD A,[1645h] ; 1760c
-	BIT A,#20h ; 17610
+	LD A,[unk1645] ; 1760c
+	BIT A,#KEY_LEFT ; 17610
 	JRS NZ,loc_0x017624 ; 17612
-	BIT A,#40h ; 17614
+	BIT A,#KEY_RIGHT ; 17614
 	JRS Z,loc_0x017640 ; 17616
 	LD A,[1AD5h] ; 17618
 	INC A ; 1761c
@@ -11037,8 +11037,7 @@ loc_0x01765B:
 loc_0x017661:
 	PUSH IP ; 17661
 	PUSH IY ; 17662
-	LD IY,#7673h ; 17663
-	LD YP,#01h ; 17666
+	farload y, pool_017673
 	ADD A,A ; 17669
 	LD B,#00h ; 1766a
 	ADD IY,BA ; 1766c
@@ -11047,6 +11046,7 @@ loc_0x017661:
 	POP IP ; 17671
 	RET
 ; ---------------------- ; 17672
+pool_017673:
 	DB 0DCh ; 17673
 	ASCII "u" ; 17674
 	DB 0E2h ; 17675

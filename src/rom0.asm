@@ -1149,7 +1149,7 @@ loc_0x00258F:
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 loc_0x00259F:
 
-	farloady screenbuf
+	farload y, screenbuf
 
 	LD L, #0
 	LD BA, #SIZE_SCREENBUF
@@ -1162,7 +1162,7 @@ loc_0x00259F:
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 loc_0x0025AE:
 
-	farloady tilemap
+	farload y, tilemap
 
 	LD L, #0
 	LD BA, #SIZE_TILEMAP
@@ -1260,7 +1260,7 @@ loc_0x0025F8:
 ; ---------------------- ; 25fb
 loc_0x0025FD:
 
-	farloady tilemap
+	farload y, tilemap
 
 loc_0x002603:
 
@@ -1475,7 +1475,7 @@ loc_0x0026C6:
 	LD A,[sfx_vol] ; 26d2
 	LD B,#00h ; 26d6
 
-	farloady lookup_2705
+	farload y, lookup_2705
 	ADD IY,BA ; 26de
 	LD A,[IY] ; 26e0
 	LD [1508h],A ; 26e1
@@ -1483,7 +1483,7 @@ loc_0x0026C6:
 	LD A,[1AB7h] ; 26e5
 	LD B,#00h ; 26e9
 
-	farloady lookup_2708
+	farload y, lookup_2708
 	ADD IY,BA ; 26f1
 	LD A,[IY] ; 26f3
 	LD [1507h],A ; 26f4
@@ -1650,7 +1650,7 @@ loc_0x002798:
 	PUSH A ; 2798
 	PUSH HL ; 279a
 
-	farloadx game_id
+	farload x, game_id
 
 	LD B,#10h ; 27a1
 
@@ -1772,7 +1772,7 @@ loc_0x0027F8:
 ; ---------------------- ; 2807
 loc_0x002808:
 
-	farloadx game_id ; 2808
+	farload x, game_id ; 2808
 
 	LD BA,[IX] ; 280e
 	LD [159Fh],BA ; 2810
@@ -1874,7 +1874,7 @@ loc_0x00287D:
 
 	CARL loc_0x002847 ; 287d
 
-	farloadx game_id
+	farload x, game_id
 	LD BA,[IX] ; 2886
 	LD [159Fh],BA ; 2888
 
@@ -1920,7 +1920,7 @@ loc_0x0028BF:
 
 	CARL loc_0x002847 ; 28c0
 
-	farloadx game_id
+	farload x, game_id
 
 	LD BA,[IX] ; 28c9
 	LD [159Fh],BA ; 28cb
@@ -1949,7 +1949,7 @@ loc_0x0028BF:
 	LD XP,#00h ; 28f7
 	CARL loc_0x002745 ; 28fa
 
-	farloadx game_id
+	farload x, game_id
 
 	LD BA,[IX] ; 2903
 	LD [159Fh],BA ; 2905
@@ -2656,7 +2656,7 @@ loc_0x002D17:
 	LD A, [1656h]
 	LD XP, A
 
-	farloady tilemap
+	farload y, tilemap
 
 	LD L, [164Eh]
 	LD H, #00h
@@ -3349,7 +3349,7 @@ loc_0x003330:
 loc_0x003390:
 
 	LD A,[1ACAh] ; 3390
-	farloady titlescreen_clock_lookup
+	farload y, titlescreen_clock_lookup
 	CARL loc_0x002586 ; 339a
 
 	RET
