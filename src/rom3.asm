@@ -519,9 +519,8 @@ loc_0x0183AC:
 	CARL loc_0x011B84 ; 183f0
 
 	LD HL,#0303h ; 183f3
-	LD IY,#897Eh ; 183f6
-	LD NB,#07h ; 183f9
-	CARL loc_0x03836A ; 183fc
+	LD IY,#@DOFF(pool_03897e)
+	farcall loc_0x03836A ; 183fc
 
 	LD HL,#0503h ; 183ff
 	LD IY,#8912h ; 18402
