@@ -625,13 +625,13 @@ loc_0x0023B1:
 	JRS Z, loc_0x0023CB
 
 	LD BA, [163Bh]
-	LD [1641h], BA
+	LD [keys_old2], BA
 
 	LD BA, [163Dh]
-	LD [1643h], BA
+	LD [keys_new_unpressed], BA
 
 	LD BA, [163Fh]
-	LD [1645h], BA
+	LD [unk1645], BA
 
 	RET
 
@@ -639,9 +639,9 @@ loc_0x0023CB:
 
 	LD BA, #0000h
 
-	LD [1641h], BA
-	LD [1643h], BA
-	LD [1645h], BA
+	LD [keys_old2], BA
+	LD [keys_new_unpressed], BA
+	LD [unk1645], BA
 
 	RET
 
@@ -1115,6 +1115,7 @@ loc_0x002575:
 ;      A: index
 ;     IY: base addr
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+global loc_0x002586
 loc_0x002586:
 
 	LD B,#00h
@@ -1478,15 +1479,15 @@ loc_0x0026C6:
 	farload y, lookup_2705
 	ADD IY,BA ; 26de
 	LD A,[IY] ; 26e0
-	LD [1508h],A ; 26e1
+	LD [mn_sfx_vol],A ; 26e1
 
-	LD A,[1AB7h] ; 26e5
+	LD A,[bgm_vol] ; 26e5
 	LD B,#00h ; 26e9
 
 	farload y, lookup_2708
 	ADD IY,BA ; 26f1
 	LD A,[IY] ; 26f3
-	LD [1507h],A ; 26f4
+	LD [mn_bgm_vol],A ; 26f4
 
 	POP IY ; 26f8
 	POP IP ; 26f9
@@ -1497,8 +1498,8 @@ loc_0x0026C6:
 loc_0x0026FB:
 
 	XOR A,A ; 26fb
-	LD [1508h],A ; 26fc
-	LD [1507h],A ; 2700
+	LD [mn_sfx_vol],A ; 26fc
+	LD [mn_bgm_vol],A ; 2700
 
 	RET
 
@@ -2792,7 +2793,7 @@ loc_0x002E0B:
 	CP A, #0FFh
 	JRS Z, loc_0x002E24
 
-	LD [14F4h], A
+	LD [mn_pending_bgm], A
 
 loc_0x002E24:
 
@@ -2982,6 +2983,7 @@ loc_0x002F16:
 	RET
 
 ; ---------------------- ; 2f6c
+global loc_0x002F6D
 loc_0x002F6D:
 
 	LD HL,#1672h ; 2f6d

@@ -1252,8 +1252,8 @@ loc_0x038958:
 	POP IP ; 3897c
 	RET
 ; ---------------------- ; 3897d
-global pool_04897D
-pool_04897D:
+global pool_03897e
+pool_03897e:
 	DB 28h, 89h ; 3897e
 	ASCII "9" ; 38980
 	DB 89h, 18h, 89h, 0CEh, 40h, 16h, 0CEh, 0D4h ; 38981

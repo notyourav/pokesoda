@@ -37,7 +37,8 @@ gfx_mudkip_close:
 DEFSECT ".rom11", CODE AT 058000H
 SECT ".rom11"
 ; ---------------------- ; 57fff
-
+global sprites_other_mons
+sprites_other_mons:
     include "graphics/other_mons.sprites"
 
     include "graphics/059c00-05a900.tiles"
@@ -2836,7 +2837,9 @@ SECT ".rom12"
 	include "graphics/faces.sprites"
     
     include "graphics/title_screen.tiles"
-    
+
+global tiles_comms
+tiles_comms:
     include "graphics/065200-065700.tiles"
 
 global tiles_outside_treecko

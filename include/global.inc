@@ -1,5 +1,7 @@
 ; GLOBAL DEFINITIONS
 
+NULL equ 0
+
 REG_BASE equ 2000h
 
 SYS_CTRL1 equ 00h
@@ -113,11 +115,47 @@ farjump MACRO line
 ENDM
 
 farload MACRO reg, address
-    IF @SCP("reg",'HL') || @SCP("reg",'hl')
-        LD HL, #@DOFF(address)
-        LD EP, #@DPAG(address)
+    IF @SCP("reg", 'CODE') || @SCP("reg", 'code')
+        LD HL, #@COFF(address)
+        LD B, #@CPAG(address)
     ELSE
-        LD I\reg, #@DOFF(address)
-        LD reg\P, #@DPAG(address)
+        IF @SCP("reg",'HL') || @SCP("reg",'hl')
+            LD HL, #@DOFF(address)
+            LD EP, #@DPAG(address)
+        ELSE
+            LD I\reg, #@DOFF(address)
+            LD reg\P, #@DPAG(address)
+        ENDIF
     ENDIF
+ENDM
+
+bgstruct MACRO _166b, prc_rate, _162b,          \
+               tilemap0, tilemap1, pet0, pet1,  \
+               _proc0, _proc1, _proc2, _proc3,  \
+               _1647, _1648, bgm, _func, _addr, \
+               _2cc2, _unk
+    DB _166b, prc_rate, _162b
+    DW @DOFF(tilemap0)
+    DB @DPAG(tilemap0)
+    DW @DOFF(tilemap1)
+    DB @DPAG(tilemap1)
+    DW @DOFF(pet0)
+    DB @DPAG(pet0)
+    DW @DOFF(pet1)
+    DB @DPAG(pet1)
+    DW @COFF(_proc0)
+    DB @CPAG(_proc0)
+    DW @COFF(_proc1)
+    DB @CPAG(_proc1)
+    DW @COFF(_proc2)
+    DB @CPAG(_proc2)
+    DW @COFF(_proc3)
+    DB @CPAG(_proc3)
+    DB _1647, _1648, bgm
+    DW @COFF(_func)
+    DB @CPAG(_func)
+    DW @DOFF(_addr)
+    DB @DPAG(_addr)
+    DB _2cc2
+    DB _unk
 ENDM

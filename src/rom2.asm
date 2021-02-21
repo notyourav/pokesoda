@@ -3101,67 +3101,205 @@ pool_0121B3:
 	DB 0A1h ; 121b6
 	ASCII "v" ; 121b7
 	DB 1Ah, 10h, 00h, 0A0h, 0ADh, 10h, 00h, 0A4h ; 121b8
-	DB 0ADh, 0C1h, 99h, 0B9h, 21h, 0CEh, 0D0h ; 121c0
-	ASCII "C" ; 121c7
-	DB 16h, 96h, 01h, 0E7h, 1Dh, 96h, 02h, 0E6h ; 121c8
-	ASCII "1" ; 121d0
-	DB 0CEh, 0D0h, 0B6h, 1Ah, 20h, 0E6h, 07h, 0B0h ; 121d1
-	DB 02h, 0CEh, 0D4h, 0FAh, 14h, 0C5h, 0B5h, 86h ; 121d9
-	DB 0B1h, 03h, 0A3h, 0F2h, 0A9h, 80h, 0ABh, 0F8h ; 121e1
-	DB 0A6h, 0A3h, 0CEh, 0C7h, 01h, 0C7h ; 121e9
-	ASCII "a", 22h, "" ; 121ef
-	DB 0CEh, 0D0h, 0Ah, 1Bh ; 121f1
-	ASCII "2" ; 121f5
-	DB 07h, 0E4h, 03h, 0B0h, 07h, 0F2h, 89h, 83h ; 121f6
-	DB 0ABh, 0AEh, 0F8h, 0CEh, 0D0h, 0Ah, 1Bh, 0CEh ; 121fe
-	DB 0D1h ; 12206
-	ASCII "E" ; 12207
-	DB 16h, 97h, 20h, 0E7h, 11h, 97h, 40h, 0E7h ; 12208
-	DB 10h, 97h, 08h, 0E7h, 0Fh, 97h, 10h, 0E6h ; 12210
-	DB 20h, 02h, 04h, 0F1h, 09h, 88h, 0F1h, 06h ; 12218
-	DB 80h, 0F1h, 03h, 12h, 04h, 22h, 07h, 0CEh ; 12220
-	DB 0D4h, 0Ah, 1Bh, 0CEh, 0D0h, 0B6h, 1Ah, 20h ; 12228
-	DB 0E6h, 07h, 0B0h, 04h, 0CEh, 0D4h, 0FAh, 14h ; 12230
-	DB 0CEh, 0D0h, 0Ah, 1Bh, 00h, 0B1h, 00h, 0A6h ; 12238
-	DB 0A3h, 0C7h ; 12240
-	ASCII "Q", 22h, "" ; 12242
-	DB 0CEh, 0C7h, 01h, 0CFh ; 12244
-	ASCII "B" ; 12248
-	DB 0CFh, 0D8h, 0ABh, 0AEh, 0F2h ; 12249
-	ASCII "3" ; 1224e
-	DB 0D7h, 0F8h, 0Ch, 0Ch, 24h, 0Ch, 3Ch, 0Ch ; 1224f
+	DB 0ADh, 0C1h, 99h, 0B9h, 21h
+; ---------------------- ; 121c0
+loc_0x0121C5:
+	LD A,[keys_new_unpressed] ; 121c5
+	BIT A,#KEY_A ; 121c9
+	JRS NZ,loc_0x0121E9 ; 121cb
+	BIT A,#KEY_B ; 121cd
+	JRS Z,loc_0x012201 ; 121cf
+	LD A,[1AB6h] ; 121d1
+	AND A,A ; 121d5
+	JRS Z,loc_0x0121DE ; 121d6
+	LD A,#02h ; 121d8
+	LD [14FAh],A ; 121da
+loc_0x0121DE:
+	LD HL,#86B5h ; 121de
+	LD B,#03h ; 121e1
+	PUSH IY ; 121e3
+	CARL loc_0x00228F ; 121e4
+	POP IY ; 121e7
+	RET
+; ---------------------- ; 121e8
+loc_0x0121E9:
+	PUSH IP ; 121e9
+	PUSH IY ; 121ea
+	LD YP,#@DPAG(pool_012261) ; 121eb
+	LD IY,#@DOFF(pool_012261) ; 121ee
+	LD A,[1B0Ah] ; 121f1
+	CP A,#07h ; 121f5
+	JRS C,loc_0x0121FB ; 121f7
+	LD A,#07h ; 121f9
+loc_0x0121FB:
+	CARL loc_0x002586 ; 121fb
+	POP IY ; 121fe
+	POP IP ; 121ff
+	RET
+; ---------------------- ; 12200
+loc_0x012201:
+	LD A,[1B0Ah] ; 12201
+	LD B,[unk1645] ; 12205
+	BIT B,#KEY_LEFT ; 12209
+	JRS NZ,loc_0x01221D ; 1220b
+	BIT B,#KEY_RIGHT ; 1220d
+	JRS NZ,loc_0x012220 ; 1220f
+	BIT B,#KEY_UP ; 12211
+	JRS NZ,loc_0x012223 ; 12213
+	BIT B,#KEY_DOWN ; 12215
+	JRS Z,loc_0x012238 ; 12217
+	ADD A,#04h ; 12219
+	JRS loc_0x012225
+; ---------------------- ; 1221b
+loc_0x01221D:
+	DEC A ; 1221d
+	JRS loc_0x012225
+; ---------------------- ; 1221e
+loc_0x012220:
+	INC A ; 12220
+	JRS loc_0x012225
+; ---------------------- ; 12221
+loc_0x012223:
+	SUB A,#04h ; 12223
+loc_0x012225:
+	AND A,#07h ; 12225
+	LD [1B0Ah],A ; 12227
+	LD A,[1AB6h] ; 1222b
+	AND A,A ; 1222f
+	JRS Z,loc_0x012238 ; 12230
+	LD A,#04h ; 12232
+	LD [14FAh],A ; 12234
+loc_0x012238:
+	LD A,[1B0Ah] ; 12238
+	ADD A,A ; 1223c
+	LD B,#00h ; 1223d
+	PUSH IP ; 1223f
+	PUSH IY ; 12240
+	LD IY,#2251h ; 12241
+	LD YP,#01h ; 12244
+	ADD IY,BA ; 12247
+	LD BA,[IY] ; 12249
+	POP IY ; 1224b
+	POP IP ; 1224c
+	CARL loc_0x007982 ; 1224d
+	RET
+; ---------------------- ; 12250
+	DB 0Ch, 0Ch, 24h, 0Ch, 3Ch, 0Ch ; 12251
 	ASCII "T" ; 12257
 	DB 0Ch, 0Ch, 24h, 24h, 24h, 3Ch, 24h ; 12258
-	ASCII "T$q" ; 1225f
-	DB 0A2h, 0A0h, 0A2h, 0B4h, 0A2h, 28h, 0A3h, 0D4h ; 12262
-	DB 0A2h, 00h, 0A3h, 14h, 0A3h, 0E8h, 0A2h, 0CEh ; 1226a
-	DB 0D0h, 0B6h, 1Ah, 20h, 0E6h, 07h, 0B0h, 06h ; 12272
-	DB 0CEh, 0D4h, 0FAh, 14h, 0B0h, 01h, 0CEh, 0D4h ; 1227a
-	DB 22h, 1Bh, 0C5h, 0D8h, 1Ah, 0CEh, 3Dh, 01h ; 12282
-	DB 0CEh, 0C4h, 03h, 0F2h, 07h, 0EAh, 0CEh, 0D1h ; 1228a
-	DB 23h, 1Bh, 0B0h, 28h, 0BCh, 12h, 1Bh, 0C5h ; 12292
-	DB 0B5h, 86h, 0B1h, 03h, 0F1h, 5Bh, 0CEh, 0D0h ; 1229a
-	DB 0B6h, 1Ah, 20h, 0E6h, 07h, 0B0h, 01h, 0CEh ; 122a2
-	DB 0D4h, 0FAh, 14h, 0C5h, 9Fh, 95h, 0B1h, 03h ; 122aa
-	DB 0F1h ; 122b2
-	ASCII "G" ; 122b3
-	DB 0CEh, 0D0h, 0B6h, 1Ah, 20h, 0E6h, 07h, 0B0h ; 122b4
-	DB 01h, 0CEh, 0D4h, 0FAh, 14h, 0B0h, 03h, 0CEh ; 122bc
-	DB 0D4h, 15h, 1Bh, 0CEh, 0C4h, 03h, 0F2h, 05h ; 122c4
-	DB 0EBh, 0C5h, 0B8h, 86h, 0B1h, 03h, 0F1h, 27h ; 122cc
-	DB 0CEh, 0D0h, 0B6h, 1Ah, 20h, 0E6h, 07h, 0B0h ; 122d4
-	DB 01h, 0CEh, 0D4h, 0FAh, 14h, 0C5h, 0D7h, 91h ; 122dc
-	DB 0B1h, 03h, 0F1h, 13h, 0CEh, 0D0h, 0B6h, 1Ah ; 122e4
-	DB 20h, 0E6h, 07h, 0B0h, 01h, 0CEh, 0D4h, 0FAh ; 122ec
-	DB 14h, 0C5h, 0E8h, 0A2h, 0B1h, 03h, 0A3h, 0F2h ; 122f4
-	DB 92h, 7Fh, 0ABh, 0F8h, 0CEh, 0D0h, 0B6h, 1Ah ; 122fc
-	DB 20h, 0E6h, 07h, 0B0h, 08h, 0CEh, 0D4h, 0FAh ; 12304
-	DB 14h, 0C5h, 28h, 0E8h, 0B1h, 03h, 0F1h, 0E7h ; 1230c
-	DB 0CEh, 0D0h, 0B6h, 1Ah, 20h, 0E6h, 07h, 0B0h ; 12314
-	DB 01h, 0CEh, 0D4h, 0FAh, 14h, 0C5h, 0D0h, 0A7h ; 1231c
-	DB 0B1h, 03h, 0F1h, 0D3h, 0CEh, 0D0h, 0B6h, 1Ah ; 12324
-	DB 20h, 0E6h, 07h, 0B0h, 01h, 0CEh, 0D4h, 0FAh ; 1232c
-	DB 14h, 0C5h, 0BCh, 97h, 0B1h, 03h, 0F1h, 0BFh ; 12334
+	ASCII "T$" ; 1225f
+pool_012261:
+	DW @COFF(loc_0x012271), @COFF(loc_0x0122A0)
+    DW @COFF(loc_0x0122B4), @COFF(loc_0x012328)
+    DW @COFF(loc_0x0122D4), @COFF(loc_0x012300)
+    DW @COFF(loc_0x012314), @COFF(loc_0x0122E8)
+
+; ---------------------- ; 1226a
+loc_0x012271:
+	LD A,[1AB6h] ; 12271
+	AND A,A ; 12275
+	JRS Z,loc_0x01227E ; 12276
+	LD A,#06h ; 12278
+	LD [14FAh],A ; 1227a
+loc_0x01227E:
+	LD A,#01h ; 1227e
+	LD [1B22h],A ; 12280
+	LD HL,#1AD8h ; 12284
+	XOR [HL],#01h ; 12287
+	LD NB,#03h ; 1228a
+	CARL loc_0x018C96 ; 1228d
+	LD B,[1B23h] ; 12290
+	LD A,#28h ; 12294
+	LD [1B12h],BA ; 12296
+	LD HL,#86B5h ; 12299
+	LD B,#03h ; 1229c
+	JRS loc_0x0122FA
+; ---------------------- ; 1229e
+loc_0x0122A0:
+	LD A,[1AB6h] ; 122a0
+	AND A,A ; 122a4
+	JRS Z,loc_0x0122AD ; 122a5
+	LD A,#01h ; 122a7
+	LD [14FAh],A ; 122a9
+loc_0x0122AD:
+	LD HL,#959Fh ; 122ad
+	LD B,#03h ; 122b0
+	JRS loc_0x0122FA
+; ---------------------- ; 122b2
+loc_0x0122B4:
+	LD A,[1AB6h] ; 122b4
+	AND A,A ; 122b8
+	JRS Z,loc_0x0122C1 ; 122b9
+	LD A,#01h ; 122bb
+	LD [14FAh],A ; 122bd
+loc_0x0122C1:
+	LD A,#03h ; 122c1
+	LD [1B15h],A ; 122c3
+	LD NB,#03h ; 122c7
+	CARL loc_0x018DD1 ; 122ca
+	LD HL,#86B8h ; 122cd
+	LD B,#03h ; 122d0
+	JRS loc_0x0122FA
+; ---------------------- ; 122d2
+loc_0x0122D4:
+	LD A,[1AB6h] ; 122d4
+	AND A,A ; 122d8
+	JRS Z,loc_0x0122E1 ; 122d9
+	LD A,#01h ; 122db
+	LD [14FAh],A ; 122dd
+loc_0x0122E1:
+	LD HL,#91D7h ; 122e1
+	LD B,#03h ; 122e4
+	JRS loc_0x0122FA
+; ---------------------- ; 122e6
+loc_0x0122E8:
+	LD A,[1AB6h] ; 122e8
+	AND A,A ; 122ec
+	JRS Z,loc_0x0122F5 ; 122ed
+	LD A,#01h ; 122ef
+	LD [14FAh],A ; 122f1
+loc_0x0122F5:
+	LD HL,#0A2E8h ; 122f5
+	LD B,#03h ; 122f8
+loc_0x0122FA:
+	PUSH IY ; 122fa
+	CARL loc_0x00228F ; 122fb
+	POP IY ; 122fe
+	RET
+; ---------------------- ; 122ff
+loc_0x012300:
+	LD A,[1AB6h] ; 12300
+	AND A,A ; 12304
+	JRS Z,loc_0x01230D ; 12305
+	LD A,#08h ; 12307
+	LD [14FAh],A ; 12309
+loc_0x01230D:
+	LD HL,#0E828h ; 1230d
+	LD B,#03h ; 12310
+	JRS loc_0x0122FA
+; ---------------------- ; 12312
+loc_0x012314:
+	LD A,[1AB6h] ; 12314
+	AND A,A ; 12318
+	JRS Z,loc_0x012321 ; 12319
+	LD A,#01h ; 1231b
+	LD [14FAh],A ; 1231d
+loc_0x012321:
+	LD HL,#0A7D0h ; 12321
+	LD B,#03h ; 12324
+	JRS loc_0x0122FA
+; ---------------------- ; 12326
+loc_0x012328:
+	LD A,[1AB6h] ; 12328
+	AND A,A ; 1232c
+	JRS Z,loc_0x012335 ; 1232d
+	LD A,#01h ; 1232f
+	LD [14FAh],A ; 12331
+loc_0x012335:
+	LD HL,#97BCh ; 12335
+	LD B,#03h ; 12338
+	JRS loc_0x0122FA
+; ---------------------- ; 1233a
 	DB 0F8h ; 1233c
 	ASCII "q" ; 1233d
 	DB 9Ah, 0C5h, 0A1h, 0B9h, 21h, 0C5h, 0CBh, 1Ah ; 1233e
