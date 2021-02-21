@@ -4661,8 +4661,7 @@ loc_0x00B2A5:
 	PUSH IP ; 0b2a5
 	PUSH IX ; 0b2a6
 	PUSH IY ; 0b2a7
-	LD IX,#1AECh ; 0b2a8
-	LD XP,#00h ; 0b2ab
+	farload x, 1AECh
 	LD HL,#1B8Ah ; 0b2ae
 	LD B,#07h ; 0b2b1
 loc_0x00B2B3:
@@ -4670,11 +4669,9 @@ loc_0x00B2B3:
 	INC IX ; 0b2b4
 	INC HL ; 0b2b5
 	DJR NZ,loc_0x00B2B3 ; 0b2b6
-	LD IX,#15AAh ; 0b2b8
-	LD XP,#00h ; 0b2bb
+	farload x, 15AAh
 	CARL loc_0x004706 ; 0b2be
-	LD IX,#15AFh ; 0b2c1
-	LD XP,#00h ; 0b2c4
+	farload x, 15AFh
 	CARL loc_0x00B2F0 ; 0b2c7
 	LD IX,#1B83h ; 0b2ca
 	LD A,[IX+00h] ; 0b2cd
@@ -4701,10 +4698,10 @@ loc_0x00B2EC:
 	POP IP ; 0b2ee
 	RET
 ; ---------------------- ; 0b2ef
+global loc_0x00B2F0
 loc_0x00B2F0:
 	LD HL,#1B8Fh ; 0b2f0
-	LD IY,#1B88h ; 0b2f3
-	LD YP,#00h ; 0b2f6
+	farload y, 1B88h
 	LD A,[IX] ; 0b2f9
 	SUB A,[HL] ; 0b2fa
 	DEC HL ; 0b2fb

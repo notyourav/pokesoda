@@ -1102,6 +1102,7 @@ loc_0x002575:
 ;      A: index
 ;     IY: base addr
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+global loc_0x002586
 loc_0x002586:
 
 	LD B,#00h
@@ -2788,7 +2789,7 @@ loc_0x002E0B:
 	CP A, #0FFh
 	JRS Z, loc_0x002E24
 
-	LD [14F4h], A
+	LD [mn_pending_bgm], A
 
 loc_0x002E24:
 
@@ -2984,6 +2985,7 @@ loc_0x002F16:
 	RET
 
 ; ---------------------- ; 2f6c
+global loc_0x002F6D
 loc_0x002F6D:
 
 	LD HL,#1672h ; 2f6d

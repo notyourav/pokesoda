@@ -6279,7 +6279,10 @@ tiles_outside_torchick:
 	DB 15h, 16h, 17h, 18h, 19h, 1Ah, 1Bh, 20h ; 37e29
 	DB 21h, 22h, 23h, 24h, 25h, 26h, 27h, 28h ; 37e31
 	DB 29h, 2Ah, 2Bh ; 37e39
-	ASCIZ "0123456789:;@ABCDEFGHIJKPQRSTUVWXYZ[`abcdefghijkpqrstuvwxyz{" ; 37e3c
+	ASCII "0123456789:;@ABCDEFGHIJKPQRSTUVWXYZ[`abcdefghijkpqrstuvwxyz{" ; 37e3c
+global unk_037e78
+unk_037e78:
+    DB 00h
 	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 37e79
 	DB 00h, 00h, 00h, 00h, 00h, 01h, 02h, 03h ; 37e81
 	DB 00h, 04h, 05h, 06h, 07h, 08h, 00h, 00h ; 37e89
