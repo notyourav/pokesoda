@@ -17,3 +17,6 @@ src/splash.asm
 *.sprites
 *.bmp
 *.pyc
+tools/toolchain/bin-windows/pokemini.cfg
+tools/toolchain/bin-windows/pokemini_debug.cfg
+syms.txt

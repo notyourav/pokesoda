@@ -4,25 +4,34 @@
     DEFSECT ".rom8", CODE AT 040000H
     SECT ".rom8"
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-    
+global gfx_torchick
+gfx_torchick:
     include "graphics/torchic.sprites"
-    
+
+global gfx_treecko
+gfx_treecko:
     include "graphics/treecko.sprites"
 	
 DEFSECT ".rom9", CODE AT 048000H
 SECT ".rom9"
 ; ---------------------- ; 47fff
 
+global gfx_mudkip
+gfx_mudkip:
     include "graphics/mudkip.sprites"
 
+global gfx_torchick_close
+gfx_torchick_close:
     include "graphics/torchic_closeup.sprites"
 	
 DEFSECT ".rom10", CODE AT 050000H
 SECT ".rom10"
 ; ---------------------- ; 4ffff
-
+global gfx_treecko_close
+gfx_treecko_close:
     include "graphics/treecko_closeup.sprites"
-
+global gfx_mudkip_close
+gfx_mudkip_close:
 	include "graphics/mudkip_closeup.sprites"
     
 DEFSECT ".rom11", CODE AT 058000H

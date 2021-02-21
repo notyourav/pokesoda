@@ -1,0 +1,3 @@
+[submodule "tools/toolchain"]
+	path = tools/toolchain
+	url = https://github.com/notyourav/c88toolchain
