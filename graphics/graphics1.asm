@@ -4,21 +4,36 @@
 	DEFSECT ".rom4", CODE AT 020000H
 	SECT ".rom4"
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
+global sprites_settings
+sprites_settings:
 	include "graphics/settings.sprites"
     
+global unk_sprites_021000
+unk_sprites_021000:
     include "graphics/021000-021700.sprites"
-    
+
+global unk_sprites_021700
+unk_sprites_021700:
 	include "graphics/021700.sprites"
     
+global tiles_eeprom_font
+tiles_eeprom_font:
     include "graphics/eeprom_font.tiles"
     
+global tiles_eeprom_dialogues
+tiles_eeprom_dialogues:
     include "graphics/eeprom_dialogues.tiles"
     
+global tiles_name_entry
+tiles_name_entry:
     include "graphics/name_entry.tiles"
     
+global unk_tiles_dialogues
+unk_tiles_dialogues:
     include "graphics/unk_dialogues.tiles"
     
+global tiles_datetime
+tiles_datetime:
 	include "graphics/datetime.tiles"
 
 global unk_graphics_024a00
@@ -498,7 +513,11 @@ unk_graphics_024e43:
 	DB 0DAh, 0FFh, 0AAh, 0E0h, 0FFh, 0E8h, 0E6h, 0FFh ; 25132
 	DB 2Bh, 0EDh, 0FFh ; 2513a
 	ASCII "p" ; 2513d
-	DB 0F3h, 0FFh, 0B8h, 0F9h, 0FFh, 00h, 01h, 01h ; 2513e
+	DB 0F3h, 0FFh, 0B8h, 0F9h, 0FFh
+
+global unk_graphics_025143
+unk_graphics_025143:
+    DB 00h, 01h, 01h ; 2513e
 	DB 01h, 02h, 03h, 04h, 05h, 01h, 01h, 01h ; 25146
 	DB 06h, 09h, 0Ah, 0Bh ; 2514e
 	ASCII "z{" ; 25152
@@ -6115,6 +6134,8 @@ SECT ".rom6"
 
     include "graphics/numbers.sprites"
 
+global sprites_dialogue
+sprites_dialogue:
     include "graphics/dialogue.sprites"
     
     include "graphics/034800-035000.tiles"
@@ -6126,7 +6147,9 @@ tiles_outside_torchick:
     include "graphics/outside.tiles"
     
     include "graphics/036c00-037180.tiles"
-    
+
+global tiles_dialogue_font
+tiles_dialogue_font:
     include "graphics/dialogue_font.tiles"
     
 	DB 00h
@@ -6153,7 +6176,11 @@ tiles_outside_torchick:
 	DB 00h, 00h, 00h ; 37a6a
 	ASCIZ "OKLFGLLP" ; 37a6d
 	DB 00h, 00h, 00h ; 37a76
-	ASCIZ "QKLRSTLUVVVVWKLXYZ[[[[[[[\]^_`adbefbgac" ; 37a79
+	ASCII "QKLRSTLUVVVVWKLXYZ[[[[[[[\]^_`adbefbgac" ; 37a79
+
+global unk_graphics_037AA0
+unk_graphics_037AA0:
+    DB 00h
 	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 37aa1
 	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 37aa9
 	DB 00h, 00h, 00h, 00h, 00h, 00h, 00h, 00h ; 37ab1

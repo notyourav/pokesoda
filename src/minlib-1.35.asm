@@ -3,30 +3,30 @@ minlib_reset_audio_registers:
 	LD BR,#20h ; 3b2b
 	LD EP,#00h ; 3b2d
 
-	LD [BR:48h],#82h ; 3b30
-	LD [BR:49h],#00h ; 3b33
+	LD [BR:TMR3_CTRL_L],#(TMR_16BIT | TMR_RESET)
+	LD [BR:TMR3_CTRL_H],#00h ; 3b33
 
-	AND [BR:70h],#0FCh ; 3b36
-	AND [BR:71h],#0FCh ; 3b39
-	OR [BR:71h],#03h ; 3b3c
+	AND [BR:AUD_CTRL],#0FFh^3
+	AND [BR:AUD_VOL],#0FFh^3
+	OR [BR:AUD_VOL],#3
 
-	AND [BR:19h],#0DFh ; 3b3f
-	OR [BR:19h],#20h ; 3b42
-	LD [BR:1Ch],#08h ; 3b45
-	LD [BR:1Dh],#00h ; 3b48
-	AND [BR:1Ah],#0Fh ; 3b4b
-	OR [BR:1Ah],#0D0h ; 3b4e
-	AND [BR:1Bh],#0FDh ; 3b51
+	AND [BR:TMR1_OSC],#0DFh ; 3b3f
+	OR [BR:TMR1_OSC],#20h ; 3b42
+	LD [BR:TMR3_SCALE],#08h ; 3b45
+	LD [BR:TMR3_OSC],#00h ; 3b48
+	AND [BR:TMR2_SCALE],#0Fh ; 3b4b
+	OR [BR:TMR2_SCALE],#0D0h ; 3b4e
+	AND [BR:TMR2_OSC],#0FDh ; 3b51
 
-	AND [BR:20h],#0C0h ; 3b54
-	OR [BR:20h],#20h ; 3b57
+	AND [BR:IRQ_PRI1],#0C0h ; 3b54
+	OR [BR:IRQ_PRI1],#20h ; 3b57
 
-	AND [BR:23h],#80h ; 3b5a
-	OR [BR:23h],#20h ; 3b5d
+	AND [BR:IRQ_ENA1],#IRQ1_PRC_COMPLETE
+	OR [BR:IRQ_ENA1],#IRQ1_TIM2_HI_UF
 
-	AND [BR:38h],#7Fh ; 3b60
-	LD [BR:3Bh],#0FFh ; 3b63
-	LD [BR:39h],#06h ; 3b66
+	AND [BR:TMR2_CTRL_L],#0FFh^TMR_16BIT
+	LD [BR:TMR2_PRE_H],#0FFh ; 3b63
+	LD [BR:TMR2_CTRL_H],#(TMR_ENABLE | TMR_RESET)
 
 	CARL loc_0x003FE1 ; 3b69
 
@@ -41,11 +41,11 @@ loc_0x003B77:
 
 	LD BR,#20h ; 3b77
 	LD EP,#00h ; 3b79
-	AND [BR:23h],#0DFh ; 3b7c
+	AND [BR:IRQ_ENA1],#0DFh ; 3b7c
 
-	LD A,[BR:71h] ; 3b7f
-	AND A,#0FCh ; 3b81
-	LD [BR:71h],A ; 3b83
+	LD A,[BR:AUD_VOL] ; 3b7f
+	AND A,#0FFh^3
+	LD [BR:AUD_VOL],A ; 3b83
 
 	RET
 
@@ -54,7 +54,7 @@ loc_0x003B86:
 
 	LD BR,#20h ; 3b86
 	LD EP,#00h ; 3b88
-	OR [BR:23h],#20h ; 3b8b
+	OR [BR:IRQ_ENA1],#IRQ1_TIM2_HI_UF
 
 	RET
 
@@ -2701,7 +2701,7 @@ loc_0x004A54:
     
 	JRL NZ,loc_0x004B01 ; 4a9e
     
-	OR [BR:02h],#02h ; 4aa1
+	OR [BR:SYS_CTRL3],#RTC_VALID ; 4aa1
     
 	JRL loc_0x004AFF
     
@@ -2731,36 +2731,36 @@ loc_0x004AB4:
 	INC IX ; 4aba
 	INC IX ; 4abb
 
-	LD A,[BR:0Bh] ; 4abc
+	LD A,[BR:SEC_CNT_HI] ; 4abc
 	LD [IX],A ; 4abe
 
 	DEC IX ; 4abf
 
-	LD A,[BR:0Ah] ; 4ac0
+	LD A,[BR:SEC_CNT_MID] ; 4ac0
 	LD [IX],A ; 4ac2
 
 	DEC IX ; 4ac3
 
-	LD A,[BR:09h] ; 4ac4
+	LD A,[BR:SEC_CNT_LO] ; 4ac4
 	LD [IX],A ; 4ac6
 
 	INC IX ; 4ac7
 	INC IX ; 4ac8
 
-	LD B,[BR:0Bh] ; 4ac9
+	LD B,[BR:SEC_CNT_HI] ; 4ac9
 	LD A,[IX] ; 4acb
 	CP A,B ; 4acc
 	JRL NZ,loc_0x004AFB ; 4acd
 
 	DEC IX ; 4ad0
-	LD B,[BR:0Ah] ; 4ad1
+	LD B,[BR:SEC_CNT_MID] ; 4ad1
 	LD A,[IX] ; 4ad3
 	CP A,B ; 4ad4
 	JRL NZ,loc_0x004AFB ; 4ad5
 
 	DEC IX ; 4ad8
 
-	LD B,[BR:09h] ; 4ad9
+	LD B,[BR:SEC_CNT_LO] ; 4ad9
 	LD A,[IX] ; 4adb
 	CP A,B ; 4adc
 	JRL NZ,loc_0x004AFB ; 4add
@@ -2768,21 +2768,21 @@ loc_0x004AB4:
 	INC IX ; 4ae0
 	INC IX ; 4ae1
 
-	LD B,[BR:0Bh] ; 4ae2
+	LD B,[BR:SEC_CNT_HI] ; 4ae2
 	LD A,[IX] ; 4ae4
 	CP A,B ; 4ae5
 	JRL NZ,loc_0x004AFB ; 4ae6
 
 	DEC IX ; 4ae9
 
-	LD B,[BR:0Ah] ; 4aea
+	LD B,[BR:SEC_CNT_MID] ; 4aea
 	LD A,[IX] ; 4aec
 	CP A,B ; 4aed
 	JRL NZ,loc_0x004AFB ; 4aee
 
 	DEC IX ; 4af1
 
-	LD B,[BR:09h] ; 4af2
+	LD B,[BR:SEC_CNT_LO] ; 4af2
 	LD A,[IX] ; 4af4
 	CP A,B ; 4af5
 	JRL NZ,loc_0x004AFB ; 4af6
@@ -2866,8 +2866,8 @@ loc_0x004B1E:
 loc_0x004B25:
 	LD BR,#20h ; 4b25
 	LD EP,#00h ; 4b27
-	LD [BR:60h],#32h ; 4b2a
-	LD [BR:61h],#00h ; 4b2d
+	LD [BR:IO_DIR],#(IR_DIS | RUMBLE | IR_TX)
+	LD [BR:IO_DATA],#00h
 	LD [BR:62h],#00h ; 4b30
 	LD B,#0C8h ; 4b33
 loc_0x004B35:
@@ -2910,13 +2910,13 @@ loc_0x004B73:
 	LD A,[eeprom_buffer + 4] ; 4b81
 	CP A,#01h ; 4b85
 	JRS Z,loc_0x004BA1 ; 4b87
-	LD [BR:2Ah],#80h ; 4b89
+	LD [BR:IRQ_ACT4],#IRQ4_IR_RECV ; 4b89
 	LD IY,#0300h ; 4b8c
 loc_0x004B8F:
 	NOP ; 4b8f
 	DEC IY ; 4b90
 	JRL Z,loc_0x004B99 ; 4b91
-	BIT [BR:2Ah],#80h ; 4b94
+	BIT [BR:IRQ_ACT4],#IRQ4_IR_RECV ; 4b94
 	JRS Z,loc_0x004B8F ; 4b97
 loc_0x004B99:
 	LD A,#50h ; 4b99
@@ -3606,7 +3606,7 @@ loc_0x004E94:
 	LD A,#00h ; 4ea7
 	LD H,#12h ; 4ea9
 	LD L,#00h ; 4eab
-	LD [BR:2Ah],#80h ; 4ead
+	LD [BR:IRQ_ACT4],#IRQ4_IR_RECV
 	CP IY,#0018h ; 4eb0
 	JRS C,loc_0x004EBA ; 4eb3
 	SUB IY,#0017h ; 4eb5
@@ -3618,7 +3618,7 @@ loc_0x004EBD:
 	NOP ; 4ebd
 	DEC IY ; 4ebe
 	JRL Z,loc_0x005601 ; 4ebf
-	BIT [BR:2Ah],#80h ; 4ec2
+	BIT [BR:IRQ_ACT4],#IRQ4_IR_RECV
 	JRS Z,loc_0x004EBD ; 4ec5
 	LD [u8_150a],IY ; 4ec7
 	NOP ; 4eca
@@ -5001,7 +5001,7 @@ loc_0x005631:
 ; ---------------------- ; 5633
 loc_0x005634:
 	LD A,A ; 5634
-	LD [BR:2Ah],#80h ; 5635
+	LD [BR:IRQ_ACT4],#IRQ4_IR_RECV
 	DEC B ; 5638
 	JRS NZ,loc_0x00565E ; 5639
 	LD B,#0Ah ; 563b
@@ -5009,7 +5009,7 @@ loc_0x005634:
 loc_0x00563F:
 	DEC A ; 563f
 	JRS Z,loc_0x005683 ; 5640
-	BIT [BR:2Ah],#80h ; 5642
+	BIT [BR:IRQ_ACT4],#IRQ4_IR_RECV
 	JRS Z,loc_0x00563F ; 5645
 	CP L,#0FFh ; 5647
 	JRS NZ,loc_0x005654 ; 564a
@@ -5056,7 +5056,7 @@ loc_0x00565E:
 	NOP ; 5675
 	NOP ; 5676
 	NOP ; 5677
-	BIT [BR:2Ah],#80h ; 5678
+	BIT [BR:IRQ_ACT4],#IRQ4_IR_RECV
 	JRS NZ,loc_0x005680 ; 567b
 	LD A,#00h ; 567d
 	RET
@@ -5090,15 +5090,15 @@ loc_0x0056AF:
 	LD EP,#00h ; 56b7
 	LD EP,#00h ; 56ba
 	LD BR,#20h ; 56bd
-	LD L,[BR:23h] ; 56bf
-	LD H,[BR:24h] ; 56c1
+	LD L,[BR:IRQ_ENA1] ; 56bf
+	LD H,[BR:IRQ_ENA2] ; 56c1
 	PUSH HL ; 56c3
-	LD L,[BR:26h] ; 56c4
+	LD L,[BR:IRQ_ENA4] ; 56c4
 	LD H,[BR:PRC_MODE] ; 56c6
 	PUSH HL ; 56c8
-	LD [BR:23h],#00h ; 56c9
-	AND [BR:24h],#03h ; 56cc
-	AND [BR:26h],#3Fh ; 56cf
+	LD [BR:IRQ_ENA1],#00h ; 56c9
+	AND [BR:IRQ_ENA2],#(IRQ1_TIM3_HI_UF | IRQ1_TIM3_PIVOT)
+	AND [BR:IRQ_ENA4],#0FFh^(IRQ4_IR_RECV | IRQ4_SHOCK) ; 56cf
 loc_0x0056D2:
 	CARL loc_0x005A1D ; 56d2
 	CP A,#00h ; 56d5
@@ -5137,16 +5137,16 @@ loc_0x00571D:
 	CARL loc_0x005A0D ; 571d
 	LD EP,#00h ; 5720
 	LD BR,#20h ; 5723
-	LD [BR:27h],#0FFh ; 5725
-	LD [BR:28h],#0FFh ; 5728
-	LD [BR:29h],#0FFh ; 572b
-	LD [BR:2Ah],#0FFh ; 572e
+	LD [BR:IRQ_ACT1],#0FFh ; 5725
+	LD [BR:IRQ_ACT2],#0FFh ; 5728
+	LD [BR:IRQ_ACT3],#0FFh ; 572b
+	LD [BR:IRQ_ACT4],#0FFh ; 572e
 	POP HL ; 5731
-	LD [BR:26h],L ; 5732
+	LD [BR:IRQ_ENA4],L ; 5732
 	LD [BR:PRC_MODE],H ; 5734
 	POP HL ; 5736
-	LD [BR:23h],L ; 5737
-	LD [BR:24h],H ; 5739
+	LD [BR:IRQ_ENA1],L ; 5737
+	LD [BR:IRQ_ENA2],H ; 5739
 	RET
 ; ---------------------- ; 573b
 loc_0x00573C:
@@ -5156,8 +5156,8 @@ loc_0x00573C:
 	LD [152Ah],IX ; 5745
 	LD A,#00h ; 5748
 	LD [1528h],A ; 574a
-	LD [BR:2Ah],#80h ; 574e
-	OR [BR:26h],#80h ; 5751
+	LD [BR:IRQ_ACT4],#IRQ4_IR_RECV
+	OR [BR:IRQ_ENA4],#IRQ4_IR_RECV
 	RET
 ; ---------------------- ; 5754
 loc_0x005755:
@@ -5165,7 +5165,7 @@ loc_0x005755:
 	AND SC,#0CFh ; 5757
 	LD EP,#00h ; 5759
 	LD BR,#20h ; 575c
-	LD [BR:2Ah],#80h ; 575e
+	LD [BR:IRQ_ACT4],#IRQ4_IR_RECV
 	CARL loc_0x005959 ; 5761
 	CP A,#00h ; 5764
 	JRS Z,loc_0x005776 ; 5766

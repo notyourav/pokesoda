@@ -2303,7 +2303,11 @@ loc_0x0394F1:
 	ASCII "L" ; 395e5
 	DB 0Dh, 0B0h, 00h, 0CEh ; 395e6
 	ASCII "D" ; 395ea
-	DB 0Eh, 0F8h, 0F8h, 0DEh, 95h, 0EDh, 95h, 0CEh ; 395eb
+	DB 0Eh, 0F8h, 0F8h
+
+global pool_0395ee
+pool_0395ee:
+    DB 0DEh, 95h, 0EDh, 95h, 0CEh
 	DB 95h, 3Eh, 82h ; 395f3
 	ASCII "n" ; 395f6
 	DB 82h, 00h, 02h ; 395f7
@@ -2327,7 +2331,11 @@ loc_0x0394F1:
 	DB 0CFh ; 39637
 	ASCII "B" ; 39638
 	DB 0CFh, 0D8h, 0F2h, 7Fh, 0ECh, 0F8h, 0F6h, 95h ; 39639
-	DB 04h, 96h, 12h, 96h, 1Fh, 96h, 0F4h, 95h ; 39641
+	DB 04h, 96h ; 39641
+
+global pool_039643
+pool_039643:
+    DB 12h, 96h, 1Fh, 96h, 0F4h, 95h
 	DB 0A6h, 0A2h, 0A3h, 0F2h, 86h, 8Ch, 0F2h, 3Eh ; 39649
 	DB 8Ch, 0C4h, 0F2h, 82h, 0F2h ; 39651
 	ASCII "q" ; 39656

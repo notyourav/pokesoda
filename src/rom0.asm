@@ -1293,6 +1293,7 @@ loc_0x002612:
 
 	JRS loc_0x0025FD
 
+global loc_0x00261A
 loc_0x00261A:
 
 	LD BA,#0C10h ; 261a
@@ -2705,8 +2706,8 @@ dummy_func:
 ;   Args:
 ;     IY: offset
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-global loc_0x002D72
-loc_0x002D72:
+global load_bgstruct
+load_bgstruct:
 
 	LD EP, #00h
 
@@ -3898,7 +3899,7 @@ loc_0x0036AC:
 
 	LD IY,#@DOFF(data_3686) ; 36c4
 	LD YP,#@DPAG(data_3686) ; 36c7
-	CARL loc_0x002D72 ; 36ca
+	CARL load_bgstruct ; 36ca
 
 	LD IY,#0012h ; 36cd
 	farcall loc_0x011B84
@@ -3946,7 +3947,7 @@ loc_0x003718:
 
 	LD IY,#@DOFF(data_36f2) ; 3730
 	LD YP,#@DPAG(data_36f2) ; 3733
-	CARL loc_0x002D72 ; 3736
+	CARL load_bgstruct ; 3736
 
 	LD IY,#0012h ; 3739
 	farcall loc_0x011B84
@@ -4015,7 +4016,7 @@ loc_0x00379F:
 
 	LD IY,#@DOFF(data_3779) ; 37b7
 	LD YP,#@DPAG(data_3779) ; 37ba
-	CARL loc_0x002D72 ; 37bd
+	CARL load_bgstruct ; 37bd
 
 	LD IY,#0012h ; 37c0
 	farcall loc_0x011B84 ; 37c6
@@ -4065,7 +4066,7 @@ loc_0x00380B:
 
 	LD IY,#@DOFF(data_37e5) ; 3823
 	LD YP,#@DPAG(data_37e5) ; 3826
-	CARL loc_0x002D72 ; 3829
+	CARL load_bgstruct ; 3829
 
 	LD A,#00h ; 382c
 	LD [168Eh],A ; 382e
@@ -4136,7 +4137,7 @@ loc_0x0038B2:
 	farcall loc_0x0382F4 ; 38c7
 	LD IY,#@DOFF(data_388c) ; 38ca
 	LD YP,#@DPAG(data_388c) ; 38cd
-	CARL loc_0x002D72 ; 38d0
+	CARL load_bgstruct ; 38d0
 	LD IY,#0012h ; 38d3
 	farcall loc_0x011B84 ; 38d9
 	LD IY,#13AEh ; 38dc
@@ -4175,7 +4176,7 @@ loc_0x00391E:
 	farcall loc_0x0382F4 ; 3933
 	LD IY,#@DOFF(data_38f8) ; 3936
 	LD YP,#@DPAG(data_38f8) ; 3939
-	CARL loc_0x002D72 ; 393c
+	CARL load_bgstruct ; 393c
 	LD IY,#@DOFF(data_387d4) ; 393f
 	LD NB,#@CPAG(loc_0x03836A) ; 3942
 	CARL loc_0x03836A ; 3945
@@ -4240,7 +4241,7 @@ loc_0x0039C1:
 	farcall loc_0x0382F4 ; 39d6
 	LD IY,#@DOFF(data_399b) ; 39d9
 	LD YP,#@DPAG(data_399b) ; 39dc
-	CARL loc_0x002D72 ; 39df
+	CARL load_bgstruct ; 39df
 	LD IY,#@DOFF(data_387d4) ; 39e2
 	LD NB,#@CPAG(loc_0x03836A) ; 39e5
 	CARL loc_0x03836A ; 39e8
@@ -4307,7 +4308,7 @@ loc_0x003A79:
 	farcall loc_0x0382F4 ; 3a8e
 	LD IY,#@DOFF(data_3a53) ; 3a91
 	LD YP,#@DPAG(data_3a53) ; 3a94
-	CARL loc_0x002D72 ; 3a97
+	CARL load_bgstruct ; 3a97
 	LD IY,#0012h ; 3a9a
 	farcall loc_0x011B84 ; 3aa0
 	LD IY,#13AEh ; 3aa3
@@ -4339,7 +4340,7 @@ loc_0x003AE5:
 	farcall loc_0x0382F4 ; 3afa
 	LD IY,#@DOFF(data_3abf) ; 3afd
 	LD YP,#@DPAG(data_3abf) ; 3b00
-	CARL loc_0x002D72 ; 3b03
+	CARL load_bgstruct ; 3b03
 	LD IY,#0012h ; 3b06
 	farcall loc_0x011B84 ; 3b0c
 	LD IY,#13AEh ; 3b0f
